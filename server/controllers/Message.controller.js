@@ -1,0 +1,172 @@
+import { asyncHandler } from "../utilities/AsyncHandler.utility.js";
+import { Message } from "../models/message.model.js";
+import { ErrorHandler } from "../utilities/ErrorHandler.utility.js";
+import { Report } from "../models/report.model.js";
+
+// Code to Send (create) message
+export const sendMessage = asyncHandler(async (req, res, next) => {
+  console.log('Send message route hit....')
+  const { userId, photo } = req.user;
+  const msg = req.body.message.trim();
+
+  if (msg.length === 0 || msg.length > 800) {
+    return res.status(403).json({
+      success: false,
+      message: "Message length must be between 1 to 800 characters.",
+    });
+  }
+
+  await Message.create({ userId, userPhoto: photo, message: msg });
+  return res.status(201).json({
+    success: true,
+    message: "Message sent successfully.",
+  });
+
+  // Web socket code here...
+});
+
+
+
+// Code to edit message
+export const editMessage = asyncHandler(async (req, res, next) => {
+    console.log('edit message route hit....')
+  const { messageId } = req.params;
+  const msg = req.body.message.trim();
+
+  if (msg.length < 1 || msg.length > 800) {
+    return res.status(403).json({
+      success: false,
+      message: "Message length must be between 1 to 800 characters.",
+    });
+  }
+
+  const updatedMessage = await Message.findByIdAndUpdate(messageId, {
+    message: msg,
+  });
+
+  if (!updatedMessage) {
+    return res.status(404).json({
+      success: false,
+      message: "Message doen't exist.",
+    });
+  }
+  return res.status(200).json({
+    success: true,
+    message: "Message updated successfully.",
+  });
+
+  // Web socket code here...
+
+
+});
+
+
+
+// Code to delete message
+export const deleteMessage = asyncHandler(async (req, res, next) => {
+    console.log('delete message route hit....')
+  const { messageId } = req.params;
+
+  const msg = await Message.findByIdAndDelete(messageId);
+
+  if (!msg) {
+    return res.status(404).json({
+      success: false,
+      message: "Message doesn't exist.",
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "Message deleted successfully.",
+  });
+
+  // Web socket code here...
+
+
+});
+
+
+
+// Code to get Messages
+export const getMessages = asyncHandler(async (req, res, next) => {
+    console.log('get messages route hit....')
+  const { page = 1 } = req.params;
+  const messageLimit = 25;
+  const messageSkip = (page - 1) * messageLimit;
+
+  const messages = await Message.find()
+    .sort({ createdAt: -1 })
+    .skip(messageSkip)
+    .limit(messageLimit);
+
+  return res.status(200).json({
+    success: true,
+    message: "Messages fetched successfully.",
+    messages,
+  });
+});
+
+// Code to report messages
+export const reportMessage = asyncHandler(async (req, res, next) => {
+  console.log("Report message route hit....");
+  let messageId = req.params.messageId;
+  let reportMessage = req.body.reportMessage?.trim();
+  const reporterId = req.user.userId; // from auth middleware
+  const reportType = "Message";
+
+  if (
+    !reportMessage ||
+    reportMessage.length < 10 ||
+    reportMessage.length > 500
+  ) {
+    return next(
+      new ErrorHandler(400, "Report message must be 10-500 characters."),
+    );
+  }
+
+  // get the reported Message
+  const reportedMessage = await Message.findById(messageId);
+
+  if (!reportedMessage) {
+    return next(new ErrorHandler(404, "Reported Message doesn't exist."));
+  }
+
+  const reportedUser = reportedMessage.userId;        // Fetch user Id of Reported Message Author
+
+  // cannot report your own post
+  if (reportedUser.toString() === reporterId.toString()) {
+    return next(new ErrorHandler(403, "You cannot report your own comment."));
+  }
+
+  // prevent multiple reports by same user
+  const existingReport = await Report.findOne({
+    reportReferenceId: messageId,
+    reporterId,
+  });
+
+  if (existingReport) {
+    return next(new ErrorHandler(400, "You already reported this message."));
+  }
+
+  // create Message report
+  await Report.create({
+    reportReferenceId: messageId,
+    reportType,
+    reporterId,
+    reportedId: reportedUser,
+    reportMessage,
+  });
+
+  // increment reporter's reportsMade count
+  await User.findByIdAndUpdate(reporterId, { $inc: { reportsMade: 1 } });
+
+  res.status(201).json({
+    success: true,
+    message: "Message reported successfully.",
+  });
+
+
+
+
+});
