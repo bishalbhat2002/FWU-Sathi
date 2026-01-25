@@ -18,6 +18,8 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "Password is required"],
+    minlength: [8, "Password must be at least 8 characters"],
+    maxlength: [20, "Password cannot exceed 30 characters"],
     select: false, // won't return password by default
   },
   semester: {
@@ -57,11 +59,11 @@ const UserSchema = new mongoose.Schema({
     maxlength: [30, "Address cannot exceed 30 characters"],
     trim: true,
   },
-  photo:{
-     type:String,
+  photo: {
+    type: String,
   },
-  coverPhoto:{
-     type:String
+  coverPhoto: {
+    type: String,
   },
   facebook: {
     type: String,
@@ -84,10 +86,9 @@ const UserSchema = new mongoose.Schema({
     trim: true,
   },
   reportsMade: {
-      type: Number,
-      default: 0,
+    type: Number,
+    default: 0,
   },
 });
 
-
-export const User = mongoose.model('User', UserSchema);
+export const User = mongoose.model("User", UserSchema);
