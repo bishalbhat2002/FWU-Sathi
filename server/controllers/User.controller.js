@@ -1,10 +1,13 @@
 import { asyncHandler } from "../utilities/AsyncHandler.utility.js";
 import { User } from "../models/user.model.js";
+import { Post } from "../models/post.model.js";
 import { ErrorHandler } from "../utilities/ErrorHandler.utility.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import path from "path";
 import multer from "multer";
+import { exit } from "process";
 
 // Encrypt Password function
 const encryptPassword = async (plainPassword) => {
@@ -69,7 +72,6 @@ export const login = asyncHandler(async (req, res, next) => {
     .json({
       success: true,
       message: "User logged in successfully",
-      user,
     });
 });
 
@@ -205,7 +207,6 @@ export const register = asyncHandler(async (req, res, next) => {
     .json({
       success: true,
       message: "User registered successfully",
-      user,
     });
 });
 
@@ -223,7 +224,7 @@ export const logout = asyncHandler(async (req, res, next) => {
     });
 });
 
-// Code for getting user profile
+// Code for getting own profile
 export const getProfile = asyncHandler(async (req, res, next) => {
   const userId = req.user.userId;
   console.log("Userid: ", userId);
@@ -243,9 +244,48 @@ export const getProfile = asyncHandler(async (req, res, next) => {
   });
 });
 
-// Code for getting user profile posts
+// Code for getting Other user profile
+export const getOtherProfile = asyncHandler(async (req, res, next) => {
+  const userId = req.params.userId;
+  console.log("Userid: ", userId);
+
+  // Check if user already exists
+  const user = await User.findById(userId);
+  if (!user) {
+    return next(
+      new ErrorHandler(404, "No user Exists for the provided Email."),
+    );
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "Profile details fetched Successfully",
+    user,
+  });
+});
+
+// Code for getting own profile posts
 export const getProfilePosts = asyncHandler(async (req, res, next) => {
   const userId = req.user.userId;
+  const limitPost = 15; // Give 15 post at a time...
+  const { page = 1 } = req.query;
+  let skipPost = (page - 1) * limitPost;
+
+  const posts = await Post.find({ userId })
+    .sort({ createdAt: -1 }) // Latest posts come first
+    .skip(skipPost)
+    .limit(limitPost);
+
+  res.status(200).json({
+    success: true,
+    message: "Profile posts fetched successfully.",
+    posts,
+  });
+});
+
+// Code for getting other profiles posts
+export const getOtherProfilePosts = asyncHandler(async (req, res, next) => {
+  const userId = req.params.userId;
   const limitPost = 15; // Give 15 post at a time...
   const { page = 1 } = req.query;
   let skipPost = (page - 1) * limitPost;
@@ -269,7 +309,7 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
   const userId = req.user.userId;
 
   const name = req.body.name?.trim();
-  const email = req.body.email?.trim()?.toLowerCase();
+  // const email = req.body.email?.trim()?.toLowerCase();
   const gender = req.body.gender?.trim();
   const program = req.body.program?.trim();
   let semester = req.body.semester?.trim();
@@ -282,15 +322,7 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
   const website = req.body.website?.trim();
 
   // Check for Required fields for missing
-  if (
-    !name ||
-    !email ||
-    !gender ||
-    !program ||
-    !semester ||
-    !college ||
-    !address
-  ) {
+  if (!name || !gender || !program || !semester || !college || !address) {
     return next(new ErrorHandler(400, "First 6 fields are required."));
   }
 
@@ -299,21 +331,6 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
     return next(
       new ErrorHandler(400, "Name must be between 3 and 30 characters."),
     );
-  }
-
-  // Simple email regex
-  console.log(email);
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  // Validate email
-  if (!emailRegex.test(email)) {
-    return next(new ErrorHandler(400, "Invalid email address."));
-  }
-
-  // Check for existing already exists
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    return next(new ErrorHandler(400, "Email is already registered."));
   }
 
   // Validate program, college, address length
@@ -346,7 +363,6 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
 
   let updateInfo = {
     name,
-    email,
     gender,
     semester,
     program,
@@ -355,35 +371,63 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
   };
 
   if (facebook) {
-    if (facebook.includes("facebook.com")) {
+    if (facebook.includes("facebook.com/")) {
       updateInfo.facebook = facebook;
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Facebook URL",
+      });
     }
   }
   if (instagram) {
-    if (instagram.includes("instagram.com")) {
+    if (instagram.includes("instagram.com/")) {
       updateInfo.instagram = instagram;
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Instagram URL",
+      });
     }
   }
   if (linkedln) {
-    if (linkedln.includes("linkedln.com")) {
+    if (linkedln.includes("linkedln.com/")) {
       updateInfo.linkedln = linkedln;
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid linkedln URL",
+      });
     }
   }
   if (github) {
-    if (github.includes("github.com")) {
+    if (github.includes("github.com/")) {
       updateInfo.github = github;
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Github URL",
+      });
     }
   }
   if (website) {
-    if (facebook.includes("facebook.com")) {
+    // Regular expresssion for Webstite URL..
+    const websiteRegex = /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
+    if (websiteRegex.test(website)) {
       updateInfo.website = website;
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid website URL",
+      });
     }
   }
 
   console.log("Profile Update Info: ", updateInfo);
 
   // update User
-  const updatedUser = await User.findByIdAndUpdate(userId, updateInfo);
+  const updatedUser = await User.findByIdAndUpdate(userId, updateInfo, {new:true});
+  // new:true -> this means return the object with new updated values.
 
   return res.status(200).json({
     success: true,
@@ -394,15 +438,21 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
 
 // Update Password logic:
 export const updatePassword = asyncHandler(async (req, res, next) => {
-  console.log("edit profile info route hit...");
+  console.log("edit password info route hit...");
 
   const userId = req.user.userId;
-  const password = req.body.password?.trim();
+  const newPassword = req.body.newPassword?.trim();
+  const currentPassword = req.body.currentPassword?.trim();
+
+  // check if current password is empty or not.
+  if (!currentPassword) {
+    return next(new ErrorHandler(400, "Current password cannot be empty."));
+  }
 
   // Check for Required fields for missing
-  if (!password || password?.length < 8 || password?.length > 20) {
+  if (!newPassword || newPassword?.length < 8 || newPassword?.length > 20) {
     return next(
-      new ErrorHandler(400, "Password must be between 8-20 characters."),
+      new ErrorHandler(400, "New Password must be between 8-20 characters."),
     );
   }
 
@@ -414,27 +464,28 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
     });
   }
 
-  // check if user provided current password and password in database mathch or not.
-  if (!(await comparePassword(password, user.password))) {
+  // check if user provided currentPassword and password in database mathch or not.
+  if (!(await comparePassword(currentPassword, user.password))) {
     return next(new ErrorHandler(400, "Wrong Password."));
   }
 
   // Hash the password
-  const hashPassword = await encryptPassword(password);
+  const hashPassword = await encryptPassword(newPassword);
 
   // update User password
   await User.findByIdAndUpdate(userId, { password: hashPassword });
 
-  return res.status(200).json({
-    success: true,
-    message: "User password updated successfully",
-  });
+  return res
+    .status(200)
+    .cookie("token", "", {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    })
+    .json({
+      success: true,
+      message: "User password updated successfully",
+    });
 });
-
-
-
-
-
 
 // Upload Profile pic logic
 // we make a storage with diskStorage - which takes an object with 2 values - Destination and Filename.
@@ -479,15 +530,19 @@ export const editProfilePic = asyncHandler(async (req, res, next) => {
   let userId = req.user.userId;
 
   let photoPath = null;
+
   if (req.file) {
     photoPath = req.file.path;
-
-    await User.findByIdAndUpdate(userId, { photo: photoPath });
-
-    res.status(200).json({
+    const updatedUser = await User.findByIdAndUpdate(userId, { photo: photoPath }, {new:true});
+    return res.status(200).json({
       success: true,
       message: "Profile pic updated successfully.",
-      post,
+      updatedPhoto:updatedUser.photo
+    });
+  } else {
+    return res.status(403).json({
+      success: false,
+      message: "No Profile photo uploaded.",
     });
   }
 });
@@ -501,12 +556,17 @@ export const editCoverPic = asyncHandler(async (req, res, next) => {
   if (req.file) {
     coverPath = req.file.path;
 
-    await User.findByIdAndUpdate(userId, { coverPhoto: coverPath });
+    const updatedUser = await User.findByIdAndUpdate(userId, { coverPhoto: coverPath }, {new:true});
 
     res.status(200).json({
       success: true,
       message: "Cover pic updated successfully.",
-      post,
+      updatedCover:updatedUser.coverPhoto
+    });
+  } else {
+    return res.status(403).json({
+      success: false,
+      message: "No cover photo uploaded.",
     });
   }
 });
