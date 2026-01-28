@@ -44,18 +44,21 @@
 
 /* Define your custom classes when you want to use the same styling in multiple elements. You can write pure CSS or @apply directives to use Tailwind CSS utility class */
 @layer component {
-     .active{
-          @apply text-blue-600 scale-105;
-     }
+  .active {
+    @apply text-blue-600 scale-105;
+  }
+  .hide-scrollbar {
+    scrollbar-width: none;
+  }
 }
 
 /* Here, you create your own utility classes that tailwind doesn't provide by default. */
 @layer utilities {
-     .hover-scale{
-          @apply hover:scale-105 ease-in duration-200 active:scale-97;
-     }
+  .hover-scale {
+    @apply hover:scale-105 ease-in duration-200 active:scale-97;
+  }
 
-     .no-scale-on-hover:hover{
-          @apply hover:scale-100;
-     }
+  .no-scale-on-hover:hover {
+    @apply hover:scale-100;
+  }
 }

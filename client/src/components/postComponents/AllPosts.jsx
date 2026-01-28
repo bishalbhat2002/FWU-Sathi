@@ -3,7 +3,7 @@ import Post from './Post'
 
 const AllPosts = () => {
   return (
-    <div className='container flex flex-col gap-2 mt-3'>
+    <div className='container mx-auto flex flex-col gap-2 mt-3'>
      <Post />
      <Post />
      <Post />

@@ -11,6 +11,9 @@ import CreatePost from "./components/postComponents/CreatePost"
 import EditPost from "./components/postComponents/EdiPost"
 import ReportPost from "./components/postComponents/ReportPost"
 import DeletePost from "./components/postComponents/DeletePost"
+import CommentPost from "./components/postComponents/CommentPost"
+import ImageShower from "./components/postComponents/ImageShower"
+import PageNotFound from "./pages/PageNotFound"
 
 
 const App = () => {
@@ -24,12 +27,18 @@ const App = () => {
             <Route path="/post/edit" element={<EditPost />} />
             <Route path="/post/report/" element={<ReportPost />} />
             <Route path="/post/delete/" element={<DeletePost />} />
+            <Route path="/post/comment/" element={<CommentPost />} />
+            <Route path="/post/view" element={<CommentPost />} />
+            <Route path="/post/view-image" element={<ImageShower />} />
           </Route>
+
           <Route path="/search" element={<Search />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/*" element={<PageNotFound />} />
+
       </Routes>
       <Toaster />
     </>

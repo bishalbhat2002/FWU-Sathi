@@ -42,7 +42,7 @@ const ReportPost = () => {
             <textarea
               rows={3}
               className="rounded-sm w-full px-2 min-h-20 max-h-50 py-1 border-1 border-zinc-300 shadow text-gray-700 focus:outline-none"
-              placeholder="Your Text Here ..."
+              placeholder="Your Report Here ..."
             />
 
             <button className="w-full mt-2 bg-blue-300 rounded-sm py-1 text-zinc-800 hover:bg-blue-400 hover:text-white active:scale-97 ease-in duration-200">

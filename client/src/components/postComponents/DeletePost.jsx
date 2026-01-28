@@ -38,8 +38,8 @@ const DeletePost = () => {
 
           {/* Delete Confirmation Buttons... */}
           <div className="bg-blue-100 mt-2 p-2 rounded-md shadow">
-          <div className="text-center text-lg font-semibold text-zinc-800 ">
-            Are you sure, You want to delete this POST?
+          <div className="text-center text-lg font-medium text-zinc-800 ">
+            Are you sure, You want to <b className="text-red-600">delete</b> this POST?
           </div>
             <div className="text-md font-medium flex gap-2">
               <Link to={"/"}  className="w-1/2">

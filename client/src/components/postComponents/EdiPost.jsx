@@ -34,7 +34,7 @@ const EditPost = () => {
             rows={3}
             value={post.caption}
             className="w-full px-2 min-h-20 max-h-50 py-1 border-1 border-zinc-300 shadow text-gray-700 focus:outline-none"
-            placeholder="Enter Text Here ..."
+            placeholder="Enter Caption Here ..."
             onChange={(e) =>
               setPost((prev) => ({ ...prev, caption: e.target.value }))
             }
