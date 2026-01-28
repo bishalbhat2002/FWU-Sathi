@@ -36,7 +36,7 @@ const App = () => {
           <Route path="/chat" element={<Chat />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/notes" element={<Notes />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/" element={<Profile />} />
           <Route path="/*" element={<PageNotFound />} />
 
       </Routes>

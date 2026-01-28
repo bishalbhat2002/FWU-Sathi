@@ -37,9 +37,14 @@
 
 /* Define the default styling of HTML elements. This acts as the base styling for the elements. Use only element in this section */
 @layer base {
+  *{
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply h-screen w-screen overflow-x-hidden overflow-y-auto bg-[var(--background)];
   }
+  
 }
 
 /* Define your custom classes when you want to use the same styling in multiple elements. You can write pure CSS or @apply directives to use Tailwind CSS utility class */
@@ -50,6 +55,24 @@
   .hide-scrollbar {
     scrollbar-width: none;
   }
+  .shadow-post {
+    box-shadow: 0rem 0.2rem 0.5rem 0.1rem rgba(227, 227, 227, 0.773);
+  }
+  .shadow-notes {
+    box-shadow: 0rem 0.1rem 0rem 0.01rem #fb95f248;
+  }
+  .shadow-notes:hover {
+    box-shadow: 0rem 0.2rem 0.2rem 0.02rem #289df758;
+  }
+
+  /* .notes-individual{
+      background-color: white;
+    } */
+  .notes-individual:nth-child(1),
+  .notes-individual:nth-child(2) {
+    background-color: rgb(121, 121, 122);
+    color: white;
+  }
 }
 
 /* Here, you create your own utility classes that tailwind doesn't provide by default. */
@@ -58,7 +81,15 @@
     @apply hover:scale-105 ease-in duration-200 active:scale-97;
   }
 
+  .hover-scale-sm {
+    @apply hover:scale-101 duration-200 ease-in active:scale-99;
+  }
+
   .no-scale-on-hover:hover {
     @apply hover:scale-100;
+  }
+
+  .h-all {
+    height: 100dvh;
   }
 }

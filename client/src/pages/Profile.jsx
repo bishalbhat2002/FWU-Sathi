@@ -1,8 +1,9 @@
 import React from 'react'
+import FixPageLayout from '../layouts/FixPageLayout'
 
 const Profile = () => {
   return (
-    <div>Profile</div>
+    <FixPageLayout>Profile</FixPageLayout>
   )
 }
 

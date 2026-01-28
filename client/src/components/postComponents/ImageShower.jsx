@@ -6,7 +6,7 @@ import { IoMdDownload } from "react-icons/io";
 const ImageShower = () => {
   return (
     <OverlayScreen>
-      <div className="flex gap-3 px-2 py-1 bg-white absolute top-15 right-15 border-1 border-zinc-400 rounded-md">
+      <div className="flex gap-3 px-2 py-1 bg-white absolute top-[94%] right-5 lg:top-15 lg:right-15 border-1 border-zinc-400 rounded-md">
           <button
           onClick={()=>alert("Download button")}
             className="rounded-full p-1 bg-zinc-300 hover-scale"

@@ -14,7 +14,7 @@ const Post = ({ comment }) => {
   const navigate=useNavigate();
 
   return (
-    <div className="mx-auto max-w-130 w-full bg-white border-1 border-gray-300 rounded-md overflow-hidden">
+    <div className="mx-auto max-w-130 w-full bg-white border-1 border-gray-300 shadow-post rounded-md overflow-hidden">
       <div className="flex gap-4 p-2 items-center border-b border-gray-300 relative">
         <Link to="/profile/id">
           <ProfilePhoto className="h-15 w-15 no-scale-on-hover" />

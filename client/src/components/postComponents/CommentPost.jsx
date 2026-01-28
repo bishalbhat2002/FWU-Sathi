@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const CommentPost = () => {
   return (
     // Overlays the Comment post infront of all...
-    <OverlayScreen>
+    <OverlayScreen >
       {/* Comment Post Container.. */}
       <div className="h-9/10 flex-col justify-center items-center bg-zinc-300 ml-3 p-2 rounded-sm overflow-y-auto hide-scrollbar">
         {/* Display the actual post first.... */}
@@ -33,22 +33,6 @@ const CommentPost = () => {
 
 export default CommentPost;
 
-// Component to write comment on the post.
-function CommentWrite() {
-  return (
-    <div className="bg-zinc-200 flex justify-between gap-2 my-2 rounded-sm p-2">
-      <input
-        type="text"
-        name="comment"
-        className="w-full focus:outline-blue-500 bg-white px-2 text-gray-700 font-medium"
-        placeholder="Your comment here...."
-      />
-      <button className="flex hover-scale p-2 bg-blue-400 rounded-md">
-        <RiSendPlaneFill className="size-7 text-white" />
-      </button>
-    </div>
-  );
-}
 
 
 // Component to show comments on the post.

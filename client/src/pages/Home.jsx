@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
 import CreatePostButton from "../components/postComponents/CreatePostButton"
-import MainLayout from "../layouts/MainLayout"
+import ScrollPageLayout from "../layouts/ScrollPageLayout"
 import CreatePost from "../components/postComponents/CreatePost"
 import { useEffect } from "react"
 import AllPosts from "../components/postComponents/AllPosts"
@@ -17,7 +17,7 @@ const Home = () => {
 
 
   return (
-    <MainLayout>
+    <ScrollPageLayout>
       <CreatePostButton />
       <Outlet />
 
@@ -26,7 +26,7 @@ const Home = () => {
       <AllPosts />
 
 
-    </MainLayout>
+    </ScrollPageLayout>
   )
 }
 
