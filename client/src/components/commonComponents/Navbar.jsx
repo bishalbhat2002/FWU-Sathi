@@ -3,7 +3,7 @@ import ProfilePhoto from "./ProfilePhoto";
 import { NavLink, Link } from "react-router-dom";
 import { GrHomeRounded, GrSearch } from "react-icons/gr";
 import { RiTelegram2Fill } from "react-icons/ri";
-import { IoMdNotificationsOutline } from "react-icons/io";
+import { MdNotificationsNone } from "react-icons/md";
 import { PiFilesBold } from "react-icons/pi";
 import ProfileViewer from "../profileComponents/ProfileViewer";
 
@@ -29,51 +29,51 @@ export const Navbar = () => {
           <li>
             <NavLink
               className={({ isActive }) =>
-                `text-gray-500 text-lg lg:text-xl hover:text-blue-800 ${isActive ? "active" : ""}`
+                `text-gray-500 text-lg lg:text-xl nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
               }
               to={"/"}
             >
-              <GrHomeRounded className="hover-scale size-[19px]" />
+              <GrHomeRounded className="hover-scale text-[22px]   md:text-[23px] " />
             </NavLink>
           </li>
           <li>
             <NavLink
               className={({ isActive }) =>
-                `text-gray-500 text-lg lg:text-xl hover:text-blue-800 ${isActive ? "active" : ""}`
+                `text-gray-500 text-lg lg:text-xl nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
               }
               to={"/search"}
             >
-              <GrSearch className="hover-scale size-[20px]" />
+              <GrSearch className="hover-scale text-[22px]   md:text-[23px] " />
             </NavLink>
           </li>
           <li>
             <NavLink
               className={({ isActive }) =>
-                `text-gray-500 text-lg lg:text-xl hover:text-blue-800 ${isActive ? "active" : ""}`
+                `text-gray-500 text-lg lg:text-xl nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
               }
               to={"/chat"}
             >
-              <RiTelegram2Fill className="hover-scale size-[21px]" />
+              <RiTelegram2Fill className="hover-scale text-[23px] md:text-[25px] " />
             </NavLink>
           </li>
           <li>
             <NavLink
               className={({ isActive }) =>
-                `text-gray-500 text-lg lg:text-xl hover:text-blue-800 ${isActive ? "active" : ""}`
+                `text-gray-500 text-lg lg:text-xl nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
               }
               to={"/notification"}
             >
-              <IoMdNotificationsOutline className="hover-scale size-[22px]" />
+              <MdNotificationsNone className="hover-scale text-[23px]   md:text-[25px] " />
             </NavLink>
           </li>
           <li>
             <NavLink
               className={({ isActive }) =>
-                `text-gray-500 text-lg lg:text-xl hover:text-blue-800 ${isActive ? "active" : ""}`
+                `text-gray-500 text-lg lg:text-xl nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
               }
               to={"/notes"}
             >
-              <PiFilesBold className="hover-scale size-[20px]" />
+              <PiFilesBold className="hover-scale text-[23px]   md:text-[25px] " />
             </NavLink>
           </li>
         </ul>

@@ -17,7 +17,7 @@ const Home = () => {
 
 
   return (
-    <ScrollPageLayout>
+    <ScrollPageLayout >
       <CreatePostButton />
       <Outlet />
 

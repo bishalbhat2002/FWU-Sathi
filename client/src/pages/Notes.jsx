@@ -33,7 +33,7 @@ export default Notes
 
 function Header(){
   return(
-      <div className='bg-gray-800 h-12 w-full flex justify-center items-center '>
+      <div className='bg-gray-800 h-10 w-full flex justify-center items-center'>
         <h2 className='text-2xl font-extrabold text-white'>
           FWU-CSIT Notes
         </h2>

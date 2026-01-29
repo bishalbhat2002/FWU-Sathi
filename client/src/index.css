@@ -42,7 +42,7 @@
   }
 
   body {
-    @apply h-screen w-screen overflow-x-hidden overflow-y-auto bg-[var(--background)];
+    @apply h-screen w-screen overflow-x-hidden bg-[var(--background)];
   }
   
 }
@@ -50,8 +50,22 @@
 /* Define your custom classes when you want to use the same styling in multiple elements. You can write pure CSS or @apply directives to use Tailwind CSS utility class */
 @layer component {
   .active {
-    @apply text-blue-600 scale-105;
+    @apply text-blue-600 scale-105 relative;
   }
+  .active::after{
+    content: "";
+    transform: translateX(-20%);
+    position:absolute;
+    height:0.2rem;
+    border-radius: 2rem;
+    width:150%;
+    background-color: rgba(3, 156, 232, 0.951);
+    bottom: -0.4rem;
+  }
+
+
+
+
   .hide-scrollbar {
     scrollbar-width: none;
   }

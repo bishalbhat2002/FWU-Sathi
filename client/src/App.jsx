@@ -14,6 +14,9 @@ import DeletePost from "./components/postComponents/DeletePost"
 import CommentPost from "./components/postComponents/CommentPost"
 import ImageShower from "./components/postComponents/ImageShower"
 import PageNotFound from "./pages/PageNotFound"
+import EditMessageBox from "./components/messageComponents/EditMessageBox"
+import DeleteMessageBox from "./components/messageComponents/DeleteMessageBox"
+import ReportMessageBox from "./components/messageComponents/MessageReportBox"
 
 
 const App = () => {
@@ -33,7 +36,12 @@ const App = () => {
           </Route>
 
           <Route path="/search" element={<Search />} />
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/chat" element={<Chat />} >
+            {/* Nested Overlay Route for Message */}
+            <Route path="/chat/edit" element={<EditMessageBox />}/>
+            <Route path="/chat/report" element={<ReportMessageBox />}/>
+            <Route path="/chat/delete" element={<DeleteMessageBox />}/>
+          </Route>
           <Route path="/notification" element={<Notification />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/profile/" element={<Profile />} />

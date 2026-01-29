@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const DeletePost = () => {
   return (
     <OverlayScreen>
-      <div className="bg-white max-w-130 w-full bg-white-600 border-1 rounded-md border-gray-300 shadow-2xl">
+      <div className="bg-white max-w-130 w-full bg-white-600 border-1 rounded-md border-gray-300">
         <div className="flex gap-4 p-2 items-center border-b border-gray-300 shadow relative">
           <ProfilePhoto className="h-15 w-15 no-scale-on-hover" />
           <div>
