@@ -41,8 +41,9 @@
     scroll-behavior: smooth;
   }
 
-  body {
+  html, body {
     @apply h-screen w-screen overflow-x-hidden bg-[var(--background-color)];
+    scrollbar-width: none;
   }
 
   select{

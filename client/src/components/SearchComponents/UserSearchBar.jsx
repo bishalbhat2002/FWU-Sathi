@@ -10,7 +10,7 @@ export const UserSearchBar = () => {
   }
 
   return (
-    <form onSubmit={handleUserSearch} className="w-full max-w-100 p-5 pb-2 bg-blue-100 border-1 border-black/20 mx-auto mt-2 rounded-md flex flex-col items-start overflow-hidden shadow">
+    <form onSubmit={handleUserSearch} className="w-full max-w-100 p-5 pb-2 bg-blue-100/20 border-1 border-black/20 mx-auto mt-2 rounded-md flex flex-col items-start overflow-hidden shadow">
       {/* Search bar and login button... */}
       <div className="flex gap-2 w-full">
         <input
@@ -20,9 +20,9 @@ export const UserSearchBar = () => {
           autoFocus={true}
           onChange={(e) => setSearchString(e.target.value)}
           placeholder="Ur Search String Here..."
-          className="w-8/10 bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
+          className="w-8/10 bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-2 focus:outline-blue-400"
         />
-        <button type="submit" className="flex-1 bg-blue-200 rounded text-md border-1 border-black/20">
+        <button type="submit" className="flex-1 bg-blue-200 rounded text-md border-1 border-black/20 hover-scale">
           Search
         </button>
       </div>
