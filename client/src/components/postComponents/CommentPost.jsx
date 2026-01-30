@@ -1,3 +1,4 @@
+import { useState } from "react";
 import OverlayScreen from "../../layouts/OverlayScreen";
 import { RiSendPlaneFill } from "react-icons/ri";
 import Post from "./Post";
@@ -32,6 +33,34 @@ const CommentPost = () => {
 };
 
 export default CommentPost;
+
+
+function CommentWrite(){
+const [comment, setComment] = useState("")
+
+function handleComment(){
+  alert("Comment Send: ", comment);
+}
+
+  return (
+    <form onSubmit={handleComment} className="mx-auto w-full mt-1 bg-zinc-100 flex justify-between gap-2 rounded-sm p-2">
+      <input
+        type="text"
+        value={comment}
+        onChange={(e)=>(setComment(e.target.value))}
+        name="comment"
+        className="w-full focus:outline-blue-500 not-focus:border-1 border-zinc-400 bg-white px-2 text-gray-700 font-medium"
+        placeholder="Your Message here...."
+      />
+      <button 
+      type="submit"
+      onClick={handleComment}
+      className="flex hover-scale p-2 bg-blue-400 rounded-md">
+        <RiSendPlaneFill className="size-7 text-white" />
+      </button>
+      </form>
+  )
+}
 
 
 

@@ -79,14 +79,20 @@
     box-shadow: 0rem 0.2rem 0.2rem 0.02rem #289df758;
   }
 
-  /* .notes-individual{
-      background-color: white;
-    } */
   .notes-individual:nth-child(1),
   .notes-individual:nth-child(2) {
     background-color: rgb(121, 121, 122);
     color: white;
   }
+
+  .about-shadow{
+    box-shadow: 0rem 0.1rem 0.1rem 0.1rem rgba(222, 222, 222, 0.847);
+  }
+
+  .input-shadow{
+    box-shadow: 0rem 0rem 0.2rem 0.1rem #8254ff70;
+  }
+
 }
 
 /* Here, you create your own utility classes that tailwind doesn't provide by default. */

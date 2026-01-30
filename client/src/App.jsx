@@ -17,6 +17,7 @@ import PageNotFound from "./pages/PageNotFound"
 import EditMessageBox from "./components/messageComponents/EditMessageBox"
 import DeleteMessageBox from "./components/messageComponents/DeleteMessageBox"
 import ReportMessageBox from "./components/messageComponents/MessageReportBox"
+import ChangePassword from "./components/ProfileComponents/ChangePassword"
 
 
 const App = () => {
@@ -44,7 +45,9 @@ const App = () => {
           </Route>
           <Route path="/notification" element={<Notification />} />
           <Route path="/notes" element={<Notes />} />
-          <Route path="/profile/" element={<Profile />} />
+          <Route path="/profile/" element={<Profile />}> 
+            <Route path="/profile/change-password" element={<ChangePassword />} />
+          </Route>
           <Route path="/*" element={<PageNotFound />} />
 
       </Routes>
