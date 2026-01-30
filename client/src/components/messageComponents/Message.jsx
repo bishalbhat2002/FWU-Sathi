@@ -39,7 +39,7 @@ export const Message = ({ message, direction, msg="defaukt" }) => {
 
       {/* Comment Message... */}
       <div className={`flex gap-2 ${messageOptionsSetup}`}>
-        <p className="text-sm sm:text-md bg-white/70 max-w-100 rounded-sm p-2">
+        <p className="text-sm text-gray-600 sm:text-md bg-white/70 max-w-45 sm:max-w-60 md:max-w-70 lg:max-w-80 rounded-sm p-2">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, odio
         </p>
 
@@ -70,7 +70,7 @@ export const Message = ({ message, direction, msg="defaukt" }) => {
       </div>
 
       <small
-        className={`absolute font-medium text-gray-600 -bottom-1 ${timePostionSetup}`}
+        className={`absolute font-medium text-gray-600 -bottom-1.5 ${timePostionSetup}`}
       >
         2002-12-10 12:30:10
       </small>

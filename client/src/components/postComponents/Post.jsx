@@ -9,57 +9,51 @@ import { Link, useNavigate } from "react-router-dom";
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 
-const Post = ({ comment }) => {
-  
-  const navigate=useNavigate();
+const Post = () => {
+  const navigate = useNavigate();
 
   return (
-    <div className="mx-auto max-w-130 w-full bg-white border-1 border-gray-300 shadow-post rounded-md overflow-hidden">
-      <div className="flex gap-4 p-2 items-center border-b border-gray-300 relative">
+    <div className="mx-auto max-w-130 w-full bg-white shadow-post rounded-md overflow-hidden">
+      <div className="flex gap-4 p-2 items-center shadow-bottom relative">
         <Link to="/profile/id">
           <ProfilePhoto className="h-15 w-15 no-scale-on-hover" />
         </Link>
         <div>
           <Link to="/profile/id">
-            <h2 className="font-bold text-xl text-zinc-700">Bishal Bhat</h2>
+            <h2 className="font-bold text-xl text-zinc-700 line-clamp-1">Bishal Bhat</h2>
           </Link>
-          <p className="font-light text-sm">2082-12-10 12:10:30</p>
+          <p className="font-medium text-gray-500 text-sm -mt-1">5th Semester</p>
         </div>
 
         {/* Options for handling posts.... */}
-        <div className="absolute top-2 right-2 flex gap-2 ">
+        <div className="absolute top-0 right-0 flex gap-2 bg-gray-500 px-2 py-1 rounded-bl rounded-tr ">
           <Link
             to={`/post/edit`}
-            className="rounded-full p-1 bg-zinc-200  hover:bg-zinc-300 hover-scale"
+            className="rounded-full p-1 bg-zinc-200 group hover-scale"
             title="Edit Post"
           >
-            <MdModeEdit className="size-6 -rotate-15 scale-80 text-zinc-500 hover-scale" />
+            <MdModeEdit className="size-4 -rotate-15 text-zinc-500 hover-scale" />
           </Link>
+
           <Link
             to={`/post/report`}
             className="rounded-full p-1 bg-zinc-200 group hover-scale"
             title="Report Post"
           >
-            <TbMessageReport className="size-6 scale-80 text-zinc-500 hover-scale" />
+            <TbMessageReport className="size-4 text-zinc-500 hover-scale" />
           </Link>
+
           <Link
             to={`/post/delete`}
             className="rounded-full p-1 bg-red-200 hover:bg-red-300 group hover-scale"
             title="Report Post"
           >
-            <MdDelete className="size-6 scale-80 text-zinc-500 hover-scale group-hover:text-white " />
+            <MdDelete className="size-4 text-zinc-500 hover-scale group-hover:text-white " />
           </Link>
-          {comment && (
-            <Link
-              to={"/"}
-              className="rounded-full p-1 bg-zinc-300 group hover-scale"
-            >
-              <RxCross2 className="size-6 scale-80 text-zinc-500 hover-scale" />
-            </Link>
-          )}
         </div>
-        <div className="px-3 rounded-tl-sm text-zinc-800 bg-zinc-200 absolute right-0 bottom-0">
-          5th Semester
+
+        <div className="pr-1 pb-0.5 rounded-tl-sm text-zinc-400 font-medium absolute right-0 bottom-0">
+          2082-12-10 12:10:30
         </div>
       </div>
       <div className="p-1">
@@ -70,7 +64,12 @@ const Post = ({ comment }) => {
           tenetur impedit cum!
         </p>
         <div className="w-full relative px-2 py-1">
-          <img src="/image.png" alt="Post photo" className="rounded-sm" onClick={()=>navigate("/post/view-image")} />
+          <img
+            src="/image.png"
+            alt="Post photo"
+            className="rounded-sm"
+            onClick={() => navigate("/post/view-image")}
+          />
         </div>
       </div>
       <div className="flex rounded-b-sm h-10 gap-1 mx-3 mb-2">

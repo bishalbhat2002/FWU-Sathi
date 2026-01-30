@@ -12,16 +12,18 @@ const ReportPost = () => {
           <ProfilePhoto className="h-15 w-15 no-scale-on-hover" />
           <div>
             <h2 className="font-bold text-xl text-zinc-700">Bishal Bhat</h2>
-            <p className="font-light text-sm">2082-12-10 12:10:30</p>
+            <p className="font-medium text-gray-500 text-sm -mt-1">
+              5th Semester
+            </p>
           </div>
           <Link
             to={"/"}
-            className="rounded-full p-1 bg-zinc-300 absolute right-3 top-3 hover-scale"
+            className="rounded-full p-1 bg-zinc-200 hover:bg-zinc-400 group absolute right-3 top-3 hover-scale"
           >
-            <RxCross2 className="size-6 text-zinc-500 hover-scale" />
+            <RxCross2 className="size-6 text-zinc-500 group-hover:text-white group-hover:hover-scale" />
           </Link>
-          <div className="px-3 rounded-tl-sm text-zinc-800 bg-zinc-300 absolute right-0 bottom-0">
-            5th Semester
+          <div className="pr-1 pb-0.5 rounded-tl-sm text-zinc-400 font-medium absolute right-0 bottom-0">
+            2082-12-10 12:10:30
           </div>
         </div>
         <div className="p-1">
@@ -41,7 +43,7 @@ const ReportPost = () => {
 
             <textarea
               rows={3}
-              className="rounded-sm w-full px-2 min-h-20 max-h-50 py-1 border-1 border-zinc-300 shadow text-gray-700 focus:outline-none"
+              className="rounded-sm w-full px-2 min-h-20 max-h-50 py-1 border-1 border-zinc-400 shadow text-gray-700 focus:outline-none"
               placeholder="Your Report Here ..."
             />
 

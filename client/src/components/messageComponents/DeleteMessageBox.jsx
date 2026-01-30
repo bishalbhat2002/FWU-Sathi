@@ -43,10 +43,10 @@ const DeleteMessageBox = () => {
 
         {/* Delete Confirmation Buttons... */}
         <div className="bg-white mt-2 p-2 rounded-md shadow">
-          <div className="text-center text-sm sm:text-md md:text-lg font-medium text-zinc-800 ">
+          <h2 className="text-center text-sm sm:text-md md:text-lg font-medium text-zinc-800 ">
             Are you sure, You want to <b className="text-red-600">delete</b>{" "}
             this Message?
-          </div>
+          </h2>
           <div className="text-md font-medium flex gap-2">
             <Link to={"/chat"} className="w-1/2">
               <button autoFocus={true} className="w-full mt-2 inline-block py-2 bg-white/10 border border-black/10 shadow rounded-sm py-1 text-zinc-800 hover:bg-blue-200 active:scale-97 ease-in duration-200">

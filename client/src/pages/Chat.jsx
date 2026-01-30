@@ -2,6 +2,7 @@ import { Link, Outlet } from "react-router-dom";
 import FixPageLaout from "../layouts/FixPageLayout";
 import { Header } from "../components/messageComponents/MessageHeader";
 import { Message } from "../components/messageComponents/Message";
+import ProfilePhoto from "../components/commonComponents/ProfilePhoto";
 import { MessageWrite } from "../components/messageComponents/MessageWrite";
 import { useEffect } from "react";
 

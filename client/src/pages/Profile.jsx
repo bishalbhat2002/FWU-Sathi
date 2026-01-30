@@ -21,7 +21,7 @@ const Profile = () => {
               <ProfilePicture />
               <NameInfo />
           </div>
-          
+
           <Outlet />
 
           {/* Social Links... */}

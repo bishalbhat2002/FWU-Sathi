@@ -13,13 +13,13 @@ const ProfilePicture = ({ className }) => {
 
   return (
     <div
-      className={`h-30 w-30 rounded-full bg-amber-50 border-2 relative border-violet-600 p-0.5 ${className}`}
+      className={`h-30 w-30 rounded-full bg-amber-50 border-3 relative border-blue-500 p-0.5 shadow-profile ${className} `}
     >
       <img 
       src={profileLink}
-      alt="" className="h-full w-full rounded-full overflow-hidden" />
+      alt="" className="h-full w-full object-cover object-center rounded-full overflow-hidden " />
 
-      <div className="text-lg font-semibold absolute bottom-0 right-0">
+      <div className="text-lg bg-cover font-semibold absolute bottom-0 right-0">
         <input
           type="file"
           accept="image/*"
@@ -30,14 +30,14 @@ const ProfilePicture = ({ className }) => {
 
         <button
           onClick={() => document.getElementById("profilePhoto").click()}
-          className="bg-zinc-300 rounded-full p-1 text-zinc-800 hover:opacity-90 active:scale-97 ease-in duration-200"
+          className="bg-zinc-300 rounded-full p-1 text-zinc-800 hover:opacity-90 border-3 border-white active:scale-97 ease-in duration-200"
         >
           <MdModeEdit className="-rotate-15 scale-80 text-zinc-800 hover-scale" />
         </button>
       </div>
 
       {profilePicture && (
-        <div className="absolute -bottom-8 text-xs flex gap-2">
+        <div className="absolute -bottom-12 -left-[0.1rem] text-xs flex gap-2 bg-gray-800 px-3 py-2 rounded-sm ">
           <button
             onClick={handleProfileChange}
             autoFocus={true}

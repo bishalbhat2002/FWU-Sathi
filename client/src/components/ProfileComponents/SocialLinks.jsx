@@ -11,7 +11,7 @@ import {
 
 const SocialLinks = () => {
   return (
-    <div className="rounded-md p-3 mt-5 sm:mt-0 border-1 border-zinc-400 flex gap-3">
+    <div className="rounded-md p-3 mt-5 sm:mt-0 border-1 border-gray-400 flex gap-3">
       <Link to={""} title="facebook" className="group">
         <FaFacebook className="text-3xl sm:text-4xl text-gray-700 hover:text-white  rounded-lg group-hover:scale-105 ease-in duration-200 active:scale-95 group-hover:bg-zinc-500 bg-zinc-200 p-1.5" />
       </Link>
@@ -24,7 +24,7 @@ const SocialLinks = () => {
       <Link to={""} title="Github" className="group">
         <FaGithub className="text-3xl sm:text-4xl text-gray-700 hover:text-white  rounded-lg group-hover:scale-105 ease-in duration-200 active:scale-95 group-hover:bg-zinc-500 bg-zinc-200 p-1.5" />
       </Link>
-      <Link to={""} title="Github" className="group">
+      <Link to={""} title="Youtube" className="group">
         <FaYoutube className="text-3xl sm:text-4xl text-gray-700 hover:text-white  rounded-lg group-hover:scale-105 ease-in duration-200 active:scale-95 group-hover:bg-zinc-500 bg-zinc-200 p-1.5" />
       </Link>
       <Link to={""} title="Website" className="group">

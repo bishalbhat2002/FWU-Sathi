@@ -9,12 +9,15 @@ const CoverPhoto = () => {
     alert("Apli callll..")
   }
 
+  // Set the Default Cover pic. If there is no cover photo.....
+  const coverLink = (cover && URL.createObjectURL(cover))? URL.createObjectURL(cover) : "/image.png";
+
   return (
     <>
-      <div className="relative border-1 border-zinc-200 border-t-0 bg-linear-to-b from-zinc-300 to-zinc-100 mb-1 w-full h-35 rounded-b-md overflow-clip">
-        {cover && (
+      <div className="relative border-1 border-gray-300 border-t-0 bg-linear-to-b from-zinc-300 to-zinc-100 mb-1 w-full h-35 rounded-b-md overflow-clip">
+        {(
           <img
-            src={URL.createObjectURL(cover)}
+            src={coverLink}
             alt=""
             className="w-full"
           />
@@ -37,7 +40,7 @@ const CoverPhoto = () => {
         </div>
 
         {cover && (
-          <div className="absolute bottom-2 text-xs right-2 flex gap-2">
+          <div className="absolute bottom-2 text-xs right-2 flex gap-2  bg-gray-800 px-3 py-2 rounded-sm ">
             <button
               onClick={handleCoverChange}
               autoFocus={true}

@@ -6,19 +6,19 @@ export const About = ()=>{
   return (
     <>
       <div className="w-full mt-5 sm:mt-0 rounded-sm bg-gray-200 border-1 border-zinc-300 px-4 py-2 about-shadow">
-        <p className="text-sm font-bold text-gray-700 line-clamp-1">
+        <p className="text-sm font-semibold text-gray-700 line-clamp-1">
           Email: bishalbhatddss@gmail.com
         </p>
-        <p className="text-sm font-bold text-gray-700 line-clamp-1">
+        <p className="text-sm font-semibold text-gray-700 line-clamp-1">
           Gender: Male
         </p>
-        <p className="text-sm font-bold text-gray-700 line-clamp-1">
+        <p className="text-sm font-semibold text-gray-700 line-clamp-1">
           Program: BSc.CSIT
         </p>
-        <p className="text-sm font-bold text-gray-700 line-clamp-1">
+        <p className="text-sm font-semibold text-gray-700 line-clamp-1">
           College: FWU
         </p>
-        <p className="text-sm font-bold text-gray-700 line-clamp-1">
+        <p className="text-sm font-semibold text-gray-700 line-clamp-1">
           Address: MNR
         </p>
       </div>

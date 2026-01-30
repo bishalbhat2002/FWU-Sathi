@@ -9,7 +9,7 @@ const Notification = () => {
       <div className="pb-2 h-[99%] w-full max-w-160 bg-gray-200 mx-auto shadow mt-2 rounded-md flex flex-col gap-2 shadow items-start rounded overflow-hidden">
         <Header />
 
-        <div className="w-full px-5 flex flex-col gap-1 overflow-auto hide-scrollbar">
+        <div className="w-full px-5 flex flex-col gap-2 overflow-auto hide-scrollbar">
           {/* Render Notifications here... */}
           <NotificationLink />
           <NotificationLink />
@@ -49,13 +49,13 @@ function NotificationLink() {
   return (
     <Link
       to={"/post/view"}
-      className="w-full shadow-notes p-1 px-4 rounded-sm hover-scale-sm flex items-center bg-white relative gap-3"
+      className="w-full shadow-notes p-2 px-4 rounded-sm hover-scale-sm flex items-center bg-white relative gap-3"
     >
       <ProfilePhoto />
       <p className=" font-medium text-xs sm:text-sm md:text-md lg:text-lg text-zinc-60">
         <b>Bishal Bhat</b> commented on your Post.
       </p>
-      <small className="text-xs font-semibold text-gray-500 absolute bottom-1 right-2">2002-12-12 &nbsp; 10:12:50</small>
+      <small className="text-sm font-semibold text-gray-500 absolute bottom-1 right-2">2002-12-12 &nbsp; 10:12:50</small>
     </Link>
   );
 }

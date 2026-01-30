@@ -37,14 +37,24 @@
 
 /* Define the default styling of HTML elements. This acts as the base styling for the elements. Use only element in this section */
 @layer base {
-  *{
+  * {
     scroll-behavior: smooth;
   }
 
   body {
-    @apply h-screen w-screen overflow-x-hidden bg-[var(--background)];
+    @apply h-screen w-screen overflow-x-hidden bg-[var(--background-color)];
   }
-  
+
+  select{
+    @apply w-1/3 inline-block px-2 py-2 border border-gray-300 rounded-md bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+
+  option{
+    @apply text-sm;
+  }
+  input[type="checkbox"]{
+    @apply size-4;
+  }
 }
 
 /* Define your custom classes when you want to use the same styling in multiple elements. You can write pure CSS or @apply directives to use Tailwind CSS utility class */
@@ -52,25 +62,24 @@
   .active {
     @apply text-blue-600 scale-105 relative;
   }
-  .active::after{
+  .active::after {
     content: "";
     transform: translateX(-20%);
-    position:absolute;
-    height:0.2rem;
+    position: absolute;
+    height: 0.2rem;
     border-radius: 2rem;
-    width:150%;
+    width: 150%;
     background-color: rgba(3, 156, 232, 0.951);
     bottom: -0.4rem;
   }
-
-
-
 
   .hide-scrollbar {
     scrollbar-width: none;
   }
   .shadow-post {
-    box-shadow: 0rem 0.2rem 0.5rem 0.1rem rgba(227, 227, 227, 0.773);
+    box-shadow:
+      -0.08rem 0.08rem 0.5rem 0.1rem rgba(107, 107, 107, 0.056),
+      0.01rem -0.01rem 0.1rem 0.1rem rgba(107, 107, 107, 0.075);
   }
   .shadow-notes {
     box-shadow: 0rem 0.1rem 0rem 0.01rem #fb95f248;
@@ -85,14 +94,22 @@
     color: white;
   }
 
-  .about-shadow{
-    box-shadow: 0rem 0.1rem 0.1rem 0.1rem rgba(222, 222, 222, 0.847);
+  .about-shadow {
+    box-shadow: 0rem 0.1rem 0.1rem 0.1rem rgba(222, 222, 222, 0.426);
+    box-shadow: 0rem 0.1rem 0.1rem 0.1rem #e68e8e44;
   }
 
-  .input-shadow{
+  .input-shadow {
     box-shadow: 0rem 0rem 0.2rem 0.1rem #8254ff70;
   }
 
+  .shadow-profile {
+    box-shadow: 0rem 0.1rem 0.3rem 0.1rem #2f2f2f3a;
+  }
+
+  .shadow-bottom {
+    box-shadow: 0rem 0.1rem 0.1rem 0.01rem rgba(133, 133, 133, 0.389);
+  }
 }
 
 /* Here, you create your own utility classes that tailwind doesn't provide by default. */

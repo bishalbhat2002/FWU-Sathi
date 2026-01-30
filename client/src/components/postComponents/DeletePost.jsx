@@ -12,16 +12,18 @@ const DeletePost = () => {
           <ProfilePhoto className="h-15 w-15 no-scale-on-hover" />
           <div>
             <h2 className="font-bold text-xl text-zinc-700">Bishal Bhat</h2>
-            <p className="font-light text-sm">2082-12-10 12:10:30</p>
+            <p className="font-medium text-gray-500 text-sm -mt-1">
+              5th Semester
+            </p>
           </div>
           <Link
             to={"/"}
-            className="rounded-full p-1 bg-zinc-300 absolute right-3 top-3 hover-scale"
+            className="rounded-full p-1 bg-zinc-200 hover:bg-zinc-400 group absolute right-3 top-3 hover-scale"
           >
-            <RxCross2 className="size-6 text-zinc-500 hover-scale" />
+            <RxCross2 className="size-6 text-zinc-500 group-hover:text-white group-hover:hover-scale" />
           </Link>
-          <div className="px-3 rounded-tl-sm text-zinc-800 bg-zinc-300 absolute right-0 bottom-0">
-            5th Semester
+          <div className="pr-1 pb-0.5 rounded-tl-sm text-zinc-400 font-medium absolute right-0 bottom-0">
+            2082-12-10 12:10:30
           </div>
         </div>
         <div className="p-1">
@@ -37,17 +39,23 @@ const DeletePost = () => {
           </div>
 
           {/* Delete Confirmation Buttons... */}
-          <div className="bg-blue-100 mt-2 p-2 rounded-md shadow">
-          <div className="text-center text-lg font-medium text-zinc-800 ">
-            Are you sure, You want to <b className="text-red-600">delete</b> this POST?
-          </div>
+          <div className="mt-3 p-1 rounded-md shadow border-1 border-black/30">
+            <h2 className="text-center text-sm sm:text-md md:text-lg font-medium text-zinc-800">
+              Are you sure, You want to <b className="text-red-600">delete</b>{" "}
+              this POST?
+            </h2>
             <div className="text-md font-medium flex gap-2">
-              <Link to={"/"}  className="w-1/2">
-              <button className="w-full mt-2 inline-block py-2 bg-white/10 border border-black/10 shadow rounded-sm py-1 text-zinc-800 hover:bg-blue-200 active:scale-97 ease-in duration-200">
-                No, don't Delete.
-              </button>
+              <Link to={"/"} className="w-1/2">
+                <button
+                  autoFocus={true}
+                  className="w-full mt-2 inline-block py-2 bg-white/10 border border-black/30 shadow rounded-sm py-1 text-zinc-800 hover:bg-blue-200 active:scale-97 ease-in duration-200"
+                >
+                  No, don't Delete.
+                </button>
               </Link>
-              <button className="w-1/2 mt-2 inline-block py-2 bg-red-300 rounded-sm py-1 border border-black/10 shadow text-zinc-800 hover:bg-red-400 hover:text-white active:scale-97 ease-in duration-200">
+              <button
+                className="w-1/2 mt-2 inline-block py-2 bg-red-300 rounded-sm py-1 border border-black/10 shadow text-zinc-800 hover:bg-red-400 hover:text-white active:scale-97 ease-in duration-200"
+              >
                 Yes, Delete.
               </button>
             </div>

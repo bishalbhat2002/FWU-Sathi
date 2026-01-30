@@ -15,7 +15,7 @@ const EditMessageBox = () => {
     <OverlayScreen>
       <form
         onSubmit={handleMessageEdit}
-        className="w-[80vw] relative max-w-130 bg-gray-800 p-5 rounded-md flex flex-col gap-2"
+        className="w-[80vw] relative max-w-130 bg-gray-800 p-5 rounded-md flex flex-col gap-2 "
       >
         <Link
           to={"/chat"}
