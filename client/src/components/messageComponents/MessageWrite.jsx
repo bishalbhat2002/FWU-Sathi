@@ -22,6 +22,7 @@ export const MessageWrite = ()=>{
         value={message}
         onChange={handleMessageType}
         name="comment"
+        autoFocus={true}
         className="w-full focus:outline-blue-500 bg-white px-2 text-gray-700 font-medium"
         placeholder="Your Message here...."
       />

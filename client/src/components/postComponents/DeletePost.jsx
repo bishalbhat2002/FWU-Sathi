@@ -1,12 +1,24 @@
-import { useState } from "react";
 import OverlayScreen from "../../layouts/OverlayScreen";
 import ProfilePhoto from "../commonComponents/ProfilePhoto";
+import { Link, useNavigate } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
-import { Link } from "react-router-dom";
+
+
+
 
 const DeletePost = () => {
+
+  const navigate = useNavigate();
+
   return (
     <OverlayScreen>
+      <button
+        onClick={() => navigate(-1)}
+        className="rounded-full p-1 bg-gray-800 absolute border-2 border-white right-3 top-3 hover-scale"
+      >
+        <RxCross2 className="size-6 text-white hover-scale" />
+      </button>
+
       <div className="bg-white max-w-130 w-full bg-white-600 border-1 rounded-md border-gray-300">
         <div className="flex gap-4 p-2 items-center border-b border-gray-300 shadow relative">
           <ProfilePhoto className="h-15 w-15 no-scale-on-hover" />
@@ -16,12 +28,6 @@ const DeletePost = () => {
               5th Semester
             </p>
           </div>
-          <Link
-            to={"/"}
-            className="rounded-full p-1 bg-zinc-200 hover:bg-zinc-400 group absolute right-3 top-3 hover-scale"
-          >
-            <RxCross2 className="size-6 text-zinc-500 group-hover:text-white group-hover:hover-scale" />
-          </Link>
           <div className="pr-1 pb-0.5 rounded-tl-sm text-zinc-400 font-medium absolute right-0 bottom-0">
             2082-12-10 12:10:30
           </div>
@@ -53,9 +59,7 @@ const DeletePost = () => {
                   No, don't Delete.
                 </button>
               </Link>
-              <button
-                className="w-1/2 mt-2 inline-block py-2 bg-red-300 rounded-sm py-1 border border-black/10 shadow text-zinc-800 hover:bg-red-400 hover:text-white active:scale-97 ease-in duration-200"
-              >
+              <button className="w-1/2 mt-2 inline-block py-2 bg-red-300 rounded-sm py-1 border border-black/10 shadow text-zinc-800 hover:bg-red-400 hover:text-white active:scale-97 ease-in duration-200">
                 Yes, Delete.
               </button>
             </div>

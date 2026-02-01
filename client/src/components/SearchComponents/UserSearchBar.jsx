@@ -40,14 +40,14 @@ export const UserSearchBar = () => {
       <div className="w-full flex gap-2 mt-2 mb-3">
         {/* Option for slecting Semester... */}
         <select>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
+          <option value="1">1 sem</option>
+          <option value="2">2 sem</option>
+          <option value="3">3 sem</option>
+          <option value="4">4 sem</option>
+          <option value="5">5 sem</option>
+          <option value="6">6 sem</option>
+          <option value="7">7 sem</option>
+          <option value="8">8 sem</option>
           <option value="" disabled={true} selected={true}>Semester</option>
         </select>
 

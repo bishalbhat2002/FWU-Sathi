@@ -112,7 +112,7 @@ export const register = asyncHandler(async (req, res, next) => {
   }
 
   // Simple email regex
-  console.log(email);
+  // console.log(email);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   // Validate email
@@ -319,6 +319,7 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
   const instagram = req.body.instagram?.trim();
   const linkedln = req.body.linkedln?.trim();
   const github = req.body.github?.trim();
+  const youtube = req.body.youtube?.trim();
   const website = req.body.website?.trim();
 
   // Check for Required fields for missing
@@ -407,6 +408,16 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
       return res.status(400).json({
         success: false,
         message: "Invalid Github URL",
+      });
+    }
+  }  
+  if (youtube) {
+    if (youtube.includes("youtube.com/")) {
+      updateInfo.youtube = youtube;
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Youtube URL",
       });
     }
   }

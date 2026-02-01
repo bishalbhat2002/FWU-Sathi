@@ -37,7 +37,7 @@ const ProfilePicture = ({ className }) => {
       </div>
 
       {profilePicture && (
-        <div className="absolute -bottom-12 -left-[0.1rem] text-xs flex gap-2 bg-gray-800 px-3 py-2 rounded-sm ">
+        <div className="absolute -bottom-12 -left-[0.1rem] text-xs flex gap-2 bg-gray-800 px-3 py-2 rounded-sm z-20">
           <button
             onClick={handleProfileChange}
             autoFocus={true}

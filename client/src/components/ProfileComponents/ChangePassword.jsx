@@ -1,11 +1,12 @@
 import { useState } from "react";
 import OverlayScreen from "../../layouts/OverlayScreen";
 import { RxCross2 } from "react-icons/rx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
 
 const ChangePassword = () => {
+  const navigate = useNavigate();
   // States for handling the Password show and hide
   const [showPassword, setShowPassword] = useState({
     current: false,
@@ -109,12 +110,12 @@ const ChangePassword = () => {
           <span className="text-2xl font-black text-zinc-600 py-2">
             Change Password
           </span>
-          <Link
-            to={"/profile"}
+          <button
+            onClick={()=>navigate(-1)}
             className="rounded-full p-1 bg-zinc-300 absolute -right-2 top-3 hover-scale"
           >
             <RxCross2 className="size-6 text-zinc-500 hover-scale" />
-          </Link>
+          </button>
         </div>
 
         {/* Password change Form... */}
@@ -144,7 +145,7 @@ const ChangePassword = () => {
                 type="button"
                 className="absolute right-3 top-10"
               >
-                {showPassword.current ? <FiEyeOff /> : <FiEye />}
+                {showPassword.current ? <FiEye /> : <FiEyeOff />}
               </button>
             )}
 
@@ -177,7 +178,7 @@ const ChangePassword = () => {
                 type="button"
                 className="absolute right-3 top-10"
               >
-                {showPassword.new ? <FiEyeOff /> : <FiEye />}
+                {showPassword.new ? <FiEye /> :  <FiEyeOff />}
               </button>
             )}
 
@@ -210,7 +211,7 @@ const ChangePassword = () => {
                 type="button"
                 className="absolute right-3 top-10"
               >
-                {showPassword.confirm ? <FiEyeOff /> : <FiEye />}
+                {showPassword.confirm ? <FiEye /> : <FiEyeOff />}
               </button>
             )}
 

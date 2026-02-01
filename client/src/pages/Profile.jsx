@@ -5,8 +5,8 @@ import ProfilePicture from "../components/ProfileComponents/ProfilePicture";
 import {NameInfo} from "../components/ProfileComponents/NameInfo";
 import { About } from "../components/ProfileComponents/About";
 import SocialLinks from "../components/ProfileComponents/SocialLinks";
-import AllPosts from "../components/postComponents/AllPosts";
 import { Outlet } from "react-router-dom";
+import Post from "../components/postComponents/Post";
 
 const Profile = () => {
 
@@ -33,7 +33,9 @@ const Profile = () => {
         <About />
 
         {/* Show the Post made by the user....... */}
-        <AllPosts />
+        <div className="container mx-auto flex flex-col gap-4 mt-3">
+        <Post />
+        </div>
 
       </ResizerLayout>
     </ScrollPageLayout>

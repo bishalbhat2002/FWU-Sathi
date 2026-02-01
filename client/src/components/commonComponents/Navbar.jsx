@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ProfilePhoto from "./ProfilePhoto";
 import { NavLink, Link } from "react-router-dom";
 import { GrHomeRounded, GrSearch } from "react-icons/gr";
@@ -6,14 +6,24 @@ import { RiTelegram2Fill } from "react-icons/ri";
 import { MdNotificationsNone } from "react-icons/md";
 import { PiFilesBold } from "react-icons/pi";
 import ProfileViewer from "../profileComponents/ProfileViewer";
+import { RxArrowTopRight } from "react-icons/rx";
 
 export const Navbar = () => {
   const [profileViewer, setProfileViewer] = useState(false);
+  const profileRef = useRef(null);
 
-  function handleProfileView(e){
-    e.preventDefault();
-    setProfileViewer(!profileViewer);
+  function handleOutsideClick(e) {
+    if (profileRef.current && !profileRef.current.contains(e.target)) {
+      setProfileViewer(false);
+    }
   }
+
+  useEffect(() => {
+    document.addEventListener("click", handleOutsideClick, true);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick, true);
+    };
+  }, []);
 
   return (
     <nav className="z-50 h-15 bg-white shadow flex justify-between items-center px-3 md:px-10 fixed top-0 right-0 left-0">
@@ -24,66 +34,81 @@ export const Navbar = () => {
         </div>
       </Link>
 
-      <div className="flex justify-center items-center gap-7">
-        <ul className="flex flex-1 justify-between gap-5">
+      <div className="flex justify-center items-center gap-5 sm:gap-7">
+        <ul className="flex flex-1 justify-between gap-4 sm:gap-5">
           <li>
             <NavLink
               className={({ isActive }) =>
-                `text-gray-500 text-lg lg:text-xl nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
+                `text-gray-500 nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
               }
               to={"/"}
             >
-              <GrHomeRounded className="hover-scale text-[22px]   md:text-[23px] " />
+              <GrHomeRounded className="hover-scale text-[15px] sm:text[19px]  md:text-[23px] " />
             </NavLink>
           </li>
           <li>
             <NavLink
               className={({ isActive }) =>
-                `text-gray-500 text-lg lg:text-xl nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
+                `text-gray-500 nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
               }
               to={"/search"}
             >
-              <GrSearch className="hover-scale text-[22px]   md:text-[23px] " />
+              <GrSearch className="hover-scale text-[15px] sm:text[19px]  md:text-[23px] " />
             </NavLink>
           </li>
           <li>
             <NavLink
               className={({ isActive }) =>
-                `text-gray-500 text-lg lg:text-xl nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
+                `text-gray-500 nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
               }
               to={"/chat"}
             >
-              <RiTelegram2Fill className="hover-scale text-[23px] md:text-[25px] " />
+              <RiTelegram2Fill className="hover-scale text-[17px] sm:text[21px] md:text-[25px] " />
             </NavLink>
           </li>
           <li>
             <NavLink
               className={({ isActive }) =>
-                `text-gray-500 text-lg lg:text-xl nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
+                `text-gray-500 nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
               }
               to={"/notification"}
             >
-              <MdNotificationsNone className="hover-scale text-[23px]   md:text-[25px] " />
+              <MdNotificationsNone className="hover-scale text-[17px] sm:text[21px]  md:text-[25px] " />
             </NavLink>
           </li>
           <li>
             <NavLink
               className={({ isActive }) =>
-                `text-gray-500 text-lg lg:text-xl nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
+                `text-gray-500 nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
               }
               to={"/notes"}
             >
-              <PiFilesBold className="hover-scale text-[23px]   md:text-[25px] " />
+              <PiFilesBold className="hover-scale text-[17px] sm:text[21px]  md:text-[25px] " />
             </NavLink>
           </li>
         </ul>
         <div className="relative">
-          <button className="bg-red-500 rounded-full" onClick={handleProfileView}>
-              <ProfilePhoto />
-          </button>
-        {
-          profileViewer && <ProfileViewer />
-        }
+          {false ? (
+            <>
+              <button
+                className="bg-red-500 rounded-full"
+                onClick={() => setProfileViewer((prev) => !prev)}
+              >
+                <ProfilePhoto />
+              </button>
+              {profileViewer && <div ref={profileRef}>{<ProfileViewer />}</div>}
+            </>
+          ) : (
+            <Link
+              to={"/login"}
+              className="bg-blue-700 px-2 py-1 sm:px-3 sm:py-2 rounded-md hover-scale flex items-center gap-1 opacity-90 hover:opacity-100 text-white"
+            >
+              <span className="text-[15px] sm:text-sm lg:text-md font-medium">
+                Login
+              </span>
+              <RxArrowTopRight className="size-4" />
+            </Link>
+          )}
         </div>
       </div>
     </nav>
