@@ -32,7 +32,7 @@ const CreatePost = () => {
             </p>
           </div>
 
-          <div className="pr-1 pb-0.5 rounded-tl-sm text-zinc-400 font-medium absolute right-0 bottom-0">
+          <div className="pr-1 pb-0.5 rounded-tl-sm text-zinc-400 font-medium absolute right-0 text-sm bottom-0">
             2082-12-10 12:10:30
           </div>
         </div>
@@ -42,7 +42,8 @@ const CreatePost = () => {
           <textarea
             rows={3}
             value={post.caption}
-            className="w-full px-2 min-h-20 max-h-50 py-1 border-1 border-black/30 rounded shadow text-gray-700 focus:outline-none"
+            autoFocus={true}
+            className="w-full px-2 min-h-20 max-h-50 py-1 bg-blue-100 rounded shadow text-gray-700 focus:outline-blue-300"
             placeholder="Enter Text Here ..."
             onChange={(e) =>
               setPost((prev) => ({ ...prev, caption: e.target.value }))
@@ -81,13 +82,13 @@ const CreatePost = () => {
             {/* Upload photo button */}
             <button
               onClick={() => document.getElementById("photoInput").click()}
-              className="w-full bg-zinc-300 rounded-sm py-1 text-zinc-800 hover:opacity-90 active:scale-97 ease-in duration-200"
+              className="w-full bg-zinc-200 hover:bg-zinc-300 rounded-sm py-1 text-zinc-800 active:scale-97 ease-in duration-200"
             >
               {post.photo ? "Change Photo" : "Upload Photo"}
             </button>
 
             {/* Post button.... */}
-            <button className="w-full mt-2 bg-blue-300 rounded-sm py-1 text-zinc-800 hover:bg-blue-400 active:scale-97 ease-in duration-200">
+            <button className="w-full mt-2 bg-blue-300/80 rounded-sm py-1 text-zinc-800 hover:bg-blue-400/70 active:scale-97 ease-in duration-200">
               Post
             </button>
           </div>

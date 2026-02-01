@@ -19,7 +19,10 @@ const DeletePost = () => {
         <RxCross2 className="size-6 text-white hover-scale" />
       </button>
 
-      <div className="bg-white max-w-130 w-full bg-white-600 border-1 rounded-md border-gray-300">
+      <div className="bg-white max-w-130 w-full bg-white-600 border-1 rounded-md border-gray-300 relative">
+
+      <span className="absolute right-0 text-sm sm:text-md bg-red-100 rounded-bl px-2 py-1 font-medium text-zinc-500">You are Delete this post...</span>
+
         <div className="flex gap-4 p-2 items-center border-b border-gray-300 shadow relative">
           <ProfilePhoto className="h-15 w-15 no-scale-on-hover" />
           <div>

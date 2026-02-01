@@ -5,7 +5,6 @@ import { RxCross2 } from "react-icons/rx";
 import { MdOutlineMail } from "react-icons/md";
 
 const ProfileEdit = () => {
-
   const navigate = useNavigate();
 
   const [profileData, setProfileData] = useState({
@@ -192,32 +191,32 @@ const ProfileEdit = () => {
       if (instagram.includes("instagram.com/") && instagram.length < 30) {
         socialMedia.instagram = instagram;
       } else {
-          isValid = false;
-          handleProfileUpdateError("instagramError", "Instagram is invalid.");  
+        isValid = false;
+        handleProfileUpdateError("instagramError", "Instagram is invalid.");
       }
     }
     if (linkedln) {
       if (linkedln.includes("linkedln.com/") && linkedln.length < 30) {
         socialMedia.linkedln = linkedln;
       } else {
-          isValid = false;
-          handleProfileUpdateError("linkedlnError", "Linkedln is invalid.");  
+        isValid = false;
+        handleProfileUpdateError("linkedlnError", "Linkedln is invalid.");
       }
     }
     if (github) {
       if (github.includes("github.com/") && github.length < 30) {
         socialMedia.github = github;
       } else {
-          isValid = false;
-          handleProfileUpdateError("githubError", "Github is invalid.");  
+        isValid = false;
+        handleProfileUpdateError("githubError", "Github is invalid.");
       }
     }
     if (youtube) {
       if (youtube.includes("youtube.com/") && youtube.length < 30) {
         socialMedia.youtube = youtube;
       } else {
-          isValid = false;
-          handleProfileUpdateError("youtubeError", "Youtube is invalid.");  
+        isValid = false;
+        handleProfileUpdateError("youtubeError", "Youtube is invalid.");
       }
     }
     if (website) {
@@ -227,8 +226,8 @@ const ProfileEdit = () => {
       if (websiteRegex.test(website) && website.length < 50) {
         socialMedia.website = website;
       } else {
-          isValid = false;
-          handleProfileUpdateError("websiteError", "Website is invalid.");  
+        isValid = false;
+        handleProfileUpdateError("websiteError", "Website is invalid.");
       }
     }
 
@@ -246,7 +245,7 @@ const ProfileEdit = () => {
   return (
     <OverlayScreen>
       <button
-        onClick={()=>navigate(-1)}        
+        onClick={() => navigate(-1)}
         className="rounded-full p-1 bg-gray-400 hover:bg-gray-600 absolute right-5 top-5 z-10 hover-scale"
       >
         <RxCross2 className="size-6 text-white hover-scale" />
@@ -272,7 +271,6 @@ const ProfileEdit = () => {
               name="name"
               value={profileData.name}
               onChange={handleProfileDataChange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}
@@ -298,7 +296,6 @@ const ProfileEdit = () => {
               value={profileData.email}
               onChange={handleProfileDataChange}
               autoFocus={true}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             <MdOutlineMail className="size-5 absolute right-3 top-[2.6rem] text-gray-500" />
@@ -431,7 +428,6 @@ const ProfileEdit = () => {
               name="program"
               value={profileData.program}
               onChange={handleProfileDataChange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}
@@ -456,7 +452,6 @@ const ProfileEdit = () => {
               name="college"
               value={profileData.college}
               onChange={handleProfileDataChange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}
@@ -481,7 +476,6 @@ const ProfileEdit = () => {
               name="address"
               value={profileData.address}
               onChange={handleProfileDataChange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}
@@ -506,7 +500,6 @@ const ProfileEdit = () => {
               name="facebook"
               value={profileData.facebook}
               onChange={handleProfileDataChange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}
@@ -531,7 +524,6 @@ const ProfileEdit = () => {
               name="instagram"
               value={profileData.instagram}
               onChange={handleProfileDataChange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}
@@ -556,7 +548,6 @@ const ProfileEdit = () => {
               name="linkedln"
               value={profileData.linkedln}
               onChange={handleProfileDataChange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}
@@ -581,7 +572,6 @@ const ProfileEdit = () => {
               name="github"
               value={profileData.github}
               onChange={handleProfileDataChange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}
@@ -606,7 +596,6 @@ const ProfileEdit = () => {
               name="youtube"
               value={profileData.youtube}
               onChange={handleProfileDataChange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}
@@ -631,7 +620,6 @@ const ProfileEdit = () => {
               name="website"
               value={profileData.website}
               onChange={handleProfileDataChange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}

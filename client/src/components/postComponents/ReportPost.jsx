@@ -15,7 +15,10 @@ const ReportPost = ({ parentRoute = "/" }) => {
         <RxCross2 className="size-6 text-white hover-scale" />
       </button>
 
-      <div className="bg-white max-w-130 w-full bg-white-600 border-1 rounded-md border-gray-300">
+      <div className="bg-white max-w-130 w-full bg-white-600 border-1 rounded-md border-gray-300 relative overflow-hidden">
+
+        <span className="absolute right-0 text-sm sm:text-md bg-orange-100 rounded-bl px-2 py-1 font-medium text-zinc-500">You are reporting this post...</span>
+        
         <div className="flex gap-4 p-2 items-center border-b border-gray-300 shadow relative">
           <ProfilePhoto className="h-15 w-15 no-scale-on-hover" />
           <div>
@@ -25,7 +28,7 @@ const ReportPost = ({ parentRoute = "/" }) => {
             </p>
           </div>
 
-          <div className="pr-1 pb-0.5 rounded-tl-sm text-zinc-400 font-medium absolute right-0 bottom-0">
+          <div className="pr-1 pb-0.5 rounded-tl-sm text-zinc-400 font-medium absolute right-0 bottom-0 text-sm">
             2082-12-10 12:10:30
           </div>
         </div>
@@ -46,7 +49,8 @@ const ReportPost = ({ parentRoute = "/" }) => {
 
             <textarea
               rows={3}
-              className="rounded-sm w-full px-2 min-h-20 max-h-50 py-1 border-1 border-zinc-400 shadow text-gray-700 focus:outline-none"
+              autoFocus={true}
+              className="rounded-sm w-full px-2 min-h-20 max-h-50 py-1 bg-blue-100 text-gray-700 focus:outline-blue-300"
               placeholder="Your Report Here ..."
             />
 
