@@ -91,10 +91,10 @@ const ChangePassword = () => {
   }
 
   return (
-    <div className="w-full h-screen p-15 flex justify-center items-center overflow-hidden">
+    <div className="w-full h-screen sm:pt-15 flex justify-center items-center overflow-hidden">
       <form
         onSubmit={handlePasswordSubmit}
-        className="max-w-105 w-full bg-white shadow-post rounded-md overflow-hidden p-5 flex flex-col gap-5"
+        className="max-w-105 w-full mx-2 bg-white shadow-post rounded-md overflow-hidden p-5 flex flex-col gap-5"
       >
         <h2 className="text-3xl font-bold text-center text-gray-700 -mt-2 -mb-1">
           Forgot Password

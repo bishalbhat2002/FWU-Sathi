@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { isValidElement, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -6,6 +6,8 @@ import { MdOutlineMail } from "react-icons/md";
 
 const RegisterComponent = () => {
   const [showPassword, setShowPassword] = useState(true);
+  const [showVerify, setShowVerify] = useState(false);
+
   const [registerData, setRegisterData] = useState({
     email: "",
     password: "",
@@ -15,6 +17,7 @@ const RegisterComponent = () => {
     semester: "",
     college: "",
     address: "",
+    verificationCode: "",
   });
 
   const [registerError, setRegisterError] = useState({
@@ -26,6 +29,7 @@ const RegisterComponent = () => {
     semesterError: "",
     collegeError: "",
     addressError: "",
+    verificationCodeError: "",
   });
 
   function handleRegisterDatachange(e) {
@@ -42,8 +46,8 @@ const RegisterComponent = () => {
     }));
   }
 
-  function handleRegister(e) {
-    e.preventDefault();
+  // Validate Register Data...
+  function validateRegisterData() {
     let isValid = true;
 
     // Reset previous Errors...
@@ -56,6 +60,7 @@ const RegisterComponent = () => {
       semesterError: "",
       collegeError: "",
       addressError: "",
+      verificationCodeError: "",
     }));
 
     // Validate Data....
@@ -145,20 +150,60 @@ const RegisterComponent = () => {
       handleRegisterError("genderError", "Gender is required.");
     }
 
-    console.log(registerData)
-    // Return if not valid data is provided...
-    if (!isValid) {
+    // Return True or false.... True means register data is correct, and False means register data is not correct.
+    return isValid;
+  }
+
+  function validateVerificationCode() {
+    let isValid = true;
+    if (registerData.verificationCode.length === 0) {
+      isValid = false;
+      handleRegisterError(
+        "verificationCodeError",
+        "Verification Code is required.",
+      );
+    } else if (registerData.verificationCode.length !== 6) {
+      isValid = false;
+      handleRegisterError(
+        "verificationCodeError",
+        "Verification Code must be 6 characters.",
+      );
+    }
+
+    // Return true or false.... True means verification code is in correct format false means it is in incorrect format.
+    return isValid;
+  }
+
+  // Verify Email....
+  function verifyEmail(e) {
+    e.preventDefault();
+    if (!validateRegisterData()) {
       return;
     }
 
-     // Send the registration form data to backend....     
-    
+    // Send Email only to backend for verification...
+    alert("api call... for email..");
+
+    // Show verification code input field Only if 200 response is received from backend....
+    setShowVerify(true);
+  }
+
+  function handleRegister(e) {
+    e.preventDefault();
+
+    // Return if not valid data is provided...
+    if (!validateRegisterData() || !validateVerificationCode()) {
+      return;
+    }
+
+    // Send the registration form data to backend....
+    alert("api call.. user registeration..");
   }
 
   return (
     <div className="w-full h-screen pt-15 flex justify-center items-start sm:items-center overflow-x-hidden overflow-y-auto">
       <form
-        onSubmit={handleRegister}
+        onSubmit={!showVerify? verifyEmail : handleRegister}
         className="max-w-220 w-full mx-3 my-5 bg-white shadow-post rounded-md overflow-hidden p-5 flex flex-col gap-5"
       >
         <h2 className="text-3xl font-bold text-center text-gray-700 -mt-2 -mb-1">
@@ -182,7 +227,6 @@ const RegisterComponent = () => {
               value={registerData.email}
               onChange={handleRegisterDatachange}
               autoFocus={true}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             <MdOutlineMail className="size-5 absolute right-3 top-[2.6rem] text-gray-500" />
@@ -210,7 +254,6 @@ const RegisterComponent = () => {
               name="password"
               value={registerData.password}
               onChange={handleRegisterDatachange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
 
@@ -246,7 +289,6 @@ const RegisterComponent = () => {
               name="name"
               value={registerData.name}
               onChange={handleRegisterDatachange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}
@@ -270,37 +312,52 @@ const RegisterComponent = () => {
               <div className="flex items-center">
                 <input
                   type="radio"
-                  id="gender"
+                  id="male"
                   name="gender"
                   value={"male"}
                   onChange={handleRegisterDatachange}
                   className="size-4"
                 />{" "}
-                <span className="font-medium text-gray-600 ml-2">Male </span>
+                <label
+                  htmlFor="male"
+                  className="font-medium text-gray-600 ml-2"
+                >
+                  Male{" "}
+                </label>
               </div>
 
               <div className="flex items-center">
                 <input
                   type="radio"
-                  id="gender"
+                  id="female"
                   name="gender"
                   value={"female"}
                   onChange={handleRegisterDatachange}
                   className="size-4"
                 />
-                <span className="font-medium text-gray-600 ml-2">Female </span>
+                <label
+                  htmlFor="female"
+                  className="font-medium text-gray-600 ml-2"
+                >
+                  Female{" "}
+                </label>
               </div>
 
               <div className="flex items-center">
                 <input
                   type="radio"
-                  id="gender"
+                  id="other"
                   name="gender"
                   value={"other"}
                   onChange={handleRegisterDatachange}
                   className="size-4"
                 />
-                <span className="font-medium text-gray-600 ml-2">Other </span>
+                <label
+                  htmlFor="other"
+                  className="font-medium text-gray-600 ml-2"
+                >
+                  Other{" "}
+                </label>
               </div>
             </div>
 
@@ -320,23 +377,40 @@ const RegisterComponent = () => {
             >
               Semester:
             </label>
-               <select
-               name="semester"
-               id="semester"
-               onChange={handleRegisterDatachange}
-               className="w-full bg-white-900 border-none font-medium input-shadow p-2 text-zinc-600 rounded-sm text-sm sm:text-md focus:outline-blue-400"
-               >
-                    <option value="" className="text-md">Select Semester</option>
-                    <option value="1" className="text-md">1 sem</option>
-                    <option value="2" className="text-md">2 sem</option>
-                    <option value="3" className="text-md">3 sem</option>
-                    <option value="4" className="text-md">4 sem</option>
-                    <option value="5" className="text-md">5 sem</option>
-                    <option value="6" className="text-md">6 sem</option>
-                    <option value="7" className="text-md">7 sem</option>
-                    <option value="8" className="text-md">8 sem</option>
-               </select>
-
+            <select
+              name="semester"
+              id="semester"
+              onChange={handleRegisterDatachange}
+              className="w-full bg-white-900 border-none font-medium input-shadow p-2 text-zinc-600 rounded-sm text-sm sm:text-md focus:outline-blue-400"
+            >
+              <option value="" className="text-md">
+                Select Semester
+              </option>
+              <option value="1" className="text-md">
+                1 sem
+              </option>
+              <option value="2" className="text-md">
+                2 sem
+              </option>
+              <option value="3" className="text-md">
+                3 sem
+              </option>
+              <option value="4" className="text-md">
+                4 sem
+              </option>
+              <option value="5" className="text-md">
+                5 sem
+              </option>
+              <option value="6" className="text-md">
+                6 sem
+              </option>
+              <option value="7" className="text-md">
+                7 sem
+              </option>
+              <option value="8" className="text-md">
+                8 sem
+              </option>
+            </select>
 
             {/* Show Errors If Exists.... */}
             {registerError.semesterError && (
@@ -345,7 +419,6 @@ const RegisterComponent = () => {
               </p>
             )}
           </div>
-
 
           {/* Program field continer.... */}
           <div className="flex flex-col gap-1 w-full relative">
@@ -361,7 +434,6 @@ const RegisterComponent = () => {
               name="program"
               value={registerData.program}
               onChange={handleRegisterDatachange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}
@@ -371,7 +443,6 @@ const RegisterComponent = () => {
               </p>
             )}
           </div>
-
 
           {/* college field continer.... */}
           <div className="flex flex-col gap-1 w-full relative">
@@ -387,7 +458,6 @@ const RegisterComponent = () => {
               name="college"
               value={registerData.college}
               onChange={handleRegisterDatachange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}
@@ -412,7 +482,6 @@ const RegisterComponent = () => {
               name="address"
               value={registerData.address}
               onChange={handleRegisterDatachange}
-              autoComplete={false}
               className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             />
             {/* Show Errors If Exists.... */}
@@ -422,13 +491,43 @@ const RegisterComponent = () => {
               </p>
             )}
           </div>
+
+          {/* Verification Code Entering Field... */}
+          {showVerify && (
+            <div className="border-t-1 border-black/30 mt-1 pt-2">
+              <label
+                htmlFor="verification-code"
+                className="text-md text-zinc-500 font-medium"
+              >
+                Verification Code:
+              </label>
+
+              <input
+                type="number"
+                id="verificationCode"
+                name="verificationCode"
+                value={registerData.verificationCode}
+                autoFocus={true}
+                onChange={handleRegisterDatachange}
+                placeholder={`Code has been sent to ${registerData.email}.`}
+                className="w-full bg-white-900 border-none mt-0.5 input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
+              />
+
+              {/* Show Errors If Exists.... */}
+              {registerError.verificationCodeError && (
+                <p className="text-red-400 font-medium text-sm line-clamp-1 -mb-2">
+                  {registerError.verificationCodeError}
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         <button
           type="submit"
           className="w-full bg-blue-500 opacity-85 rounded-sm py-1.5 text-white hover:opacity-100 active:scale-97 ease-in focus:opacity-100 focus:outline-blue-700 duration-200"
         >
-          Register
+          {!showVerify? "Verify Email" : "Register User"}
         </button>
 
         <div className="relative mt-3">
