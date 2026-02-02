@@ -7,7 +7,10 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 import path from "path";
 import multer from "multer";
-import { exit } from "process";
+import {
+  generateEmailVerificationCode,
+  verifyEmailCode,
+} from "../utilities/EmailVerification.utility.js";
 
 // Encrypt Password function
 const encryptPassword = async (plainPassword) => {
@@ -76,10 +79,44 @@ export const login = asyncHandler(async (req, res, next) => {
     });
 });
 
+// Email Verification - Register User - Get-verification Code logic:
+export const getVerificationCodeForRegister = asyncHandler(async (req, res, next) => {
+  //   console.log("Email verification for register route hit....");
+
+  const email = req.body.email?.trim();
+
+  // Check for missing fields
+  if (!email) {
+    return next(new ErrorHandler(403, "Email is required."));
+  }
+
+  // Simple email regex to Validate email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return next(new ErrorHandler(403, "Invalid email address."));
+  }
+
+  if(await User.findOne({email})){
+    return next(new ErrorHandler(403, "User with email already exists."));
+  }
+
+  if (await generateEmailVerificationCode(email)) {
+    return res.status(200).json({
+      success: true,
+      message: `6 digit verification code has been successfully sent to ${email}.`,
+    });
+  }
+
+  return res.status(403).json({
+    success: false,
+    message: `verification code couldn't be sent to ${email}.`,
+  });
+});
+
 // Code for Registering User
 export const register = asyncHandler(async (req, res, next) => {
   console.log("Register req hit...");
-  let { name, email, password, gender, program, semester, college, address } =
+  let { name, email, password, gender, program, semester, college, address, code } =
     req.body;
 
   // Trim all string inputs
@@ -89,6 +126,7 @@ export const register = asyncHandler(async (req, res, next) => {
   program = program?.trim();
   college = college?.trim();
   address = address?.trim();
+  code = code?.trim();
   gender = gender?.toLowerCase();
 
   // Check for missing fields
@@ -100,9 +138,31 @@ export const register = asyncHandler(async (req, res, next) => {
     !program ||
     !semester ||
     !college ||
-    !address
+    !address ||
+    !code
   ) {
     return next(new ErrorHandler(400, "All fields are required."));
+  }
+
+  if (code.length !== 6) {
+    return next(
+      new ErrorHandler(400, "Invalid Verification code."),
+    );
+  }
+
+
+  // Check if user with email already exists
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return next(new ErrorHandler(400, "Email is already registered."));
+  }
+
+  // Verify the Email & OTP code..
+  if (!(await verifyEmailCode(email, code))) {
+    return res.status(403).json({
+      success: false,
+      message: "Invalid verification code.",
+    });
   }
 
   // Validate name length
@@ -126,7 +186,7 @@ export const register = asyncHandler(async (req, res, next) => {
     return next(
       new ErrorHandler(400, "Password must be between 8 and 16 characters."),
     );
-  }
+  }  
 
   // Validate program, college, address length
   if (program.length < 3 || program.length > 30)
@@ -164,17 +224,11 @@ export const register = asyncHandler(async (req, res, next) => {
   if (gender.toLowerCase() === "other")
     defaultPhotoLink = "/public/images/profile-anime-other.jpeg";
 
-  // Check if user already exists
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    return next(new ErrorHandler(400, "Email is already registered."));
-  }
-
   const hashPassword = await encryptPassword(password);
   let role = "student";
-  if(email === "bishalbhat3313@gmail.com"){
+  if (email === "bishalbhat3313@gmail.com") {
     // Change role for email you want to make admin......
-    role="admin";
+    role = "admin";
   }
 
   // Create user
@@ -418,7 +472,7 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
         message: "Invalid Github URL",
       });
     }
-  }  
+  }
   if (youtube) {
     if (youtube.includes("youtube.com/")) {
       updateInfo.youtube = youtube;
@@ -445,7 +499,9 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
   console.log("Profile Update Info: ", updateInfo);
 
   // update User
-  const updatedUser = await User.findByIdAndUpdate(userId, updateInfo, {new:true});
+  const updatedUser = await User.findByIdAndUpdate(userId, updateInfo, {
+    new: true,
+  });
   // new:true -> this means return the object with new updated values.
 
   return res.status(200).json({
@@ -457,7 +513,7 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
 
 // Update Password logic:
 export const updatePassword = asyncHandler(async (req, res, next) => {
-  console.log("edit password info route hit...");
+  // console.log("edit password info route hit...");
 
   const userId = req.user.userId;
   const newPassword = req.body.newPassword?.trim();
@@ -506,11 +562,98 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
     });
 });
 
-// Upload Profile pic logic
-// we make a storage with diskStorage - which takes an object with 2 values - Destination and Filename.
-// Destination is where the file will be stored, and filename is name of file that will be given to the file when stored on the specified location.
-// cb stands for callback function. We call this function inside each object values as below - first parameter
-// of cb mean error - so mostly its null. And second paramter is the value (name/ path) we pass to the calback function.
+// Forgot Password Get-verification Code logic:
+export const getVerificationCode = asyncHandler(async (req, res, next) => {
+  //   console.log("Forgot Password get verification code route hit....");
+
+  const email = req.body.email?.trim();
+
+  // Check for missing fields
+  if (!email) {
+    return next(new ErrorHandler(400, "Email is required."));
+  }
+
+  const user = await User.findOne({ email }).select("+password");
+  if (!user) {
+    return next(new ErrorHandler(400, "User doesn't exist with such email."));
+  }
+
+  if (await generateEmailVerificationCode(email)) {
+    return res.status(200).json({
+      success: true,
+      message: `6 digit verification code has been successfully sent to ${email}.`,
+    });
+  }
+
+  return res.status(403).json({
+    success: false,
+    message: `verification code couldn't be sent to ${email}.`,
+  });
+});
+
+// Forgot Password - Change password code logic:
+export const ForgotChangePassword = asyncHandler(async (req, res, next) => {
+  // console.log("Forgot change password route hit...");
+
+  const email = req.body.email?.trim();
+  const code = req.body.code?.trim();
+  const password = req.body.password?.trim();
+
+  // ensure all fields are there.
+  if (!email || !code || !password) {
+    return next(new ErrorHandler(400, "All fields are required."));
+  }
+
+  // Check for Required fields for missing
+  if (password?.length < 8 || password?.length > 20) {
+    return next(
+      new ErrorHandler(400, "Password must be between 8-20 characters."),
+    );
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(403).json({
+      success: false,
+      message: "User doesn't exist for provided email.",
+    });
+  }
+
+  if (!(await verifyEmailCode(email, code))) {
+    return res.status(403).json({
+      success: false,
+      message: "Invalid verification code.",
+    });
+  }
+
+  // Hash the password
+  const hashPassword = await encryptPassword(password);
+
+  // update User password in memory
+  user.password = hashPassword;
+  await user.save();        // save the changed data in database.
+
+  return res
+    .status(200)
+    .cookie("token", "", {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    })
+    .json({
+      success: true,
+      message: "User password changed successfully.",
+    });
+});
+
+/**
+ *  Upload Profile pic logic
+ *  we make a storage with diskStorage - which takes an object with 2 values - Destination and Filename.
+ * Destination is where the file will be stored, and filename is name of file that will be given to the file when stored on the specified location.
+ * cb stands for callback function. We call this function inside each object values as below - first parameter
+ * of cb mean error - so mostly its null. And second paramter is the value (name/ path) we pass to the calback function.
+ *
+ */
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/user"); // This folder must exist otherwise file will not be uploaded.
@@ -552,11 +695,15 @@ export const editProfilePic = asyncHandler(async (req, res, next) => {
 
   if (req.file) {
     photoPath = req.file.path;
-    const updatedUser = await User.findByIdAndUpdate(userId, { photo: photoPath }, {new:true});
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { photo: photoPath },
+      { new: true },
+    );
     return res.status(200).json({
       success: true,
       message: "Profile pic updated successfully.",
-      updatedPhoto:updatedUser.photo
+      updatedPhoto: updatedUser.photo,
     });
   } else {
     return res.status(403).json({
@@ -575,12 +722,16 @@ export const editCoverPic = asyncHandler(async (req, res, next) => {
   if (req.file) {
     coverPath = req.file.path;
 
-    const updatedUser = await User.findByIdAndUpdate(userId, { coverPhoto: coverPath }, {new:true});
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { coverPhoto: coverPath },
+      { new: true },
+    );
 
     res.status(200).json({
       success: true,
       message: "Cover pic updated successfully.",
-      updatedCover:updatedUser.coverPhoto
+      updatedCover: updatedUser.coverPhoto,
     });
   } else {
     return res.status(403).json({

@@ -1,11 +1,11 @@
-import EmailVerification from "../models/emailVerification.model.js";
+import {EmailVerification} from "../models/emailVerification.model.js";
 import { sendMail } from "./SendMail.js";
 
 const generate6DigitCode = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-const generateEmailVerificationCode = async (email) => {
+export const generateEmailVerificationCode = async (email) => {
   try {
     // Delete all previous unused codes for this email
     await EmailVerification.deleteMany({ email, used: false });
@@ -22,7 +22,8 @@ const generateEmailVerificationCode = async (email) => {
     });
 
     const info = await sendMail(email, code);
-    if (info.accepted.length > 0) {
+    if (info.success) {
+      console.log(info.accepted)
       return true;
     }
 
@@ -48,7 +49,7 @@ export const verifyEmailCode = async (email, code) => {
     });
 
     if (!record) {
-      return { success: false, message: "Invalid or expired code" };
+      return false;
     }
 
     // Mark the code as used
