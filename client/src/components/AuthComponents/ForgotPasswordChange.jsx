@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
-const ChangePassword = () => {
+const ForgotPasswordChange = () => {
   const navigate = useNavigate();
+  const [code, setCode] = useState("");
 
   // States for handling the Password show and hide
   const [showPassword, setShowPassword] = useState({
@@ -27,6 +28,7 @@ const ChangePassword = () => {
 
   // State for handling Errors
   const [errors, setErrors] = useState({
+    code: "",
     new: "",
     confirm: "",
   });
@@ -53,9 +55,18 @@ const ChangePassword = () => {
     let hasError = false;
     // Reset previous Errors before revalidation....
     setErrors((prev) => ({
+      code: "",
       new: "",
       confirm: "",
     }));
+
+    if (code.length === 0) {
+      hasError = true;
+      handleErrors("code", "Code cannot be empty.");
+    } else if (code.length !== 6) {
+      hasError = true;
+      handleErrors("code", "Code must be of 6 digits.");
+    }
 
     // Validate new Password field...
     if (password.new?.length === 0) {
@@ -97,8 +108,36 @@ const ChangePassword = () => {
         className="max-w-105 w-full mx-2 bg-white shadow-post rounded-md overflow-hidden p-5 flex flex-col gap-5"
       >
         <h2 className="text-3xl font-bold text-center text-gray-700 -mt-2 -mb-1">
-          Forgot Password
+          Change Password
         </h2>
+
+        {/* Code Input field container... */}
+        <div className="flex flex-col gap-1 relative">
+          <label
+            htmlFor="verification-code"
+            className="text-md text-zinc-400 font-medium mb-1"
+          >
+            OTP Code:
+          </label>
+          <input
+            type="number"
+            id="verification-code"
+            name="verification-code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            autoFocus={true}
+            autoComplete={false}
+            placeholder="OTP is send to the email provided."
+            className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-md focus:outline-blue-400"
+          />
+          {/* Show Errors If Exists.... */}
+          {errors.code && (
+            <p className="text-red-400 text-md line-clamp-1 -mb-2">
+              {errors.code}
+            </p>
+          )}
+
+        </div>
 
         <div className="flex flex-col gap-0.5 relative">
           <label
@@ -113,7 +152,6 @@ const ChangePassword = () => {
             onChange={(e) => handlePasswordChange("new", e)}
             id="new-Password"
             autoComplete={false}
-            autoFocus={true}
             className="w-full bg-white-900 border-none input-shadow py-1 px-2 text-zinc-700 rounded-sm text-lg focus:outline-blue-400"
           />
           {password.new && (
@@ -178,4 +216,4 @@ const ChangePassword = () => {
   );
 };
 
-export default ChangePassword;
+export default ForgotPasswordChange;

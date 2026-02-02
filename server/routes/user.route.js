@@ -1,9 +1,9 @@
 
-import exporess from "express"
+import express from "express"
 import { editCoverPic, editProfileInfo, editProfilePic, getOtherProfile, getOtherProfilePosts, getProfile, getProfilePosts, login, logout, register, updatePassword, uploadProfilePhoto} from "../controllers/User.controller.js";
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 
-const route = exporess.Router();
+const route = express.Router();
 
 // Routes for handling login and register of user
 route.post("/login", login);

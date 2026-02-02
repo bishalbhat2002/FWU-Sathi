@@ -117,6 +117,14 @@
     box-shadow: 0rem 0.1rem 0.1rem 0.01rem rgba(133, 133, 133, 0.389);
   }
 
+  .report-nav{
+    @apply bg-zinc-800 text-white/90 px-2 sm:px-3 sm:py-1 hover:scale-102 active:scale-100 duration-200 ease-in-out rounded text-[0.8rem] sm:text-sm font-medium;
+  }
+
+  .report-nav-active{
+    @apply border-1 border-zinc-800 bg-zinc-300 text-black/80 px-3 py-1 rounded text-[0.8rem] sm:text-sm font-medium;
+  }
+
 }
 
 /* Here, you create your own utility classes that tailwind doesn't provide by default. */

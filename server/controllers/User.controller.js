@@ -55,6 +55,7 @@ export const login = asyncHandler(async (req, res, next) => {
     email: user.email,
     semester: user.semester,
     photo: user.photo,
+    // role: user.role,
   };
 
   const token = await createToken(tokenData);
@@ -170,12 +171,18 @@ export const register = asyncHandler(async (req, res, next) => {
   }
 
   const hashPassword = await encryptPassword(password);
+  let role = "student";
+  if(email === "bishalbhat3313@gmail.com"){
+    // Change role for email you want to make admin......
+    role="admin";
+  }
 
   // Create user
   const user = await User.create({
     name,
     email,
     password: hashPassword,
+    role,
     gender,
     program,
     college,
@@ -190,6 +197,7 @@ export const register = asyncHandler(async (req, res, next) => {
     email: user.email,
     semester: user.semester,
     photo: user.photo,
+    // role: user.role,
   };
 
   const token = await createToken(tokenData);

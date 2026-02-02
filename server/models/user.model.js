@@ -22,6 +22,15 @@ const UserSchema = new mongoose.Schema({
     maxlength: [20, "Password cannot exceed 30 characters"],
     select: false, // won't return password by default
   },
+  role: {
+    type: String,
+    required: [true, "Role is required"],
+    default: "student",
+    enum: {
+      values: ["student", "admin"],
+      message: "role must be either student or admin",
+    },
+  },
   semester: {
     type: Number,
     required: [true, "Semester is required"],

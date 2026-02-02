@@ -22,7 +22,7 @@ const ForgotPassword = () => {
     }
 
     alert("api call");
-    navigate("/forgot-password-code-verify")
+    navigate("/forgot-password-change")
 
   }
 

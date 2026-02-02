@@ -13,7 +13,7 @@ const EditPost = () => {
   const navigate = useNavigate();
 
   return (
-    <OverlayScreen >
+    <OverlayScreen>
       <button
         onClick={() => navigate(-1)}
         className="rounded-full p-1 bg-gray-800 absolute border-2 border-white right-3 top-3 hover-scale"
@@ -21,22 +21,23 @@ const EditPost = () => {
         <RxCross2 className="size-6 text-white hover-scale" />
       </button>
 
-
       <div className="bg-white max-w-130 w-full bg-white-600 border-1 rounded-md border-gray-300 relative">
-
-
-      <span className="absolute right-0 text-sm sm:text-md bg-green-100 rounded-bl px-2 py-1 font-medium text-zinc-500">You are Editing this post...</span>
+        <span className="absolute right-0 text-sm sm:text-md bg-green-100 rounded-bl px-2 py-1 font-medium text-zinc-500">
+          You are Editing this post.
+        </span>
 
         <div className="flex gap-4 p-2 items-center border-b border-gray-300 shadow relative">
           <ProfilePhoto className="h-15 w-15 no-scale-on-hover" />
           <div>
             <h2 className="font-bold text-xl text-zinc-700">Bishal Bhat</h2>
-             <p className="font-medium text-gray-500 text-sm -mt-1">5th Semester</p>
+            <p className="font-medium text-gray-500 text-sm -mt-1">
+              5th Semester
+            </p>
           </div>
-          
-        <div className="pr-1 pb-0.5 rounded-tl-sm text-zinc-400 font-medium absolute right-0 bottom-0 text-sm">
-          2082-12-10 12:10:30
-        </div>
+
+          <div className="pr-1 pb-0.5 rounded-tl-sm text-zinc-400 font-medium absolute right-0 bottom-0 text-sm">
+            2082-12-10 12:10:30
+          </div>
         </div>
         <div className="p-1">
           <textarea
@@ -49,12 +50,11 @@ const EditPost = () => {
               setPost((prev) => ({ ...prev, caption: e.target.value }))
             }
           />
-           {/*Use condition to show the photo  */}
-            <div className="w-50 relative">
-              <img src="/image.png" alt="Post photo" 
-              className="rounded-md" />
-            </div>
-          
+          {/*Use condition to show the photo  */}
+          <div className="w-50 relative">
+            <img src="/image.png" alt="Post photo" className="rounded-md" />
+          </div>
+
           <div className="mt-2 text-lg font-semibold">
             <input
               type="file"

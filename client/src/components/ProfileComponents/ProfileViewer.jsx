@@ -1,29 +1,12 @@
 import ProfilePhoto from "../commonComponents/ProfilePhoto";
 import { Link } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
-import { useEffect, useRef } from "react";
 
 const ProfileViewer = () => {
-  const profileRef = useRef(null);
-
-  // Get states from store to hide and show the profile viewer...
-
-  function handleOutsideClick(e) {
-    if (profileRef && !profileRef.current.contains(e.target)) {
-    }
-  }
-
-  useEffect(() => {
-    document.addEventListener("click", handleOutsideClick, true);
-    return () => {
-      document.removeEventListener("click", handleOutsideClick, true);
-    };
-  }, []);
 
   return (
     <>
       <div
-        ref={profileRef}
         className="absolute inline-block bg-white/80 shadow border border-black/20 right-0 top-11 px-2 py-2 rounded-md"
       >
         <Link

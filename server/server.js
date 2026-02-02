@@ -9,6 +9,9 @@ import postRoute from "./routes/post.route.js"
 import notificationRoute from "./routes/notification.route.js"
 import searchRoute from "./routes/search.route.js"
 import messageRoute from "./routes/message.route.js"
+import reportRoute from "./routes/report.route.js"
+import { sendMail } from "./utilities/sendMail.js"
+
 
 
 const app = express()
@@ -59,10 +62,12 @@ app.use("/post", postRoute)
 app.use("/notification", notificationRoute)
 app.use("/search", searchRoute)
 app.use("/message", messageRoute)
+app.use("/report", reportRoute)
 
 
 // GLOBAL ERROR HADNLING Middleware at the end
 app.use(GlobalErrorHandler)
+
 
 
 const PORT = process.env.PORT || 5000

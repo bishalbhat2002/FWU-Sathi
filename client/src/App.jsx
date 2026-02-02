@@ -26,12 +26,15 @@ import ChangePassword from "./components/ProfileComponents/ChangePassword";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./components/AuthComponents/ForgotPassword";
-import ForgotPasswordCodeVerify from "./components/AuthComponents/ForgotPasswordCodeVerify";
-import ChangePasswordForgot from "./components/AuthComponents/ChangePasswordForgot";
 import ProfileEdit from "./components/ProfileComponents/ProfileEdit";
 import EditComment from "./components/postComponents/EditComment";
 import ReportComment from "./components/postComponents/ReportComment";
 import DeleteComment from "./components/postComponents/DeleteComment";
+import Report from "./pages/Report";
+import ResolveCommentReport from "./components/reportComponents/ResolveCommentReport";
+import ResolvePostReport from "./components/reportComponents/ResolvePostReport";
+import ResolveMessageReport from "./components/reportComponents/ResolveMessageReport";
+import ForgotPasswordChange from "./components/AuthComponents/ForgotPasswordChange";
 
 const App = () => {
   return (
@@ -61,6 +64,15 @@ const App = () => {
             <Route path="/chat/delete" element={<DeleteMessageBox />} />
           </Route>
           <Route path="/notification" element={<Notification />} />
+          
+          {/* Nested routes for handling Report handling... for admin */}
+          <Route path="/report" element={<Report />}>
+            <Route path="/report/resolve-post" element={<ResolvePostReport />} />
+            <Route path="/report/resolve-comment" element={<ResolveCommentReport />} />
+            <Route path="/report/resolve-message" element={<ResolveMessageReport />} />
+          </Route>
+
+
           <Route path="/notes" element={<Notes />} />
           <Route path="/profile/" element={<Profile />}>
             <Route path="/profile/change-password" element={<ChangePassword />} />
@@ -74,8 +86,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/forgot-password-code-verify" element={<ForgotPasswordCodeVerify />} />
-          <Route path="/change-password" element={<ChangePasswordForgot />} />
+          <Route path="/forgot-password-change" element={<ForgotPasswordChange />} />
         </Route>
         {/* 404 Page not found page.... */}
         <Route path="/*" element={<PageNotFound />} />

@@ -33,9 +33,9 @@ const reportSchema = new mongoose.Schema(
     },
     reportStatus: {
       type: String,
-      default: "Pending",
+      default: "pending",
       enum: {
-        values: ["Pending", "Resolved"],
+        values: ["pending", "resolved", "rejected"],
         message: "Invalid report status.",
       },
     },

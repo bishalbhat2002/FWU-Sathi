@@ -7,6 +7,7 @@ import { MdNotificationsNone } from "react-icons/md";
 import { PiFilesBold } from "react-icons/pi";
 import ProfileViewer from "../profileComponents/ProfileViewer";
 import { RxArrowTopRight } from "react-icons/rx";
+import { TbMessageReport } from "react-icons/tb";
 
 export const Navbar = () => {
   return (
@@ -25,7 +26,9 @@ function Logo() {
   return (
     <Link to={"/"}>
       <div className="-mt-2 pl-2 sm:pl-0 inline-block font-extrabold hover:scale-102 ease duration-200 active:scale-97">
-        <span className=" text-xl sm:text-2xl bg-linear-to-r from-blue-400 to-violet-400 text-transparent bg-clip-text">FWU Sathi</span>
+        <span className=" text-lg sm:text-2xl bg-linear-to-r from-blue-400 to-violet-400 text-transparent bg-clip-text">
+          FWU Sathi
+        </span>
         <span className="text-3xl text-orange-600">.</span>
       </div>
     </Link>
@@ -43,6 +46,7 @@ function NavigationLink() {
               `text-gray-500 nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
             }
             to={"/"}
+            title="Home"
           >
             <GrHomeRounded className="hover-scale text-[15px] sm:text[19px]  md:text-[23px] " />
           </NavLink>
@@ -53,6 +57,7 @@ function NavigationLink() {
               `text-gray-500 nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
             }
             to={"/search"}
+            title="Search"
           >
             <GrSearch className="hover-scale text-[15px] sm:text[19px]  md:text-[23px] " />
           </NavLink>
@@ -63,6 +68,7 @@ function NavigationLink() {
               `text-gray-500 nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
             }
             to={"/chat"}
+            title="Chats"
           >
             <RiTelegram2Fill className="hover-scale text-[17px] sm:text[21px] md:text-[25px] " />
           </NavLink>
@@ -73,16 +79,33 @@ function NavigationLink() {
               `text-gray-500 nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
             }
             to={"/notification"}
+            title="Notifications"
           >
             <MdNotificationsNone className="hover-scale text-[17px] sm:text[21px]  md:text-[25px] " />
           </NavLink>
         </li>
+
+        {/* Short Circuit Report Navigation Menu.... I.e. Only show it to the admin. */}
+        {false && (
+          <li>
+            <NavLink
+              className={({ isActive }) =>
+                `text-gray-500 nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
+              }
+              to={"/report"}
+              title="Report"
+            >
+              <TbMessageReport className="hover-scale text-[17px] sm:text[21px]  md:text-[25px] " />
+            </NavLink>
+          </li>
+        )}
         <li>
           <NavLink
             className={({ isActive }) =>
               `text-gray-500 nav-link hover:text-blue-800 ${isActive ? "active" : ""}`
             }
             to={"/notes"}
+            title="Notes"
           >
             <PiFilesBold className="hover-scale text-[17px] sm:text[21px]  md:text-[25px] " />
           </NavLink>
