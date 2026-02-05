@@ -4,6 +4,7 @@ import {useSelector} from "react-redux"
 
 const CreatePost = () => {
   const userProfile = useSelector((state) => state.userReducer.userProfile);
+  
   // console.log(userProfile)
   return (
     <div className="max-w-130 mx-auto border shadow border-black/10 px-2 py-2 mt-3 rounded-md bg-white/90">

@@ -12,6 +12,8 @@ const initialState = {
   // Loaders
   loader: false,
   success: false, // State to redirect to different pages on any operation success.
+  editPostSuccess: false,
+  deletePostSuccess: false,
 };
 
 export const postSlice = createSlice({
@@ -54,6 +56,13 @@ export const postSlice = createSlice({
       const post = state.posts.find(p=>p._id === postId);
       if(!post) return;
       post.commentCount -= 1;
+    },
+    
+    setEditPostSuccess: (state, action)=>{
+      state.editPostSuccess = action.payload;
+    },
+     setDeletePostSuccess: (state, action)=>{
+      state.deletePostSuccess = action.payload;
     }
   },
 
@@ -97,7 +106,7 @@ export const postSlice = createSlice({
       const updatedPost = action.payload?.post;
       console.log("updated post:", updatedPost);
       state.posts = state.posts.map(post=>( post._id === updatedPost._id ? updatedPost : post ))
-
+      state.editPostSuccess = true;
       toast.success(action.payload?.message); // Show password change success message
       console.log(state.posts);
     });
@@ -387,5 +396,5 @@ export const postSlice = createSlice({
   },
 });
 
-export const { setSuccess, toggleLike, createComment } = postSlice.actions;
+export const { setSuccess, toggleLike, createComment, setEditPostSuccess, setDeletePostSuccess } = postSlice.actions;
 export default postSlice.reducer;

@@ -6,10 +6,6 @@ const MessageSchema = new mongoose.Schema({
           ref:"User",
           required:true,
      },
-     userPhoto:{
-          type:String,
-          required:[true, "User Photo is required"],
-     },
      message:{
           type:String,
           required:[true, "Message is required"],

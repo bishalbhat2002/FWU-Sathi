@@ -45,6 +45,7 @@ const EditComment = () => {
       >
         <button
           onClick={() => navigate(-1)}
+          type="button"
           className="rounded-full p-1 bg-gray-800 absolute border-2 border-white -right-3 -top-3 hover-scale"
         >
           <RxCross2 className="size-6 text-white hover-scale" />

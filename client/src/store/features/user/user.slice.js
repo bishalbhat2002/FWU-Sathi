@@ -86,8 +86,8 @@ export const userSlice = createSlice({
       state.isAuthenticated = true;
       state.userProfile = action.payload.user; // store the user details on userProfile.
       state.loader = false;
-      localStorage.setItem("isAuthenticated", JSON.stringify(true)); // Store state on localstorage.
-      localStorage.setItem("userProfile", JSON.stringify(action.payload.user)); // store userProfile also.
+      localStorage.setItem("isAuthenticated", JSON.stringify(true));              // Store state on localstorage.
+      localStorage.setItem("userProfile", JSON.stringify(action.payload.user));   // store userProfile also.
       toast.success(action.payload?.message);
     });
 
@@ -151,7 +151,7 @@ export const userSlice = createSlice({
     builder.addCase(registerUserThunk.fulfilled, (state, action) => {
       console.log("fullfilled");
       state.isAuthenticated = true;
-      state.userProfile = action.payload.user; // store the user details on userProfile.
+      state.userProfile = action.payload.user;        // store the user details on userProfile.
       state.loader = false;
 
       localStorage.setItem("isAuthenticated", JSON.stringify(true)); // Store state on localstorage.
@@ -243,6 +243,7 @@ export const userSlice = createSlice({
       // console.log(action?.payload);
       state.profileInfo.photo = action?.payload?.updatedPhoto;
       state.userProfile.photo = action?.payload?.updatedPhoto;
+      localStorage.setItem("userProfile", JSON.stringify(state.userProfile));          // store userProfile in localstorage.
       // console.log(state.profileInfo);
       toast.success(action?.payload?.message); // Show password change success message
     });
@@ -299,7 +300,6 @@ export const userSlice = createSlice({
       state.editLoader = false;
       toast.error(action?.payload?.message); // Show password change success message
     });
-
 
     // code for password update ...
     builder.addCase(changePasswordThunk.pending, (state, action) => {

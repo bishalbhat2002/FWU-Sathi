@@ -25,8 +25,9 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(getProfileThunk({userId}));
+
     dispatch(getProfilePostsThunk({userId, page:1}))
-  }, [userId]);
+  }, [userId, ]);
 
 
   if(profileLoader){

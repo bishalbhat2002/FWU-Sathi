@@ -144,7 +144,7 @@ export const getProfileThunk = createAsyncThunk(
       const response = await axiosInstance.get(`/user/get-profile/${userId}`);
 
       // console.log(response?.data);
-      return response?.data; // return created post and success message object...
+      return response?.data;        
     } catch (error) {
       console.log("error:", error);
       return rejectWithValue(error?.response?.data?.message);

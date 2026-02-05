@@ -6,7 +6,7 @@ import { Report } from "../models/report.model.js";
 // Code to Send (create) message
 export const sendMessage = asyncHandler(async (req, res, next) => {
   console.log('Send message route hit....')
-  const { userId, photo } = req.user;
+  const { userId } = req.user;
   const msg = req.body.message.trim();
 
   if (msg.length === 0 || msg.length > 800) {
@@ -16,7 +16,7 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
     });
   }
 
-  const message = await Message.create({ userId, userPhoto: photo, message: msg });
+  const message = await Message.create({ userId, message: msg });
   
   const messageWithUserDetails = await Message.findById(message._id).populate("userId", "name photo")
 

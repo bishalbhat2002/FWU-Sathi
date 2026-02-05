@@ -7,40 +7,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSemesterName } from "../../utilities/getSemName";
 import { getImageUrl } from "../../utilities/getImageUrl";
 import { editPostThunk } from "../../store/features/post/post.thunk";
-import { setSuccess } from "../../store/features/post/post.slice";
+import { setEditPostSuccess, setSuccess } from "../../store/features/post/post.slice";
 
 const EditPost = () => {
-
   const { postId } = useParams();
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.postReducer.posts);
   const loader = useSelector((state) => state.postReducer.loader);
-  const success = useSelector((state) => state.postReducer.success);
+  const editPostSuccess = useSelector((state) => state.postReducer.editPostSuccess);
   const post = posts.find((post) => post?._id === postId);
-
 
   const [caption, setCaption] = useState(post?.caption);
   const [ready, setReady] = useState(false);
-  // const profileLoader = useSelector(state=>state.userReducer.profileLoader);
 
-  useEffect(()=>{
-    dispatch(setSuccess(false));
+  useEffect(() => {
+    dispatch(setEditPostSuccess(false));
     setReady(true);
-  }, [])
- 
-  useEffect(()=>{
-    // if(!ready || !profileLoader) return;
-    if(!ready) return;
+  }, []);
 
-    if(!loader && success){
+  useEffect(() => {
+    if (!ready) return;
+
+    if (!loader && editPostSuccess) {
       navigate(-1);
     }
-  }, [success, loader])
+  }, [editPostSuccess, loader]);
 
-    function handlePostEdit(){
-    dispatch(editPostThunk({caption, postId}));
+  function handlePostEdit() {
+    dispatch(editPostThunk({ caption, postId }));
   }
 
   return (
@@ -58,9 +53,14 @@ const EditPost = () => {
         </span>
 
         <div className="flex gap-4 p-2 items-center border-b border-gray-300 shadow relative">
-          <ProfilePhoto imgSrc={post?.userId?.photo} className="h-15 w-15 no-scale-on-hover" />
+          <ProfilePhoto
+            imgSrc={post?.userId?.photo}
+            className="h-15 w-15 no-scale-on-hover"
+          />
           <div>
-            <h2 className="font-bold text-xl text-zinc-700">{post?.userId?.name}</h2>
+            <h2 className="font-bold text-xl text-zinc-700">
+              {post?.userId?.name}
+            </h2>
             <p className="font-medium text-gray-500 text-sm -mt-1">
               {getSemesterName(post?.semester)} Semester
             </p>
@@ -77,21 +77,26 @@ const EditPost = () => {
             autoFocus={true}
             className="w-full px-2 min-h-20 max-h-50 py-1 bg-blue-100 rounded my-1 shadow text-gray-700 focus:outline-blue-300"
             placeholder="Enter Caption Here ..."
-            onChange={(e) =>setCaption(e.target.value)}
+            onChange={(e) => setCaption(e.target.value)}
           />
 
           {/*Use condition to show the photo  */}
-          {post?.photo &&
+          {post?.photo && (
             <div className="w-50 relative">
-            <img src={getImageUrl(post?.photo)} alt="Post photo" className="rounded-md" />
-          </div>
-          }
+              <img
+                src={getImageUrl(post?.photo)}
+                alt="Post photo"
+                className="rounded-md"
+              />
+            </div>
+          )}
 
           <div className="mt-2 text-lg font-semibold">
-            <button 
-            type="button"
-            onClick={handlePostEdit}
-            className="w-full mt-2 bg-blue-300/90 rounded-sm py-1 text-zinc-800 hover:bg-blue-400/80 active:scale-97 ease-in duration-200">
+            <button
+              type="button"
+              onClick={handlePostEdit}
+              className="w-full mt-2 bg-blue-300/90 rounded-sm py-1 text-zinc-800 hover:bg-blue-400/80 active:scale-97 ease-in duration-200"
+            >
               Save Changes
             </button>
           </div>

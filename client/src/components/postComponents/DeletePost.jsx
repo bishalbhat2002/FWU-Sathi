@@ -6,7 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSemesterName } from "../../utilities/getSemName";
 import { getImageUrl } from "../../utilities/getImageUrl";
 import { useEffect, useState } from "react";
-import { setSuccess } from "../../store/features/post/post.slice";
+import {
+  setDeletePostSuccess,
+  setSuccess,
+} from "../../store/features/post/post.slice";
 import { deletePostThunk } from "../../store/features/post/post.thunk";
 
 const DeletePost = () => {
@@ -14,27 +17,29 @@ const DeletePost = () => {
   const dispatch = useDispatch();
   const { postId } = useParams();
   const posts = useSelector((state) => state.postReducer.posts);
-  const success = useSelector((state) => state.postReducer.success);
+  const deletePostSuccess = useSelector(
+    (state) => state.postReducer.deletePostSuccess,
+  );
   const loader = useSelector((state) => state.postReducer.loader);
   const post = posts.find((post) => post?._id === postId) || null;
 
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    dispatch(setSuccess(false));
+    dispatch(setDeletePostSuccess(false));
     setReady(true);
   }, []);
 
   useEffect(() => {
     if (!ready) return;
 
-    if (!loader && success) {
-      navigate("/");
+    if (!loader && deletePostSuccess) {
+      navigate(-1);
     }
+  }, [deletePostSuccess, loader]);
 
-  }, [success, loader]);
-
-  function handlePostDelete() {
+  function handlePostDelete(e) {
+    e.preventDefault();
     dispatch(deletePostThunk({ postId }));
   }
 
@@ -95,14 +100,15 @@ const DeletePost = () => {
               this POST?
             </h2>
             <div className="text-md font-medium flex gap-2">
-              <Link to={"/"} className="w-1/2">
-                <button
-                  autoFocus={true}
-                  className="w-full mt-2 inline-block py-2 bg-white/10 border border-black/20 shadow rounded-sm text-zinc-800 hover:bg-blue-200 active:scale-97 ease-in duration-200"
-                >
-                  No, don't Delete.
-                </button>
-              </Link>
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                autoFocus={true}
+                className="w-1/2 mt-2 inline-block py-2 bg-white/10 border border-black/20 shadow rounded-sm text-zinc-800 hover:bg-blue-200 active:scale-97 ease-in duration-200"
+              >
+                No, don't Delete.
+              </button>
+
               <button
                 onClick={handlePostDelete}
                 className="w-1/2 mt-2 inline-block py-2 bg-red-300 rounded-sm border border-black/10 shadow text-zinc-800 hover:bg-red-400 hover:text-white active:scale-97 ease-in duration-200"
