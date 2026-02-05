@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Password is required"],
     minlength: [20, "Password must be at least 20 characters"],
     maxlength: [90, "Password cannot exceed 90 characters"],
-    select: false,        // won't return password by default
+    select: false, // won't return password by default
   },
   role: {
     type: String,
@@ -77,22 +77,27 @@ const UserSchema = new mongoose.Schema({
   facebook: {
     type: String,
     trim: true,
+    default: "",
   },
   instagram: {
     type: String,
     trim: true,
+    default: "",
   },
   linkedln: {
     type: String,
     trim: true,
+    default: "",
   },
   github: {
     type: String,
     trim: true,
+    default: "",
   },
   website: {
     type: String,
     trim: true,
+    default: "",
   },
   reportsMade: {
     type: Number,

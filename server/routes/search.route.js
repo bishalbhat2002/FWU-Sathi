@@ -9,7 +9,7 @@ const route = express.Router();
 // Routes for handling the get Notificatoin
 route.get("/get-search-filters", isAuthenticated, getSearchFilters);
 route.get("/get-all-users", isAuthenticated, getAllUsers);
-route.get("/", isAuthenticated, searchByFilters);
+route.post("/", isAuthenticated, searchByFilters);
 
 
 export default route;

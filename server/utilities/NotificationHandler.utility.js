@@ -3,22 +3,20 @@ import { ErrorHandler } from "./ErrorHandler.utility.js";
 
 export const createCommentNotification = async ({
   postId,
+  actorUserId,
   posterUserId,
-  actorName,
-  actorPhoto,
   action = "commented on your post",
 }) => {
   console.log("Create Comment Notification Method hit....");
 
-  const notificationMessage = `<b>${actorName}</b> ${action}.`;
-  const link = `/post/view-post/${postId}`;
+
 
   try {
     await Notification.create({
-      userId: posterUserId,
-      notificationPhoto: actorPhoto,
-      notificationMessage,
-      link,
+      userId: actorUserId,
+      notificationMessage: action,
+      posterUserId,
+      link:postId,
     });
   } catch (error) {
     next(new ErrorHandler(500, "Internal Server Error"));
@@ -31,21 +29,19 @@ export const createCommentNotification = async ({
 
 export const createLikeNotification = async ({
   postId,
-  posterUserId,
-  actorName,
-  actorPhoto,
+  userId,
+  posterUserId
 }) => {
   try {
     console.log("Create Like Notification Method hit....");
 
-    const notificationMessage = `<b>${actorName}</b> Liked your post.`;
-    const link = `/post/view-post/${postId}`;
+    const notificationMessage =  "Liked your post";
 
     await Notification.create({
-      userId: posterUserId,
-      notificationPhoto: actorPhoto,
+      userId,
+      posterUserId,
       notificationMessage,
-      link,
+      link: postId,
     });
   } catch (error) {
     next(new ErrorHandler(500, "Internal Server Error"));

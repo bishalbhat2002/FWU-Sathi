@@ -7,6 +7,19 @@ const generate6DigitCode = () => {
 
 export const generateEmailVerificationCode = async (email) => {
   try {
+
+    // Check if unused & unexpired code already exists
+    const existingCode = await EmailVerification.findOne({
+      email,
+      used: false,
+      expiresAt: { $gt: new Date() },             // still valid (less than 10 min old)
+    });
+
+    if (existingCode) {
+      // No need to resend email
+      return true;
+    }
+
     // Delete all previous unused codes for this email
     await EmailVerification.deleteMany({ email, used: false });
 

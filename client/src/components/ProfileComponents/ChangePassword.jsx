@@ -4,9 +4,13 @@ import { RxCross2 } from "react-icons/rx";
 import { Link, useNavigate } from "react-router-dom";
 import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
+import { changePasswordThunk } from "../../store/features/user/user.thunk";
+import { useDispatch } from "react-redux";
 
 const ChangePassword = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   // States for handling the Password show and hide
   const [showPassword, setShowPassword] = useState({
     current: false,
@@ -100,7 +104,14 @@ const ChangePassword = () => {
 
     // Dont submit form if error occured....
     if (hasError) return;
-    alert("data send to backedn....");
+
+    const data = {
+      currentPassword: password.current,
+      newPassword: password.new,
+    };
+
+    // send data to backend after validation...
+    dispatch(changePasswordThunk(data));
   }
 
   return (
@@ -111,7 +122,7 @@ const ChangePassword = () => {
             Change Password
           </span>
           <button
-            onClick={()=>navigate(-1)}
+            onClick={() => navigate(-1)}
             className="rounded-full p-1 bg-zinc-300 absolute -right-2 top-3 hover-scale"
           >
             <RxCross2 className="size-6 text-zinc-500 hover-scale" />
@@ -178,7 +189,7 @@ const ChangePassword = () => {
                 type="button"
                 className="absolute right-3 top-10"
               >
-                {showPassword.new ? <FiEye /> :  <FiEyeOff />}
+                {showPassword.new ? <FiEye /> : <FiEyeOff />}
               </button>
             )}
 

@@ -1,18 +1,41 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import OverlayScreen from "../../layouts/OverlayScreen";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
+import { useDispatch, useSelector } from "react-redux";
+import { editPostCommentThunk } from "../../store/features/post/post.thunk";
+import { setSuccess } from "../../store/features/post/post.slice";
 
 const EditComment = () => {
-
   const navigate = useNavigate();
-
-  const [comment, setComment] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, odio",
-  );
+  const dispatch = useDispatch();
+  const commentId = useParams().commentId;
+  const comments = useSelector((state) => state.postReducer.comments);
+  const commentToEdit = comments?.find((c) => (c._id === commentId ? c : null));
+  
+  const [comment, setComment] = useState(commentToEdit?.comment);
+  
   function handleCommentEdit(e) {
     e.preventDefault();
+    dispatch(editPostCommentThunk({ comment, commentId }));
   }
+  
+  const success = useSelector((state) => state.postReducer.success);
+  const loader = useSelector((state) => state.postReducer.loader);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    dispatch(setSuccess(false));
+    setReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!ready) return;
+
+    if (!loader && success) {
+      navigate(-1);
+    }
+  }, [success, loader]);
 
   return (
     <OverlayScreen>
@@ -21,13 +44,15 @@ const EditComment = () => {
         className="w-[80vw] relative max-w-130 bg-gray-800 p-5 rounded-md flex flex-col gap-2 "
       >
         <button
-          onClick={()=>navigate(-1)}
+          onClick={() => navigate(-1)}
           className="rounded-full p-1 bg-gray-800 absolute border-2 border-white -right-3 -top-3 hover-scale"
         >
           <RxCross2 className="size-6 text-white hover-scale" />
         </button>
-       
-       <h3 className="text-white text-lg font-semibold text-center -mt-3 mb-1">Edit Comment</h3>
+
+        <h3 className="text-white text-lg font-semibold text-center -mt-3 mb-1">
+          Edit Comment
+        </h3>
 
         <textarea
           value={comment}

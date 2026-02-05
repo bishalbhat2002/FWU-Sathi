@@ -10,11 +10,18 @@ import notificationRoute from "./routes/notification.route.js"
 import searchRoute from "./routes/search.route.js"
 import messageRoute from "./routes/message.route.js"
 import reportRoute from "./routes/report.route.js"
-import { sendMail } from "./utilities/sendMail.js"
+import path from "path"
+import { fileURLToPath } from "url"
 
+
+
+// Create __filename and __dirname in ES module... We need this when we use type="module" way of importing...
+ const __filename = fileURLToPath(import.meta.url)
+ const __dirname = path.dirname(__filename);
 
 
 const app = express()
+
 
 /**
  * CORS configuration:
@@ -46,6 +53,7 @@ app.use(cors({
 app.use(express.json())                                     // Middleware to parse incoming JSON Request from Client (API requests)
 app.use(cookieParser())                                     // Middleware to parse Cookies sent by client in request headers
 app.use(express.urlencoded({extended:true}))                // Middleware to parse URL-encoded form data (send using GET or POST) (used when handling HTML form submissions)
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));           // Middleware to serve upload folder.
 
 /**
  * Note: 

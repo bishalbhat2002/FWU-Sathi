@@ -8,11 +8,11 @@ export const AuthHeader = ()=>{
         <span className=" text-xl sm:text-3xl bg-linear-to-r from-blue-400 to-violet-400 text-transparent bg-clip-text">FWU Sathi</span>
         <span className="text-3xl text-orange-600">.</span>
       </div>
-      <Link to={"/"}
+      {/* <Link to={"/"}
       className="bg-gray-800 px-3 py-2 rounded hover-scale flex items-center gap-1 absolute right-3 opacity-60 hover:opacity-100 text-white">
           <span className="text-xs md:text-md  font-medium hidden sm:block">Visit Website</span>
           <RxArrowTopRight className="size-4" />
-      </Link>
+      </Link> */}
     </nav>
   );
 }

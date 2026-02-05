@@ -1,31 +1,46 @@
 import ProfilePhoto from "../commonComponents/ProfilePhoto";
 import { Link } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { setProfileIndicator } from "../../store/features/user/user.slice";
+import { logoutUserThunk } from "../../store/features/user/user.thunk";
 
 const ProfileViewer = () => {
+
+  const dispatch = useDispatch();
+  const userProfile = useSelector(state=>state.userReducer.userProfile)
+
+  function handleUserLogout(e){
+    e.preventDefault();
+    // Hide profile viewer popup box....
+    dispatch(setProfileIndicator(false));
+
+    dispatch(logoutUserThunk());
+  }
 
   return (
     <>
       <div
-        className="absolute inline-block bg-white/80 shadow border border-black/20 right-0 top-11 px-2 py-2 rounded-md"
+        className="absolute inline-block bg-white shadow border border-black/20 right-0 top-11 px-2 py-2 rounded-md"
       >
         <Link
           to={"/profile"}
-          className="shadow border-1 border-black/10 px-2 py-1 rounded-sm flex gap-2 group"
+          onClick={(e)=>{dispatch(setProfileIndicator(false))}}
+          className="w-full shadow border-1 border-black/20 px-2 py-1 rounded-sm flex gap-2 group"
         >
-          <ProfilePhoto className={"no-scale-on-hover"} />
+          <ProfilePhoto imgSrc={userProfile.photo} className={"no-scale-on-hover"} />
           <div>
             <h3 className="text-sm md:text-md font-semibold text-gray-700">
-              Bisahl Bhat
+              {userProfile.name}
             </h3>
             <p className="text-[10px] group-hover:hover-scale text-gray-500">
-              bishalbhat2002@gmail.com
+              {userProfile.email}
             </p>
           </div>
         </Link>
-        <Link
-          to={"/login"}
-          className="shadow border-1 border-black/10 px-2 py-1 rounded-sm flex gap-2 mt-1.5 "
+        <button
+          onClick={handleUserLogout}
+          className="w-full shadow border-1 border-black/20 px-2 py-1 rounded-sm flex gap-2 mt-1.5 "
         >
           <div className="flex items-center gap-2 group">
             <MdLogout className="text-lg text-gray-600 group-hover:scale-105 duration-200 ease-in" />
@@ -33,7 +48,7 @@ const ProfileViewer = () => {
               Logout
             </h3>
           </div>
-        </Link>
+        </button>
       </div>
     </>
   );

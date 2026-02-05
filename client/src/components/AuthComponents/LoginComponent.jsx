@@ -1,50 +1,51 @@
 import { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import toast from "react-hot-toast";
 import { MdOutlineMail } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUserThunk } from "../../store/features/user/user.thunk";
 
 const LoginComponent = () => {
-const [showPassword, setShowPassword] = useState(true)
-const [loginData, setLogindata] = useState({
-     email:"",
-     password:""
-})
-
-const [loginErrors, setLoginErros] = useState({
-     emailError:"",
-     passwordError:"",
-})
+  const dispatch = useDispatch();
+  const loader = useSelector((state) => state.userReducer.loader);
 
 
-function handleLoginDatachange(e){
-     setLogindata((prev)=>({
-          ...prev,
-          [e.target.name]:e.target.value
-     }
-     ))
-}
+  const [showPassword, setShowPassword] = useState(true);
+  const [loginData, setLogindata] = useState({
+    email: "marian.hintz@gmail.com",
+    password: "ilovecoding0000",
+  });
 
+  function handleLoginDatachange(e) {
+    setLogindata((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  }
 
   function handleLogin(e) {
     e.preventDefault();
-     let isValid = true;
-     
-     if(loginData.email?.length === 0 || loginData.password?.length === 0){
-          isValid = false;
-          toast.error("All fields are required.")
-     }else if(loginData.password?.length < 8 || loginData.password?.length > 20){
-          isValid = false;
-          toast.error("Password must be 8-20 characters.")
-     }
-     
+    let isValid = true;
 
-     // Return if not valid data is provided...
-     if(!isValid){
-          return;
-     }
+    if (loginData.email?.length === 0 || loginData.password?.length === 0) {
+      isValid = false;
+      toast.error("All fields are required.");
+    } else if (
+      loginData.password?.length < 8 ||
+      loginData.password?.length > 20
+    ) {
+      isValid = false;
+      toast.error("Password must be 8-20 characters.");
+    }
 
-    alert("api call");
+    // Return if not valid data is provided...
+    if (!isValid) {
+      return;
+    }
+
+    // send data to backend for verificatoin..
+    dispatch(loginUserThunk(loginData));
   }
 
 
@@ -61,7 +62,9 @@ function handleLoginDatachange(e){
 
         {/* Email Input field container... */}
         <div className="flex flex-col gap-1 relative">
-          <label className="text-lg text-zinc-500 font-medium" htmlFor="email">Email:</label>
+          <label className="text-lg text-zinc-500 font-medium" htmlFor="email">
+            Email:
+          </label>
           <input
             type="text"
             id="email"
@@ -69,54 +72,70 @@ function handleLoginDatachange(e){
             value={loginData.email}
             onChange={handleLoginDatachange}
             autoFocus={true}
-            autoComplete={false}
             className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-md focus:outline-blue-400"
           />
           <MdOutlineMail className="size-5 absolute right-3 top-[2.6rem] text-gray-500" />
-        
         </div>
 
         {/* Password Input field continaer... */}
         <div className="flex flex-col gap-1 relative">
-          <label className="text-lg text-zinc-500 font-medium" htmlFor="password"> Password </label>
+          <label
+            className="text-lg text-zinc-500 font-medium"
+            htmlFor="password"
+          >
+            {" "}
+            Password{" "}
+          </label>
           <input
             type={showPassword ? "text" : "password"}
             id="password"
             name="password"
+            value={loginData.password}
             onChange={handleLoginDatachange}
-            autoComplete={false}
             className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-md focus:outline-blue-400"
           />
-   
+
           {loginData.password && (
             <button
-              onClick={() =>(setShowPassword(prev=>!prev))}
+              onClick={() => setShowPassword((prev) => !prev)}
               type="button"
               className="absolute right-3 top-11 text-gray-700"
             >
               {showPassword ? <FiEye /> : <FiEyeOff />}
             </button>
           )}
-        </div> 
-        <div className="text-end -mt-3 -mb-2">
-        <Link to={"/forgot-password"} className="text-blue-400 text-sm text-end font-medium hover:underline">Forgot Password?</Link>
         </div>
-        
-         <button
-            type="submit"
-            className="w-full bg-blue-500 opacity-85 rounded-sm py-1.5 text-white hover:opacity-100 active:scale-97 ease-in focus:opacity-100 focus:outline-blue-700 duration-200"
+        <div className="text-end -mt-3 -mb-2">
+          <Link
+            to={"/forgot-password-change"}
+            className="text-blue-400 text-sm text-end font-medium hover:underline"
           >
-            Save Changes
-          </button>
+            Forgot Password?
+          </Link>
+        </div>
 
-          <div className="relative mt-3">
-               <hr className="text-black/20" />
-               <p className="absolute -bottom-2.5 font-bold left-[50%] bg-white px-2 translate-x-[-50%] text-gray-600">or</p>
-          </div>
+        <button
+          type="submit"
+          disabled={loader}
+          className="w-full bg-blue-500 opacity-85 rounded-sm py-1.5 text-white hover:opacity-100 active:scale-97 ease-in focus:opacity-100 focus:outline-blue-700 duration-200"
+        >
+          {!loader ? "Login" : "Plase wait"}
+        </button>
 
-          <Link to={"/register"} className="mx-auto text-blue-400 text-sm text-center font-medium group">Dont't have an Account? <span className="group-hover:underline">register</span></Link>
-        
+        <div className="relative mt-3">
+          <hr className="text-black/20" />
+          <p className="absolute -bottom-2.5 font-bold left-[50%] bg-white px-2 translate-x-[-50%] text-gray-600">
+            or
+          </p>
+        </div>
 
+        <Link
+          to={"/register"}
+          className="mx-auto text-blue-400 text-sm text-center font-medium group"
+        >
+          Dont't have an Account?{" "}
+          <span className="group-hover:underline">register</span>
+        </Link>
       </form>
     </div>
   );

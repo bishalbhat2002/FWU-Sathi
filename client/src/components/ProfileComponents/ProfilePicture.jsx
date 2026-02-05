@@ -1,40 +1,69 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdModeEdit } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { getImageUrl } from "../../utilities/getImageUrl";
+import { validateImage } from "../../utilities/validatePhoto";
+import toast from "react-hot-toast";
+import { changeProfilePicThunk } from "../../store/features/user/user.thunk";
 
 const ProfilePicture = ({ className }) => {
+  const dispatch = useDispatch();
+  const profileInfo = useSelector((state) => state.userReducer.profileInfo);
+  const userProfile = useSelector((state) => state.userReducer.userProfile);
+
+  // console.log(profileInfo, userProfile);
+
   const [profilePicture, setProfilePicture] = useState(null);
 
   function handleProfileChange(e) {
     e.preventDefault();
-    alert("Apli callll..");
+    const { valid, message } = validateImage(profilePicture);
+
+    console.log(valid, message);
+
+    if (!valid) {
+      e.target.value = "";
+      setProfilePicture(null);
+      return toast.error(message);
+    }
+
+    // Send profile pic to backend for updation..
+    dispatch(changeProfilePicThunk(profilePicture));
   }
 
-  const profileLink = (profilePicture && URL.createObjectURL(profilePicture))? URL.createObjectURL(profilePicture) : "luffy.png";
+  const profileLink =
+    profilePicture && URL.createObjectURL(profilePicture)
+      ? URL.createObjectURL(profilePicture)
+      : getImageUrl(profileInfo?.photo);
 
   return (
     <div
       className={`h-30 w-30 rounded-full bg-amber-50 border-3 relative border-blue-500 p-0.5 shadow-profile ${className} `}
     >
-      <img 
-      src={profileLink}
-      alt="" className="h-full w-full object-cover object-center rounded-full overflow-hidden " />
+      <img
+        src={profileLink}
+        alt=""
+        className="h-full w-full object-cover object-center rounded-full overflow-hidden "
+      />
 
-      <div className="text-lg bg-cover font-semibold absolute bottom-0 right-0">
-        <input
-          type="file"
-          accept="image/*"
-          hidden={true}
-          id="profilePhoto"
-          onChange={(e) => setProfilePicture(e.target.files[0])}
-        />
+      {userProfile?._id === profileInfo?._id && (
+        <div className="text-lg bg-cover font-semibold absolute bottom-0 right-0">
+          <input
+            type="file"
+            accept="image/*"
+            hidden={true}
+            id="profilePhoto"
+            onChange={(e) => setProfilePicture(e.target.files[0])}
+          />
 
-        <button
-          onClick={() => document.getElementById("profilePhoto").click()}
-          className="bg-zinc-300 rounded-full p-1 text-zinc-800 hover:opacity-90 border-3 border-white active:scale-97 ease-in duration-200"
-        >
-          <MdModeEdit className="-rotate-15 scale-80 text-zinc-800 hover-scale" />
-        </button>
-      </div>
+          <button
+            onClick={() => document.getElementById("profilePhoto").click()}
+            className="bg-zinc-300 rounded-full p-1 text-zinc-800 hover:opacity-90 border-3 border-white active:scale-97 ease-in duration-200"
+          >
+            <MdModeEdit className="-rotate-15 scale-80 text-zinc-800 hover-scale" />
+          </button>
+        </div>
+      )}
 
       {profilePicture && (
         <div className="absolute -bottom-12 -left-[0.1rem] text-xs flex gap-2 bg-gray-800 px-3 py-2 rounded-sm z-20">

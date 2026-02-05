@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ProfilePhoto from "./ProfilePhoto";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { GrHomeRounded, GrSearch } from "react-icons/gr";
 import { RiTelegram2Fill } from "react-icons/ri";
 import { MdNotificationsNone } from "react-icons/md";
@@ -8,6 +8,11 @@ import { PiFilesBold } from "react-icons/pi";
 import ProfileViewer from "../profileComponents/ProfileViewer";
 import { RxArrowTopRight } from "react-icons/rx";
 import { TbMessageReport } from "react-icons/tb";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setProfileIndicator,
+  toggleProfileIndicator,
+} from "../../store/features/user/user.slice";
 
 export const Navbar = () => {
   return (
@@ -113,8 +118,10 @@ function NavigationLink() {
       </ul>
 
       <div className="relative">
+        <ProfileIcon />
+        
         {/* Show Profile in case of Login and Login button if not loggedin... */}
-        {true ? <ProfileIcon /> : <LoginButton />}
+        {/* {true ? <ProfileIcon /> : <LoginButton />} */}
       </div>
     </div>
   );
@@ -137,13 +144,25 @@ function LoginButton() {
 
 // ProfileIcon component..
 function ProfileIcon() {
-  const [profileViewer, setProfileViewer] = useState(false);
+  const profileIndicator = useSelector(
+    (state) => state.userReducer.profileIndicator,
+  );
+  const userProfile = useSelector(state=>state.userReducer.userProfile)
+  const dispatch = useDispatch();
+
   const profileRef = useRef(null);
+  const profileIconRef = useRef(null);
 
   // Check if our referenced component exists or not, And if it exists then, check if contains the clicked element or not. If it contains then condition fails, if it doesnt contain then the condition is satisfied, And hence, the setProfileViewer() function is invoked.
   function handleOutsideClick(e) {
-    if (profileRef.current && !profileRef.current.contains(e.target)) {
-      setProfileViewer(false);
+    if (
+      profileRef.current &&
+      profileIconRef.current &&
+      !profileRef.current.contains(e.target) &&
+      !profileIconRef.current.contains(e.target)
+    ) {
+      // setProfileViewer(false);
+      dispatch(setProfileIndicator(false));
     }
   }
 
@@ -157,12 +176,15 @@ function ProfileIcon() {
   return (
     <>
       <button
+        ref={profileIconRef}
         className="bg-red-500 rounded-full"
-        onClick={() => setProfileViewer((prev) => !prev)}
+        onClick={() => {
+          dispatch(setProfileIndicator(!profileIndicator));
+        }}
       >
-        <ProfilePhoto />
+        <ProfilePhoto imgSrc={userProfile.photo} />
       </button>
-      {profileViewer && <div ref={profileRef}>{<ProfileViewer />}</div>}
+      {profileIndicator && <div ref={profileRef}>{<ProfileViewer />}</div>}
     </>
   );
 }

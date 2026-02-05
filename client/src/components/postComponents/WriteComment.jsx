@@ -1,15 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { createPostCommentThunk } from "../../store/features/post/post.thunk";
+import toast from "react-hot-toast";
+import { createComment } from "../../store/features/post/post.slice";
 
 export const CommentWrite = ()=> {
   const [comment, setComment] = useState("");
+  const postId = useParams().postId;
+  const dispatch = useDispatch();
+  const success = useSelector(state=>state.postReducer.success)
+  const loader = useSelector(state=>state.postReducer.loader)
 
   function handleComment(e) {
-    e.preventDefault();
-    if(comment?.trim().length !== 0){
-      alert("Comment Send: ", comment);
+    e.preventDefault(); 
+    if(comment?.trim().length === 0){
+      return toast.error("Empty comments are not allowed.")
     }
+    
+    if(comment?.trim().length < 3 || comment?.trim().length >500){
+      return toast.error("Comment must be between 3-500 characters.")
+    }
+
+    // If everything is fine, then dispatch the comment....
+    dispatch(createPostCommentThunk({comment, postId}));
+    dispatch(createComment({postId}));
   }
+
+  useEffect(()=>{
+    if(success && !loader){
+      setComment("");
+    }
+  }, [success, loader])
 
   return (
     <form

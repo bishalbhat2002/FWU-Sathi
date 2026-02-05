@@ -11,6 +11,7 @@ import {
   generateEmailVerificationCode,
   verifyEmailCode,
 } from "../utilities/EmailVerification.utility.js";
+import { Like } from "../models/like.model.js";
 
 // Encrypt Password function
 const encryptPassword = async (plainPassword) => {
@@ -31,7 +32,7 @@ const createToken = async (data) => {
 
 // Code for Loggin user
 export const login = asyncHandler(async (req, res, next) => {
-  //   console.log("Login page");
+  console.log("Login Route hit...");
 
   let { email, password } = req.body;
 
@@ -76,48 +77,60 @@ export const login = asyncHandler(async (req, res, next) => {
     .json({
       success: true,
       message: "User logged in successfully",
+      user: tokenData,
     });
 });
 
 // Email Verification - Register User - Get-verification Code logic:
-export const getVerificationCodeForRegister = asyncHandler(async (req, res, next) => {
-  //   console.log("Email verification for register route hit....");
+export const getVerificationCodeForRegister = asyncHandler(
+  async (req, res, next) => {
+    //   console.log("Email verification for register route hit....");
 
-  const email = req.body.email?.trim();
+    const email = req.body.email?.trim();
 
-  // Check for missing fields
-  if (!email) {
-    return next(new ErrorHandler(403, "Email is required."));
-  }
+    // Check for missing fields
+    if (!email) {
+      return next(new ErrorHandler(403, "Email is required."));
+    }
 
-  // Simple email regex to Validate email
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return next(new ErrorHandler(403, "Invalid email address."));
-  }
+    // Simple email regex to Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return next(new ErrorHandler(403, "Invalid email address."));
+    }
 
-  if(await User.findOne({email})){
-    return next(new ErrorHandler(403, "User with email already exists."));
-  }
+    if (await User.findOne({ email })) {
+      return next(new ErrorHandler(403, "User with email already exists."));
+    }
 
-  if (await generateEmailVerificationCode(email)) {
-    return res.status(200).json({
-      success: true,
-      message: `6 digit verification code has been successfully sent to ${email}.`,
+    if (await generateEmailVerificationCode(email)) {
+      return res.status(200).json({
+        success: true,
+        message: `6 digit verification code has been successfully sent to ${email}.`,
+      });
+    }
+
+    return res.status(403).json({
+      success: false,
+      message: `verification code couldn't be sent to ${email}.`,
     });
-  }
-
-  return res.status(403).json({
-    success: false,
-    message: `verification code couldn't be sent to ${email}.`,
-  });
-});
+  },
+);
 
 // Code for Registering User
 export const register = asyncHandler(async (req, res, next) => {
   console.log("Register req hit...");
-  let { name, email, password, gender, program, semester, college, address, code } =
-    req.body;
+  let {
+    name,
+    email,
+    password,
+    gender,
+    program,
+    semester,
+    college,
+    address,
+    code,
+  } = req.body;
 
   // Trim all string inputs
   name = name?.trim();
@@ -145,11 +158,8 @@ export const register = asyncHandler(async (req, res, next) => {
   }
 
   if (code.length !== 6) {
-    return next(
-      new ErrorHandler(400, "Invalid Verification code."),
-    );
+    return next(new ErrorHandler(400, "Invalid Verification code."));
   }
-
 
   // Check if user with email already exists
   const existingUser = await User.findOne({ email });
@@ -186,7 +196,7 @@ export const register = asyncHandler(async (req, res, next) => {
     return next(
       new ErrorHandler(400, "Password must be between 8 and 16 characters."),
     );
-  }  
+  }
 
   // Validate program, college, address length
   if (program.length < 3 || program.length > 30)
@@ -216,13 +226,13 @@ export const register = asyncHandler(async (req, res, next) => {
 
   let defaultPhotoLink;
   if (gender.toLowerCase() === "male")
-    defaultPhotoLink = "/public/images/profile-anime-boy.jpeg";
+    defaultPhotoLink = "uploads/user/profile-boy.jpeg";
 
   if (gender.toLowerCase() === "female")
-    defaultPhotoLink = "/public/images/profile-anime-girl.jpeg";
+    defaultPhotoLink = "uploads/user/profile-girl.jpg";
 
   if (gender.toLowerCase() === "other")
-    defaultPhotoLink = "/public/images/profile-anime-other.jpeg";
+    defaultPhotoLink = "uploads/user/profile-other.png";
 
   const hashPassword = await encryptPassword(password);
   let role = "student";
@@ -269,11 +279,13 @@ export const register = asyncHandler(async (req, res, next) => {
     .json({
       success: true,
       message: "User registered successfully",
+      user: tokenData,
     });
 });
 
 // Code for logout user
 export const logout = asyncHandler(async (req, res, next) => {
+  console.log("Logout route hit....");
   return res
     .status(200)
     .cookie("token", "", {
@@ -288,6 +300,7 @@ export const logout = asyncHandler(async (req, res, next) => {
 
 // Code for getting own profile
 export const getProfile = asyncHandler(async (req, res, next) => {
+  console.log("get profile route hit...")
   const userId = req.user.userId;
   console.log("Userid: ", userId);
 
@@ -326,41 +339,51 @@ export const getOtherProfile = asyncHandler(async (req, res, next) => {
   });
 });
 
-// Code for getting own profile posts
-export const getProfilePosts = asyncHandler(async (req, res, next) => {
-  const userId = req.user.userId;
-  const limitPost = 15; // Give 15 post at a time...
-  const { page = 1 } = req.query;
-  let skipPost = (page - 1) * limitPost;
+// Dead Code becasue its work is done by GetOtherProfilePosts. for getting own profile posts
+// export const getProfilePosts = asyncHandler(async (req, res, next) => {
+//   const userId = req.user.userId;
+//   const limitPost = 15; // Give 15 post at a time...
+//   const { page = 1 } = req.query;
+//   let skipPost = (page - 1) * limitPost;
 
-  const posts = await Post.find({ userId })
-    .sort({ createdAt: -1 }) // Latest posts come first
-    .skip(skipPost)
-    .limit(limitPost);
+//   const posts = await Post.find({ userId })
+//     .sort({ createdAt: -1 }) // Latest posts come first
+//     .skip(skipPost)
+//     .limit(limitPost);
 
-  res.status(200).json({
-    success: true,
-    message: "Profile posts fetched successfully.",
-    posts,
-  });
-});
+//   res.status(200).json({
+//     success: true,
+//     message: "Profile posts fetched successfully.",
+//     posts,
+//   });
+// });
 
 // Code for getting other profiles posts
-export const getOtherProfilePosts = asyncHandler(async (req, res, next) => {
+export const getProfilePosts = asyncHandler(async (req, res, next) => {
   const userId = req.params.userId;
   const limitPost = 15; // Give 15 post at a time...
   const { page = 1 } = req.query;
+
   let skipPost = (page - 1) * limitPost;
 
   const posts = await Post.find({ userId })
+    .populate("userId", "name photo")
     .sort({ createdAt: -1 }) // Latest posts come first
     .skip(skipPost)
     .limit(limitPost);
 
+  const postsWithLikers = await Promise.all(
+    posts.map(async (post) => {
+      const likes = await Like.find({ postId: post._id }).select("liker");
+      const likerIds = likes.map((like) => like.liker);
+      return { ...post.toObject(), likerIds };
+    }),
+  );
+
   res.status(200).json({
     success: true,
     message: "Profile posts fetched successfully.",
-    posts,
+    posts: postsWithLikers,
   });
 });
 
@@ -374,7 +397,7 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
   // const email = req.body.email?.trim()?.toLowerCase();
   const gender = req.body.gender?.trim();
   const program = req.body.program?.trim();
-  let semester = req.body.semester?.trim();
+  let semester = req.body.semester;
   const college = req.body.college?.trim();
   const address = req.body.address?.trim();
   const facebook = req.body.facebook?.trim();
@@ -541,7 +564,7 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 
   // check if user provided currentPassword and password in database mathch or not.
   if (!(await comparePassword(currentPassword, user.password))) {
-    return next(new ErrorHandler(400, "Wrong Password."));
+    return next(new ErrorHandler(400, "Current Password didn't match."));
   }
 
   // Hash the password
@@ -568,6 +591,8 @@ export const getVerificationCode = asyncHandler(async (req, res, next) => {
 
   const email = req.body.email?.trim();
 
+  // console.log("email from backend: ", email)
+
   // Check for missing fields
   if (!email) {
     return next(new ErrorHandler(400, "Email is required."));
@@ -593,7 +618,7 @@ export const getVerificationCode = asyncHandler(async (req, res, next) => {
 
 // Forgot Password - Change password code logic:
 export const ForgotChangePassword = asyncHandler(async (req, res, next) => {
-  // console.log("Forgot change password route hit...");
+  console.log("Forgot change password route hit...");
 
   const email = req.body.email?.trim();
   const code = req.body.code?.trim();
@@ -601,13 +626,13 @@ export const ForgotChangePassword = asyncHandler(async (req, res, next) => {
 
   // ensure all fields are there.
   if (!email || !code || !password) {
-    return next(new ErrorHandler(400, "All fields are required."));
+    return next(new ErrorHandler(403, "All fields are required."));
   }
 
   // Check for Required fields for missing
   if (password?.length < 8 || password?.length > 20) {
     return next(
-      new ErrorHandler(400, "Password must be between 8-20 characters."),
+      new ErrorHandler(403, "Password must be between 8-20 characters."),
     );
   }
 
@@ -620,6 +645,7 @@ export const ForgotChangePassword = asyncHandler(async (req, res, next) => {
   }
 
   if (!(await verifyEmailCode(email, code))) {
+    console.log("invalid code....");
     return res.status(403).json({
       success: false,
       message: "Invalid verification code.",
@@ -631,7 +657,7 @@ export const ForgotChangePassword = asyncHandler(async (req, res, next) => {
 
   // update User password in memory
   user.password = hashPassword;
-  await user.save();        // save the changed data in database.
+  await user.save(); // save the changed data in database.
 
   return res
     .status(200)
@@ -682,7 +708,7 @@ export const uploadProfilePhoto = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 2 * 1024 * 1024, // 2MB
+    fileSize: 10 * 1024 * 1024, // 2MB
   },
 });
 

@@ -1,16 +1,18 @@
-
-import ProfilePhoto from '../commonComponents/ProfilePhoto'
-import { Link } from 'react-router-dom'
+import ProfilePhoto from "../commonComponents/ProfilePhoto";
+import { Link } from "react-router-dom";
+import {useSelector} from "react-redux"
 
 const CreatePost = () => {
+  const userProfile = useSelector((state) => state.userReducer.userProfile);
+  // console.log(userProfile)
   return (
-    <div className='max-w-130 mx-auto border-1 shadow border-black/10 px-2 py-2 mt-3 rounded-md bg-white/90'>
-    <Link to={"/post/create"} className='flex gap-3 items-center'>
-     <ProfilePhoto />
-      <p className='text-md text-gray-600'>What's on your Mind, Bishal?</p>
-    </Link>
-     </div>
-  )
-}
+    <div className="max-w-130 mx-auto border shadow border-black/10 px-2 py-2 mt-3 rounded-md bg-white/90">
+      <Link to={"/post/create"} className="flex gap-3 items-center">
+        <ProfilePhoto  imgSrc={userProfile.photo} />
+        <p className="text-md text-gray-600">What's on your Mind, {userProfile.name}?</p>
+      </Link>
+    </div>
+  );
+};
 
-export default CreatePost
+export default CreatePost;

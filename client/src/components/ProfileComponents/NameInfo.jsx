@@ -1,12 +1,18 @@
 import { Link } from "react-router-dom";
+import { getSemesterName } from "../../utilities/getSemName";
+import { useSelector } from "react-redux";
+
 
 // Component to Display the Names Semester and Password Change feature...
-export const NameInfo = ()=> {
+export const NameInfo = () => {
+
+  const profileInfo = useSelector((state) => state.userReducer.profileInfo);
+  
   return (
     <div>
-      <h2 className="text-3xl font-bold text-gray-900">Bishal Bhat</h2>
+      <h2 className="text-3xl font-bold text-gray-900">{profileInfo?.name}</h2>
       <h2 className="text-sm font-medium text-gray-700 -mt-0.5 mb-1">
-        8th Semester
+        {getSemesterName(profileInfo?.semester)} Semester
       </h2>
       <Link
         to={"/profile/change-password"}
@@ -16,6 +22,4 @@ export const NameInfo = ()=> {
       </Link>
     </div>
   );
-}
-
-
+};

@@ -1,22 +1,31 @@
-import { isValidElement, useState } from "react";
+import { isValidElement, useEffect, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { MdOutlineMail } from "react-icons/md";
+import { useSelector, useDispatch } from "react-redux";
+import { registerUserThunk, verifyRegisterEmailThunk } from "../../store/features/user/user.thunk";
 
 const RegisterComponent = () => {
   const [showPassword, setShowPassword] = useState(true);
-  const [showVerify, setShowVerify] = useState(false);
+  const verificationCodeField = useSelector(
+    (state) => state.userReducer.verificationCodeField,
+  );
+  const isAuthenticated = useSelector(
+    (state) => state.userReducer.isAuthenticated,
+  );
+  const loader = useSelector((state) => state.userReducer.loader);
+  const dispatch = useDispatch();
 
   const [registerData, setRegisterData] = useState({
-    email: "",
-    password: "",
-    name: "",
-    gender: "",
-    program: "",
-    semester: "",
-    college: "",
-    address: "",
+    email: "xedeciw869@dnsclick.com",
+    password: "ifhiufhewiwf",
+    name: "ifhiufhewiwf",
+    gender: "male",
+    program: "csit",
+    semester: "2",
+    college: "fekwn",
+    address: "lkwenf",
     verificationCode: "",
   });
 
@@ -85,12 +94,12 @@ const RegisterComponent = () => {
       handleRegisterError("passwordError", "Password is required.");
     } else if (
       registerData.password.length < 8 ||
-      registerData.password.length > 16
+      registerData.password.length > 20
     ) {
       isValid = false;
       handleRegisterError(
         "passwordError",
-        "Password must be between 3-30 characters.",
+        "Password must be between 8-20 characters.",
       );
     }
 
@@ -182,10 +191,7 @@ const RegisterComponent = () => {
     }
 
     // Send Email only to backend for verification...
-    alert("api call... for email..");
-
-    // Show verification code input field Only if 200 response is received from backend....
-    setShowVerify(true);
+    dispatch(verifyRegisterEmailThunk({ email: registerData.email }));
   }
 
   function handleRegister(e) {
@@ -197,13 +203,15 @@ const RegisterComponent = () => {
     }
 
     // Send the registration form data to backend....
-    alert("api call.. user registeration..");
-  }
-
+    console.log("data send:", registerData);
+    
+    dispatch(registerUserThunk(registerData));
+  } 
+  
   return (
     <div className="w-full h-screen pt-15 flex justify-center items-start sm:items-center overflow-x-hidden overflow-y-auto">
       <form
-        onSubmit={!showVerify? verifyEmail : handleRegister}
+        onSubmit={!verificationCodeField ? verifyEmail : handleRegister}
         className="max-w-220 w-full mx-3 my-5 bg-white shadow-post rounded-md overflow-hidden p-5 flex flex-col gap-5"
       >
         <h2 className="text-3xl font-bold text-center text-gray-700 -mt-2 -mb-1">
@@ -493,7 +501,7 @@ const RegisterComponent = () => {
           </div>
 
           {/* Verification Code Entering Field... */}
-          {showVerify && (
+          {verificationCodeField && (
             <div className="border-t-1 border-black/30 mt-1 pt-2">
               <label
                 htmlFor="verification-code"
@@ -525,9 +533,16 @@ const RegisterComponent = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-500 opacity-85 rounded-sm py-1.5 text-white hover:opacity-100 active:scale-97 ease-in focus:opacity-100 focus:outline-blue-700 duration-200"
+          disabled={loader}
+          className={`w-full bg-blue-500 opacity-85 rounded-sm py-1.5 text-white ${loader ? "" : "hover:opacity-100 active:scale-97"}  ease-in focus:opacity-100 focus:outline-blue-700 duration-200 `}
         >
-          {!showVerify? "Verify Email" : "Register User"}
+          {loader
+            ? verificationCodeField
+              ? "Registering User. Please Wait..."
+              : "Sending code. Please wait..."
+            : verificationCodeField
+              ? "Verify Email"
+              : "Register User"}
         </button>
 
         <div className="relative mt-3">

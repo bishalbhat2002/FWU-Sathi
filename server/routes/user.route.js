@@ -1,6 +1,6 @@
 
 import express from "express"
-import { editCoverPic, editProfileInfo, editProfilePic, ForgotChangePassword, getOtherProfile, getOtherProfilePosts, getProfile, getProfilePosts, getVerificationCode, getVerificationCodeForRegister, login, logout, register, updatePassword, uploadProfilePhoto} from "../controllers/User.controller.js";
+import { editCoverPic, editProfileInfo, editProfilePic, ForgotChangePassword, getOtherProfile, getProfile, getProfilePosts, getVerificationCode, getVerificationCodeForRegister, login, logout, register, updatePassword, uploadProfilePhoto} from "../controllers/User.controller.js";
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 
 const route = express.Router();
@@ -16,12 +16,12 @@ route.put("/forgot-password/change-password", ForgotChangePassword)
 
 // Routes for handling logout and getting user Profile
 route.get("/logout", isAuthenticated, logout);
-route.get("/get-profile", isAuthenticated, getProfile);
+// route.get("/get-profile", isAuthenticated, getProfile);                     // Delete this....
 route.get("/get-profile-posts/", isAuthenticated, getProfilePosts);           // Route for getting own posts on profile
 
 // Route for getting other users profile and their posts
 route.get("/get-profile/:userId", isAuthenticated, getOtherProfile);
-route.get("/get-profile-posts/:userId", isAuthenticated, getOtherProfilePosts);
+route.get("/get-profile-posts/:userId", isAuthenticated, getProfilePosts);
 
 // Routes for Updating Profile Info
 route.put("/edit-profile", isAuthenticated, editProfileInfo);                // for updating the data in database.

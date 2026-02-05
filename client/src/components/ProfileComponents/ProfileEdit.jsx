@@ -1,32 +1,53 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OverlayScreen from "../../layouts/OverlayScreen";
 import { useNavigate } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { MdOutlineMail } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { setEditProfile } from "../../store/features/user/user.slice";
+import { editUserInformationThunk } from "../../store/features/user/user.thunk";
 
 const ProfileEdit = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const profileInfo = useSelector((state) => state.userReducer.profileInfo);
+  const editLoader = useSelector((state) => state.userReducer.editLoader);
+  const editSuccess = useSelector((state) => state.userReducer.editSuccess);
+  const [ready, setReady] = useState(false);
+
+  console.log(profileInfo);
+
+  useEffect(()=>{
+    dispatch(setEditProfile(true));
+    setReady(true);
+  }, [])
+
+  useEffect(()=>{
+    if(!ready)
+      return;
+
+    if(!editLoader && editSuccess){
+      navigate(-1);
+    }
+  }, [editSuccess, editLoader]);
+
 
   const [profileData, setProfileData] = useState({
-    email: "",
-    password: "",
-    name: "",
-    gender: "",
-    program: "",
-    semester: "",
-    college: "",
-    address: "",
-    facebook: "",
-    instagram: "",
-    linkedln: "",
-    github: "",
-    youtube: "",
-    website: "",
+    name: profileInfo?.name,
+    gender: profileInfo?.gender,
+    program: profileInfo?.program,
+    semester: profileInfo?.semester,
+    college: profileInfo?.college,
+    address: profileInfo?.address,
+    facebook: profileInfo?.facebook,
+    instagram: profileInfo?.instagram,
+    linkedln: profileInfo?.linkedln,
+    github: profileInfo?.github,
+    youtube: profileInfo?.youtube,
+    website: profileInfo?.website,
   });
 
   const [profileError, setProfileError] = useState({
-    emailError: "",
-    passwordError: "",
     nameError: "",
     genderError: "",
     programError: "",
@@ -61,8 +82,6 @@ const ProfileEdit = () => {
 
     // Reset previous Errors...
     setProfileError((prev) => ({
-      emailError: "",
-      passwordError: "",
       nameError: "",
       genderError: "",
       programError: "",
@@ -77,15 +96,6 @@ const ProfileEdit = () => {
       websiteError: "",
     }));
 
-    // Validate Data....
-    if (profileData.email.length === 0) {
-      isValid = false;
-      handleProfileUpdateError("emailError", "Email is required.");
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profileData.email)) {
-      isValid = false;
-      handleProfileUpdateError("emailError", "Invalid email format.");
-    }
-
     if (profileData.name.length === 0) {
       isValid = false;
       handleProfileUpdateError("nameError", "Name is required.");
@@ -94,20 +104,6 @@ const ProfileEdit = () => {
       handleProfileUpdateError(
         "nameError",
         "Name must be between 3-30 characters.",
-      );
-    }
-
-    if (profileData.password.length === 0) {
-      isValid = false;
-      handleProfileUpdateError("passwordError", "Password is required.");
-    } else if (
-      profileData.password.length < 8 ||
-      profileData.password.length > 16
-    ) {
-      isValid = false;
-      handleProfileUpdateError(
-        "passwordError",
-        "Password must be between 3-30 characters.",
       );
     }
 
@@ -231,15 +227,19 @@ const ProfileEdit = () => {
       }
     }
 
-    console.log(socialMedia);
+    // console.log(socialMedia);
 
-    console.log(profileData);
+    // console.log(profileData);
+
     // Return if not valid data is provided...
     if (!isValid) {
       return;
     }
 
-    // Send the registration form data to backend....
+    // Send the updated profile data to backend....
+    dispatch(editUserInformationThunk(profileData));
+
+
   }
 
   return (
@@ -281,33 +281,6 @@ const ProfileEdit = () => {
             )}
           </div>
 
-          {/* Email Input field container... */}
-          <div className="flex flex-col gap-1 w-full relative">
-            <label
-              className="text-lg text-zinc-500 font-medium"
-              htmlFor="email"
-            >
-              Email:
-            </label>
-            <input
-              type="text"
-              id="email"
-              name="email"
-              value={profileData.email}
-              onChange={handleProfileDataChange}
-              autoFocus={true}
-              className="w-full bg-white-900 border-none input-shadow p-2 text-zinc-700 rounded-sm text-sm sm:text-md focus:outline-blue-400"
-            />
-            <MdOutlineMail className="size-5 absolute right-3 top-[2.6rem] text-gray-500" />
-
-            {/* Show Errors If Exists.... */}
-            {profileError.emailError && (
-              <p className="text-red-400 font-medium text-sm line-clamp-1 -mb-2">
-                {profileError.emailError}
-              </p>
-            )}
-          </div>
-
           {/* Gender field continer.... */}
           <div className="flex flex-col gap-1 w-full relative">
             <label
@@ -321,37 +294,55 @@ const ProfileEdit = () => {
               <div className="flex items-center">
                 <input
                   type="radio"
-                  id="gender"
+                  id="male"
                   name="gender"
                   value={"male"}
                   onChange={handleProfileDataChange}
+                  checked={profileData.gender === "male"}
                   className="size-4"
                 />{" "}
-                <span className="font-medium text-gray-600 ml-2">Male </span>
+                <label
+                  htmlFor="male"
+                  className="font-medium text-gray-600 ml-2"
+                >
+                  Male{" "}
+                </label>
               </div>
 
-              <div className="flex items-center">
+              <div className="flex items-center" htmlFor="">
                 <input
                   type="radio"
-                  id="gender"
+                  id="female"
                   name="gender"
                   value={"female"}
                   onChange={handleProfileDataChange}
+                  checked={profileData.gender === "female"}
                   className="size-4"
                 />
-                <span className="font-medium text-gray-600 ml-2">Female </span>
+                <label
+                  htmlFor="female"
+                  className="font-medium text-gray-600 ml-2"
+                >
+                  Female{" "}
+                </label>
               </div>
 
               <div className="flex items-center">
                 <input
                   type="radio"
-                  id="gender"
+                  id="other"
                   name="gender"
                   value={"other"}
                   onChange={handleProfileDataChange}
+                  checked={profileData.gender === "other"}
                   className="size-4"
                 />
-                <span className="font-medium text-gray-600 ml-2">Other </span>
+                <label
+                  className="font-medium text-gray-600 ml-2"
+                  htmlFor="other"
+                >
+                  Other{" "}
+                </label>
               </div>
             </div>
 
@@ -374,36 +365,19 @@ const ProfileEdit = () => {
             <select
               name="semester"
               id="semester"
+              value={profileData.semester}
               onChange={handleProfileDataChange}
               className="w-full bg-white-900 border-none font-medium input-shadow p-2 text-zinc-600 rounded-sm text-sm sm:text-md focus:outline-blue-400"
             >
-              <option value="" className="text-md">
-                Select Semester
-              </option>
-              <option value="1" className="text-md">
-                1 sem
-              </option>
-              <option value="2" className="text-md">
-                2 sem
-              </option>
-              <option value="3" className="text-md">
-                3 sem
-              </option>
-              <option value="4" className="text-md">
-                4 sem
-              </option>
-              <option value="5" className="text-md">
-                5 sem
-              </option>
-              <option value="6" className="text-md">
-                6 sem
-              </option>
-              <option value="7" className="text-md">
-                7 sem
-              </option>
-              <option value="8" className="text-md">
-                8 sem
-              </option>
+              {Array.from({ length: 8 }).map((_, index) => (
+                <option
+                  key={index}
+                  value={index + 1}
+                  className="text-md"
+                >
+                  {index + 1}
+                </option>
+              ))}
             </select>
 
             {/* Show Errors If Exists.... */}
@@ -607,7 +581,7 @@ const ProfileEdit = () => {
           </div>
 
           {/* Website field continer.... */}
-          <div className="flex flex-col gap-1 w-full relative sm:col-span-2">
+          <div className="flex flex-col gap-1 w-full relative">
             <label
               className="text-md text-zinc-500 font-medium"
               htmlFor="website"
@@ -635,7 +609,7 @@ const ProfileEdit = () => {
           type="submit"
           className="w-full bg-blue-500 opacity-85 rounded-sm py-1.5 text-white hover:opacity-100 active:scale-97 ease-in focus:opacity-100 focus:outline-blue-700 duration-200"
         >
-          Save Changes
+          {editLoader ? "Saving Changes" : "Save Changes"}
         </button>
       </form>
     </OverlayScreen>

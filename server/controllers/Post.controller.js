@@ -45,16 +45,16 @@ export const uploadPostPhoto = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 2 * 1024 * 1024, // 2MB
+    fileSize: 10 * 1024 * 1024, // 2MB              -> Make it 2 in production..
   },
 });
 
 export const createPost = asyncHandler(async (req, res, next) => {
   let caption = req.body.caption;
-  let { userId, semester } = req.user;
+  let { userId, semester, name, photo } = req.user;
   caption = caption.trim();
 
-  console.log(caption, userId, semester);
+  // console.log(caption);
 
   // Check for required fields
   if (!userId || !caption || !semester) {
@@ -82,10 +82,21 @@ export const createPost = asyncHandler(async (req, res, next) => {
     photo: photoPath,
   });
 
+  const postWithPosterDetails = {
+    ...post.toObject(),
+    likerIds: [],
+    userId: {
+      name,
+      photo,
+      _id: userId,
+    },
+  };
+
+  // console.log("created successfully");
   res.status(201).json({
     success: true,
     message: "Post created successfully.",
-    post,
+    post: postWithPosterDetails,
   });
 });
 
@@ -93,7 +104,7 @@ export const editPost = asyncHandler(async (req, res, next) => {
   console.log("Post edit route hit...");
   let caption = req.body.caption;
   let postId = req.params.postId; // use req.params for getting parameters from the URL /:id <- this is a parameter.
-  const userId = req.user.userId;
+  const { userId, semester, name, photo } = req.user;
   caption = caption.trim();
 
   // console.log(caption, postId, userId);
@@ -134,29 +145,78 @@ export const editPost = asyncHandler(async (req, res, next) => {
     },
   );
 
+  // find all likes for the post...
+  const likers = await Like.find({ postId }).select("liker -_id");
+
+  // make array of likers...
+  const likerIds = likers.map((like) => like.liker);
+
+  const updatedPostWithPosterDetails = {
+    ...updatedPost.toObject(),
+    likerIds,
+    userId: {
+      name,
+      photo,
+      _id: userId,
+    },
+  };
+
   res.status(200).json({
     success: true,
     message: "Post updated successfully.",
-    post: updatedPost,
+    post: updatedPostWithPosterDetails,
   });
 });
 
 // Code for getting all the posts - using pagination and limiting
 export const getPosts = asyncHandler(async (req, res, next) => {
+  console.log("get posts route hit....");
   const limitPost = 15; // Give 15 post at a time...
   const { page = 1 } = req.query; // use req.query for getting query parameters from the URL ?page=2 <- this is a query parameter.
 
   let skipPost = (page - 1) * limitPost;
 
   const posts = await Post.find()
+    .populate("userId", "name photo")
     .sort({ createdAt: -1 }) // Latest posts come first
     .skip(skipPost)
     .limit(limitPost);
 
+  const postsWithLikers = await Promise.all(
+    posts.map(async (post) => {
+      const likes = await Like.find({ postId: post._id }).select("liker");
+      const likerIds = likes.map((like) => like.liker);
+      return { ...post.toObject(), likerIds };
+    }),
+  );
+
   res.status(200).json({
     success: true,
     message: "Post fetched successfully.",
-    posts,
+    posts: postsWithLikers, // Send userId of post likers also...
+  });
+});
+
+// Code for getting all the comments from a post - using pagination and limiting
+export const getComments = asyncHandler(async (req, res, next) => {
+  console.log("get comments route hit....");
+  const limitComment = 15; // Give 15 post at a time...
+  const postId = req.params.postId;
+  const { page = 1 } = req.query; // use req.query for getting query parameters from the URL ?page=2 <- this is a query parameter.
+
+  let skipComment = (page - 1) * limitComment;
+  // console.log("post Id: ", postId);
+
+  const comments = await Comment.find({ postId })
+    .populate("userId", "name photo")
+    .sort({ createdAt: -1 }) // Latest posts come first
+    .skip(skipComment)
+    .limit(limitComment);
+
+  res.status(200).json({
+    success: true,
+    message: "comments fetched successfully.",
+    comments,
   });
 });
 
@@ -164,7 +224,7 @@ export const getPosts = asyncHandler(async (req, res, next) => {
 export const getPost = asyncHandler(async (req, res, next) => {
   const { postId } = req.params;
 
-  const post = await Post.findById(postId);
+  const post = await Post.findById(postId).populate("userId", "name photo");
 
   if (!post) {
     return res.status(404).json({
@@ -174,15 +234,22 @@ export const getPost = asyncHandler(async (req, res, next) => {
     });
   }
 
+  // find all likes for the post...
+  const likerIds = await Like.find({ postId });
+
   res.status(200).json({
     success: true,
     message: "Post fetched successfully.",
-    post,
+    post: {
+      post,
+      likerIds,
+    },
   });
 });
 
 // For Post Deletion.
 export const deletePost = asyncHandler(async (req, res, next) => {
+  console.log('delete post route hit....')
   const postId = req.params.postId; // use req.params here.
   const userId = req.user.userId;
 
@@ -200,11 +267,12 @@ export const deletePost = asyncHandler(async (req, res, next) => {
     );
   }
 
-  await Post.findByIdAndDelete(postId);
+  const deletedPost = await Post.findByIdAndDelete(postId);
 
   res.status(200).json({
     success: true,
     message: "Post deleted successfully.",
+    post: deletedPost,
   });
 });
 
@@ -215,7 +283,7 @@ export const reportPost = asyncHandler(async (req, res, next) => {
   const postId = req.params.postId;
   const reporterId = req.user.userId; // from auth middleware
   const reportType = "Post";
-  console.log(reportMessage, postId, reporterId);
+  // console.log(reportMessage, postId, reporterId);
 
   // validate report message
   reportMessage = reportMessage?.trim();
@@ -272,12 +340,11 @@ export const reportPost = asyncHandler(async (req, res, next) => {
 });
 
 // Code to add like to the post
-export const likePost = asyncHandler(async (req, res, next) => {
+export const ToogleLikePost = asyncHandler(async (req, res, next) => {
   console.log("Post Like route hit....");
   const postId = req.params.postId;
-  const liker = req.user.userId; // from auth middleware
+  const liker = req.user.userId;          // from auth middleware
 
-  console.log(postId);
 
   // check if already liked or not.
   const liked = await Like.findOne({ postId, liker });
@@ -289,18 +356,19 @@ export const likePost = asyncHandler(async (req, res, next) => {
       $inc: { likeCount: 1 },
     });
 
+    
     // Set the like notification...
     const notificationDetails = {
       postId,
+      userId: liker,
       posterUserId: post.userId,
-      actorName: req.user.name,
-      actorPhoto: req.user.photo,
     };
 
-    console.log(notificationDetails);
+    if(post.userId.toString() !== liker.toString()){
+    // console.log(notificationDetails);
     await createLikeNotification(notificationDetails);
-    console.log("Like notification created successfully.");
-
+    // console.log("Like notification created successfully.");
+    }
     // Send response to the user.
     return res.status(201).json({
       success: true,
@@ -335,7 +403,7 @@ export const createComment = asyncHandler(async (req, res, next) => {
   const userId = req.user.userId; // from auth middleware
   commentMessage = commentMessage.trim();
 
-  console.log(commentMessage);
+  // console.log(commentMessage);
   // Validate comment for its length
   if (validateComment(commentMessage)) {
     return res.status(401).json({
@@ -351,26 +419,33 @@ export const createComment = asyncHandler(async (req, res, next) => {
   });
 
   // Increase the number of commentCount.
-  const post = await Post.findByIdAndUpdate(postId, { $inc: { commentCount: 1 } });
+  const post = await Post.findByIdAndUpdate(postId, {
+    $inc: { commentCount: 1 },
+  });
 
-    // Set the like notification...
-    const notificationDetails = {
-      postId,
-      posterUserId: post.userId,
-      actorName: req.user.name,
-      actorPhoto: req.user.photo,
-      action: "commented on you post."
-    };
+  // Set the like notification...
+  const notificationDetails = {
+    postId,
+    posterUserId: post.userId,
+    actorUserId: userId,
+    action: "commented on you post.",
+  };
 
-    console.log(notificationDetails);
+  if(post.userId.toString() !== userId.toString()){
+    // console.log(notificationDetails);
     await createCommentNotification(notificationDetails);
-    console.log("Comment notification created successfully.");
+    // console.log("Comment notification created successfully.");
+  }
 
+  const populatedComment = await Comment.findById(newComment._id).populate(
+    "userId",
+    "name photo",
+  );
 
   return res.status(201).json({
     success: true,
     message: "Comment added to post successfully.",
-    comment: newComment,
+    comment: populatedComment,
   });
 });
 
@@ -398,22 +473,29 @@ export const editComment = asyncHandler(async (req, res, next) => {
         "Comment update failed because the comment doesnt belong to you.",
     });
   } else {
-    await Comment.findByIdAndUpdate(commentId, { comment: commentMessage });
+    const updatedComment = await Comment.findByIdAndUpdate(commentId, { comment: commentMessage });
+
+    const newComment = await Comment.findById(updatedComment._id)
+            .populate("userId", "name photo");
 
     return res.status(201).json({
       success: true,
       message: "Comment updated successfully.",
+      comment: newComment
     });
   }
 });
 
-
 // Code to delete post comment
 export const deleteComment = asyncHandler(async (req, res, next) => {
-  console.log("Delete comment route hit....");
+  console.log("Delete comment route hit....fewkjbj");
   const commentId = req.params.id;
-  const postId = req.body.postId;
+  const postId = req.params.postId;
   const userId = req.user.userId; // from auth middleware
+
+  console.log(`commentId:  ${commentId}`)
+  console.log(`postId: ${postId}`)
+
 
   // check if the comment belongs to the user or not.
   const commentExist = await Comment.findOne({ _id: commentId, userId });
@@ -421,32 +503,24 @@ export const deleteComment = asyncHandler(async (req, res, next) => {
   if (!commentExist) {
     return res.status(403).json({
       success: false,
-      message: "Comment can't be deleted because it doen't belong to you.",
+      message: "Comment can't be deleted.",
     });
   } else {
-    await Comment.findByIdAndDelete(commentId);
-    const post = await Post.findByIdAndUpdate(postId, { $inc: { commentCount: -1 } });
+    const deletedComment = await Comment.findByIdAndDelete(commentId);
+    const post = await Post.findByIdAndUpdate(postId, {
+      $inc: { commentCount: -1 },
+    });
 
-    // Set the Comment notification...
-    const notificationDetails = {
-      postId,
-      posterUserId: post.userId,
-      actorName: req.user.name,
-      actorPhoto: req.user.photo,
-      action: "deleted their comment from your post."
-    };
-
-    console.log(notificationDetails);
-    await createCommentNotification(notificationDetails);
-    console.log("Comment notification created successfully.");
+    console.log(deletedComment);
 
     return res.status(200).json({
       success: true,
       message: "Comment deleted successfully.",
+      comment: deletedComment,
+      post: post,
     });
   }
 });
-
 
 // Code to make Comment report
 export const reportComment = asyncHandler(async (req, res, next) => {

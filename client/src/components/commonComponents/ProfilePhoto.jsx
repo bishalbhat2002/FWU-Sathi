@@ -1,10 +1,11 @@
-import React from 'react'
+import { getImageUrl } from "../../utilities/getImageUrl"
 
-const ProfilePhoto = ({className}) => {
+const ProfilePhoto = ({imgSrc, className}) => {
   
   return (
     <div className={`overflow-hidden h-10 w-10 rounded-full bg-amber-50 border-2 border-blue-500 p-0.5 hover:scale-104 ease duration-200 active:scale-97 ${className}`}>
-     <img src="/luffy.png" alt="" className='scale-107'/>
+     {/* <img src={imgSrc} alt="" className='scale-107'/> */}
+     <img src={getImageUrl(imgSrc)} alt="" className='scale-107 object-cover object-center w-full h-full'/>
     </div>
   )
 }
