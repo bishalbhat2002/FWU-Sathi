@@ -6,6 +6,7 @@ import {
   changeProfilePicThunk,
   editUserInformationThunk,
   getProfileThunk,
+  getTotalUserThunk,
   loginUserThunk,
   logoutUserThunk,
   registerUserThunk,
@@ -24,6 +25,8 @@ const initialState = {
   profileInfo: null, // state to store profile information - name, cover, profile, social media links, etc...
   editProfile:false,
   editLoader: false,
+  totalUsers: 0,
+  onlineUsers: 1,
  
   editSuccess: false,
   profileLoader: false,
@@ -239,6 +242,7 @@ export const userSlice = createSlice({
       state.success = true;
       // console.log(action?.payload);
       state.profileInfo.photo = action?.payload?.updatedPhoto;
+      state.userProfile.photo = action?.payload?.updatedPhoto;
       // console.log(state.profileInfo);
       toast.success(action?.payload?.message); // Show password change success message
     });
@@ -321,6 +325,28 @@ export const userSlice = createSlice({
       console.log("rejected");
       state.passwordChangeLoader = false;
       toast.error(action?.payload); // Show password change success message
+    });
+
+    // code for fetching total user number...
+    builder.addCase(getTotalUserThunk.pending, (state, action) => {
+      console.log("pending");
+      state.loader = true;
+      state.success = false;
+    });
+
+    builder.addCase(getTotalUserThunk.fulfilled, (state, action) => {
+      console.log("fullfilled");
+      state.loader = false;
+      state.success = true;
+      state.totalUsers = action.payload;
+      // toast.success(action.payload?.message); // comment this when in production
+    });
+
+    builder.addCase(getTotalUserThunk.rejected, (state, action) => {
+      console.log("rejected");
+      state.loader = false;
+      console.log(action.payload);
+      // toast.error(action.payload.message); // comment this when in production
     });
 
   },

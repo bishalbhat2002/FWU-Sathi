@@ -2,12 +2,14 @@ import {configureStore} from "@reduxjs/toolkit"
 import userReducer from "./features/user/user.slice"
 import postReducer from "./features/post/post.slice";
 import searchReducer from "./features/search/search.slice";
+import messageReducer from "./features/message/message.slice";
 
 const store = configureStore({
      reducer: {
           userReducer,                  // this means userReducer:userReducer....
           postReducer,
-          searchReducer
+          searchReducer,
+          messageReducer,
 
 
      }

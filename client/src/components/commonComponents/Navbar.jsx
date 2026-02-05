@@ -13,6 +13,7 @@ import {
   setProfileIndicator,
   toggleProfileIndicator,
 } from "../../store/features/user/user.slice";
+import { Logo } from "./Logo";
 
 export const Navbar = () => {
   return (
@@ -26,19 +27,6 @@ export const Navbar = () => {
   );
 };
 
-// Logo Component
-function Logo() {
-  return (
-    <Link to={"/"}>
-      <div className="-mt-2 pl-2 sm:pl-0 inline-block font-extrabold hover:scale-102 ease duration-200 active:scale-97">
-        <span className=" text-lg sm:text-2xl bg-linear-to-r from-blue-400 to-violet-400 text-transparent bg-clip-text">
-          FWU Sathi
-        </span>
-        <span className="text-3xl text-orange-600">.</span>
-      </div>
-    </Link>
-  );
-}
 
 // Navigation Link Components
 function NavigationLink() {

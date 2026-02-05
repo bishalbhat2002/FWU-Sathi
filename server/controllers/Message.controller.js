@@ -16,10 +16,14 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
     });
   }
 
-  await Message.create({ userId, userPhoto: photo, message: msg });
+  const message = await Message.create({ userId, userPhoto: photo, message: msg });
+  
+  const messageWithUserDetails = await Message.findById(message._id).populate("userId", "name photo")
+
   return res.status(201).json({
     success: true,
     message: "Message sent successfully.",
+    message: messageWithUserDetails
   });
 
   // Web socket code here...
@@ -31,18 +35,19 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
 export const editMessage = asyncHandler(async (req, res, next) => {
     console.log('edit message route hit....')
   const { messageId } = req.params;
-  const msg = req.body.message.trim();
+  const msg = req.body.message;
+  // console.log("msg: ", msg)
 
-  if (msg.length < 1 || msg.length > 800) {
+  if (!msg || msg.length < 1 || msg.length > 800) {
     return res.status(403).json({
       success: false,
       message: "Message length must be between 1 to 800 characters.",
     });
   }
 
-  const updatedMessage = await Message.findByIdAndUpdate(messageId, {
-    message: msg,
-  });
+  const updatedMessage = await Message.findByIdAndUpdate(messageId, {message: msg}, {new:true});
+
+  console.log(updatedMessage)
 
   if (!updatedMessage) {
     return res.status(404).json({
@@ -50,9 +55,15 @@ export const editMessage = asyncHandler(async (req, res, next) => {
       message: "Message doen't exist.",
     });
   }
+  
+  // Get name, and photo of user also .... 
+  // const messageWithUserDetails = await Message.findById(messageId).populate("userId", "name photo")
+
   return res.status(200).json({
     success: true,
     message: "Message updated successfully.",
+    updatedMessage: updatedMessage
+    // updatedMessage: messageWithUserDetails
   });
 
   // Web socket code here...
@@ -79,6 +90,7 @@ export const deleteMessage = asyncHandler(async (req, res, next) => {
   return res.status(200).json({
     success: true,
     message: "Message deleted successfully.",
+    deletedMessage: msg
   });
 
   // Web socket code here...
@@ -96,6 +108,7 @@ export const getMessages = asyncHandler(async (req, res, next) => {
   const messageSkip = (page - 1) * messageLimit;
 
   const messages = await Message.find()
+    .populate("userId", "name photo")
     .sort({ createdAt: -1 })
     .skip(messageSkip)
     .limit(messageLimit);

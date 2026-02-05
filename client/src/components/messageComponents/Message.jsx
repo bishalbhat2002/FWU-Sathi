@@ -2,24 +2,32 @@ import { Link } from "react-router-dom";
 import ProfilePhoto from "../commonComponents/ProfilePhoto";
 import { SlOptionsVertical } from "react-icons/sl";
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
-export const Message = ({ message, direction, msg="defaukt" }) => {
+export const Message = ({ message, direction }) => {
   const [showOptions, setShowOptions] = useState(false);
   const optionsRef = useRef(null);
+  const userProfile = useSelector((state) => state.userReducer.userProfile);
 
   const profileMessageOrderSetup =
     direction === "start" ? "justify-start" : "flex-row-reverse";
   const messageOptionsSetup =
     direction === "start" ? "justify-start" : "flex-row-reverse justify-end";
-  const timePostionSetup = direction === "start" ? "left-20 md:left-21 lg:left-22" : "right-19 md:right-20 sm:right-21";
 
-  const handleOutsideClick = (e)=>{
-      // e.stopPropagation();
-      if (optionsRef.current && !optionsRef.current.contains(e.target)) {
-        console.log("first", msg)
-        setShowOptions((prev) => !prev);
-      }
+  const timePostionSetup =
+    direction === "start" ? "left-0" : "right-0 flex justify-end";
+
+  const optionSetup =
+    direction === "start"
+      ? "left-10 -top-5"
+      : "right-7 -top-5 flex justify-end";
+
+  const handleOutsideClick = (e) => {
+    // e.stopPropagation();
+    if (optionsRef.current && !optionsRef.current.contains(e.target)) {
+      setShowOptions((prev) => !prev);
     }
+  };
 
   useEffect(() => {
     document.addEventListener("click", handleOutsideClick, true);
@@ -33,47 +41,71 @@ export const Message = ({ message, direction, msg="defaukt" }) => {
       className={`w-full p-2 pb-3 flex gap-2 md:gap-3 lg:gap-4 items-start relative ${profileMessageOrderSetup}`}
     >
       {/* Profile of Commenter... */}
-      <Link to={"/profile"}>
-        <ProfilePhoto className={"h-15 w-15 no-scale-on-hover"} />
+
+      <Link
+        to={`/profile/${message?.userId?._id !== userProfile?._id ? message?.userId?._id : ""}`}
+      >
+        <ProfilePhoto
+          imgSrc={message?.userId?.photo}
+          className={"h-15 w-15 no-scale-on-hover"}
+        />
       </Link>
 
       {/* Comment Message... */}
       <div className={`flex gap-2 ${messageOptionsSetup}`}>
-        <p className="text-sm text-gray-600 sm:text-md bg-white/70 max-w-45 sm:max-w-60 md:max-w-70 lg:max-w-80 rounded-sm p-2">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, odio
-        </p>
+        <div className="relative">
+          <p className="text-sm text-gray-600 sm:text-md bg-white/70 max-w-45 sm:max-w-60 md:max-w-70 lg:max-w-80 rounded-sm p-2">
+            {message?.message}
+          </p>
+
+          <small
+            className={`absolute w-40 -top-5 font-medium text-gray-400 bottom-2 ${timePostionSetup}`}
+          >
+            {new Date(message?.createdAt).toLocaleString("en-Np")}
+          </small>
+        </div>
 
         <div className="relative">
-          <SlOptionsVertical
-            onClick={(e) => setShowOptions((prev) => !prev)}
-            className="size-8 text-gray-600 hover:bg-gray-100 p-2 rounded-full hover-scale shadow-2xl"
-          />
+          {userProfile._id === message.userId._id && (
+            <SlOptionsVertical
+              onClick={(e) => setShowOptions((prev) => !prev)}
+              className="size-8 text-gray-600 hover:bg-gray-100 p-2 rounded-full hover-scale shadow-2xl"
+            />
+          )}
 
           {/*Show Options when user clicks on the 3 dots... */}
           {showOptions && (
             <div
               ref={optionsRef}
-              className="flex flex-col absolute bg-white rounded-md gap-1 overflow-hidden z-20 shadow-2xl border-1 border-zinc-400"
+              className={`flex flex-col absolute ${optionSetup}  bg-white rounded-md gap-1 overflow-hidden z-20 shadow-2xl border border-zinc-400`}
             >
-              <Link to={"/chat/edit"} className="text-sm font-medium text-zinc-800 hover:bg-zinc-400 active:bg-zinc-300 w-full px-2">
-                Edit
-              </Link>
-              <Link to={"/chat/report"} className="text-sm font-medium text-zinc-800 hover:bg-zinc-400 active:bg-zinc-300 w-full px-2">
+              {userProfile._id === message.userId._id && (
+                <Link
+                  to={`/chat/edit/${message._id}`}
+                  className="text-sm font-medium text-zinc-800 hover:bg-zinc-400 active:bg-zinc-300 w-full px-2"
+                >
+                  Edit
+                </Link>
+              )}
+              {/* <Link
+                to={`/chat/report/${message._id}`}
+                className="text-sm font-medium text-zinc-800 hover:bg-zinc-400 active:bg-zinc-300 w-full px-2"
+              >
                 Report
-              </Link>
-              <Link to={"/chat/delete"} className="text-sm font-medium text-zinc-800 hover:bg-zinc-400 active:bg-zinc-300 w-full px-2">
-                Delete
-              </Link>
+              </Link> */}
+
+              {userProfile._id === message.userId._id && (
+                <Link
+                  to={`/chat/delete/${message._id}`}
+                  className="text-sm font-medium text-zinc-800 hover:bg-zinc-400 active:bg-zinc-300 w-full px-2"
+                >
+                  Delete
+                </Link>
+              )}
             </div>
           )}
         </div>
       </div>
-
-      <small
-        className={`absolute font-medium text-gray-600 -bottom-1.5 ${timePostionSetup}`}
-      >
-        2002-12-10 12:30:10
-      </small>
     </div>
   );
 };

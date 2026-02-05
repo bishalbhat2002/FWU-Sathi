@@ -1,18 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
+import {useDispatch, useSelector} from "react-redux"
+import { sendMessageThunk } from "../../store/features/message/message.thunk";
 
 export const MessageWrite = ()=>{
 
+  const dispatch = useDispatch();
   const [message, setMessage] = useState("");
-  
-  // Handle Message Type
-  function handleMessageType(e){
-    setMessage(e.target.value);
-  }
+  const success = useSelector(state=>state.messageReducer.success)
+  const loader = useSelector(state=>state.messageReducer.loader)
+
+  useEffect(()=>{
+    if(!loader && success){
+      setMessage("");
+    }
+  }, [success, loader])
 
   // Handle Message Send
-  function handleMessageSend(){
-    alert(message, "Message send");
+  function handleMessageSend(e){
+    e.preventDefault();
+    if(message.length === 0)
+      return;
+    dispatch(sendMessageThunk({message}));
   }
 
   return (
@@ -20,7 +29,7 @@ export const MessageWrite = ()=>{
       <input
         type="text"
         value={message}
-        onChange={handleMessageType}
+        onChange={(e)=>setMessage(e.target.value)}
         name="comment"
         autoFocus={true}
         className="w-full focus:outline-blue-500 bg-white px-2 text-gray-700 font-medium"

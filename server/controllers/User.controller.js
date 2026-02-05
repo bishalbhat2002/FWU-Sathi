@@ -300,7 +300,7 @@ export const logout = asyncHandler(async (req, res, next) => {
 
 // Code for getting own profile
 export const getProfile = asyncHandler(async (req, res, next) => {
-  console.log("get profile route hit...")
+  console.log("get profile route hit...");
   const userId = req.user.userId;
   console.log("Userid: ", userId);
 
@@ -765,4 +765,18 @@ export const editCoverPic = asyncHandler(async (req, res, next) => {
       message: "No cover photo uploaded.",
     });
   }
+});
+
+// get total users logic:
+export const getTotalUsers = asyncHandler(async (req, res, next) => {
+  console.log("get total users route hit.....");
+
+  const totalUsers = await User.countDocuments();
+
+  res.status(200).json({
+    success: true,
+    message: "Total users fetched successfully.",
+    totalUsers,
+  });
+  
 });

@@ -1,6 +1,6 @@
 
 import express from "express"
-import { editCoverPic, editProfileInfo, editProfilePic, ForgotChangePassword, getOtherProfile, getProfile, getProfilePosts, getVerificationCode, getVerificationCodeForRegister, login, logout, register, updatePassword, uploadProfilePhoto} from "../controllers/User.controller.js";
+import { editCoverPic, editProfileInfo, editProfilePic, ForgotChangePassword, getOtherProfile, getProfile, getProfilePosts, getTotalUsers, getVerificationCode, getVerificationCodeForRegister, login, logout, register, updatePassword, uploadProfilePhoto} from "../controllers/User.controller.js";
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 
 const route = express.Router();
@@ -31,8 +31,7 @@ route.put("/edit-cover", isAuthenticated, uploadProfilePhoto.single("cover-photo
 
 route.put("/update-password", isAuthenticated, updatePassword)                                 // route for updating password.
 
-
-
+route.get("/get-total-users", isAuthenticated, getTotalUsers)                                 // route for gettting total users.
 
 
 

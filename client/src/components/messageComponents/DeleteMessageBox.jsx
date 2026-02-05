@@ -1,18 +1,46 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import OverlayScreen from "../../layouts/OverlayScreen";
-
 import { RxCross2 } from "react-icons/rx";
+import { useDispatch, useSelector } from "react-redux";
+import { setSuccess } from "../../store/features/message/message.slice";
+import { deleteMessageThunk } from "../../store/features/message/message.thunk";
+import { useEffect, useState } from "react";
 
 const DeleteMessageBox = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { messageId } = useParams();
+  const messages = useSelector((state) => state.messageReducer.messages);
+  const message = messages.find((message) => message._id === messageId);
+  const success = useSelector((state) => state.messageReducer.success);
+  const loader = useSelector((state) => state.messageReducer.loader);
+
+  const [ready, setReady] = useState(false);
+
+  console.log("message:", message);
+  console.log("messages:", messages);
+
+  useEffect(() => {
+    dispatch(setSuccess(false));
+    setReady(true);
+  }, []);
+
+    useEffect(() => {
+    if (!ready) return;
+
+    if (!loader && success) {
+      navigate(-1);
+    }
+  }, [success, loader]);
+
   function handleMessageDelete(e) {
     e.preventDefault();
+    dispatch(deleteMessageThunk({ messageId }));
   }
 
   return (
     <OverlayScreen>
-      <div
-        className="w-[80vw] relative max-w-130 bg-gray-800 p-5 rounded-md flex flex-col gap-2"
-      >
+      <div className="w-[80vw] relative max-w-130 bg-gray-800 p-5 rounded-md flex flex-col gap-2">
         <Link
           to={"/chat"}
           className="rounded-full p-1 bg-gray-800 absolute border-2 border-white -right-3 -top-3 hover-scale"
@@ -24,17 +52,11 @@ const DeleteMessageBox = () => {
           Delete Message
         </h3>
 
-        <p
-          name="delete-message"
-          onChange={(e) => setEditMessage(e.target.value)}
-          className="scrollbar-none text-sm sm:text-md bg-white/98 rounded-sm text-gray-800 font-medium w-full p-2 py-1"
-
-        >
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Non eius
-          error quaerat praesentium vel facilis, ducimus voluptatem velit
-          possimus deserunt harum omnis ut quo vitae neque modi nulla. In, sit.
-        </p>
-
+        {message && (
+          <p className="scrollbar-none text-sm sm:text-md bg-white/98 rounded-sm text-gray-800 font-medium w-full p-4">
+            {message?.message}
+          </p>
+        )}
 
         {/* Delete Confirmation Buttons... */}
         <div className="bg-white mt-2 p-2 rounded-md shadow">
@@ -44,13 +66,19 @@ const DeleteMessageBox = () => {
           </h2>
           <div className="text-md font-medium flex gap-2">
             <Link to={"/chat"} className="w-1/2">
-              <button autoFocus={true} className="w-full mt-2 inline-block py-2 bg-white/10 border border-black/10 shadow rounded-sm py-1 text-zinc-800 hover:bg-blue-200 active:scale-97 ease-in duration-200">
+              <button
+                autoFocus={true}
+                type="button"
+                className="w-full mt-2 inline-block py-2 bg-white/10 border border-black/10 shadow rounded-sm text-zinc-800 hover:bg-blue-200 active:scale-97 ease-in duration-200"
+              >
                 No, don't Delete.
               </button>
             </Link>
-            <button 
-            onClick={handleMessageDelete}
-            className="w-1/2 mt-2 inline-block py-2 bg-red-300 rounded-sm py-1 border border-black/10 shadow text-zinc-800 hover:bg-red-400 hover:text-white active:scale-97 ease-in duration-200">
+            <button
+              type="button"
+              onClick={handleMessageDelete}
+              className="w-1/2 mt-2 inline-block py-2 bg-red-300 rounded-sm border border-black/10 shadow text-zinc-800 hover:bg-red-400 hover:text-white active:scale-97 ease-in duration-200"
+            >
               Yes, Delete.
             </button>
           </div>

@@ -119,9 +119,9 @@ const App = () => {
 
           <Route path="/search" element={<Search />} />
           <Route path="/chat" element={<Chat />}>
-            <Route path="edit/messageId" element={<EditMessageBox />} />
-            <Route path="report/messageId" element={<ReportMessageBox />} />
-            <Route path="delete/messageId" element={<DeleteMessageBox />} />
+            <Route path="edit/:messageId" element={<EditMessageBox />} />
+            <Route path="report/:messageId" element={<ReportMessageBox />} />
+            <Route path="delete/:messageId" element={<DeleteMessageBox />} />
           </Route>
           <Route path="/notification" element={<Notification />} />
 

@@ -11,7 +11,7 @@ const initialState = {
 };
 
 export const searchSlice = createSlice({
-  name: "post",
+  name: "search",
   initialState,
   reducers: {
     setSuccess: (state, action) => {

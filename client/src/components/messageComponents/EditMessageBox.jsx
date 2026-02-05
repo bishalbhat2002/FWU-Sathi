@@ -1,14 +1,42 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import OverlayScreen from "../../layouts/OverlayScreen";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
+import { useDispatch, useSelector } from "react-redux";
+import { setSuccess } from "../../store/features/message/message.slice";
+import { editMessageThunk } from "../../store/features/message/message.thunk";
 
 const EditMessageBox = () => {
-  const [editMessage, setEditMessage] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, odio",
-  );
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { messageId } = useParams();
+  const messages = useSelector((state) => state.messageReducer.messages);
+  const message = messages.find((message) => message._id === messageId);
+  const success = useSelector((state) => state.messageReducer.success);
+  const loader = useSelector((state) => state.messageReducer.loader);
+
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    dispatch(setSuccess(false));
+    setReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!ready) return;
+
+    if (!loader && success) {
+      navigate(-1);
+    }
+  }, [success, loader]);
+
+
+
+  const [editMessage, setEditMessage] = useState(message?.message);
   function handleMessageEdit(e) {
     e.preventDefault();
+
+    dispatch(editMessageThunk({messageId, editMessage}))
   }
 
   return (

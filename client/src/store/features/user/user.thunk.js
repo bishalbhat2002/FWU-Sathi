@@ -238,3 +238,23 @@ export const changePasswordThunk = createAsyncThunk(
     }
   },
 );
+
+
+
+
+// Code to fetch total user number...
+export const getTotalUserThunk = createAsyncThunk(
+  "getTotalUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      // const response = await axiosInstance.get(`/user/get-profile/${userId}`);
+      const response = await axiosInstance.get(`/user/get-total-users`);
+
+      // console.log(response?.data);
+      return response?.data?.totalUsers; // return created post and success message object...
+    } catch (error) {
+      console.log("error:", error);
+      return rejectWithValue(error?.response?.data?.message);
+    }
+  },
+);
