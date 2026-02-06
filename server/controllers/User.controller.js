@@ -465,6 +465,8 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
         message: "Invalid Facebook URL",
       });
     }
+  } else {
+    updateInfo.facebook = "";
   }
   if (instagram) {
     if (instagram.includes("instagram.com/")) {
@@ -475,6 +477,8 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
         message: "Invalid Instagram URL",
       });
     }
+  } else {
+    updateInfo.instagram = "";
   }
   if (linkedln) {
     if (linkedln.includes("linkedln.com/")) {
@@ -485,6 +489,8 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
         message: "Invalid linkedln URL",
       });
     }
+  } else {
+    updateInfo.linkedln = "";
   }
   if (github) {
     if (github.includes("github.com/")) {
@@ -495,6 +501,8 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
         message: "Invalid Github URL",
       });
     }
+  } else {
+    updateInfo.github = "";
   }
   if (youtube) {
     if (youtube.includes("youtube.com/")) {
@@ -505,6 +513,8 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
         message: "Invalid Youtube URL",
       });
     }
+  } else {
+    updateInfo.youtube = "";
   }
   if (website) {
     // Regular expresssion for Webstite URL..
@@ -517,9 +527,11 @@ export const editProfileInfo = asyncHandler(async (req, res, next) => {
         message: "Invalid website URL",
       });
     }
+  } else {
+    updateInfo.website = "";
   }
 
-  console.log("Profile Update Info: ", updateInfo);
+  // console.log("Profile Update Info: ", updateInfo);
 
   // update User
   const updatedUser = await User.findByIdAndUpdate(userId, updateInfo, {
@@ -778,5 +790,4 @@ export const getTotalUsers = asyncHandler(async (req, res, next) => {
     message: "Total users fetched successfully.",
     totalUsers,
   });
-  
 });

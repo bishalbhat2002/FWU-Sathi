@@ -93,6 +93,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     trim: true,
     default: "",
+  },  
+  youtube: {
+    type: String,
+    trim: true,
+    default: "",
   },
   website: {
     type: String,

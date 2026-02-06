@@ -28,6 +28,7 @@ const Chat = () => {
 
     socket
       .on("onlineUsers", (onlineUsers) => {
+        
         if (onlineUsers) {
           // console.log("active users:", onlineUsers);
           dispatch(setOnlineUsers(onlineUsers));
@@ -35,12 +36,9 @@ const Chat = () => {
       })
       .on("newMessage", (newMessage) => {
         // console.log(("new message:", newMessage));
-
         dispatch(appendMessage(newMessage));
       })
-      // .on("greet", (msg) => {
-      //   console.log("gree:", msg);
-      // });
+
   }, [socket]);
 
   return (

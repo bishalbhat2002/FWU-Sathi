@@ -17,6 +17,9 @@ export const Message = ({ message, direction }) => {
   const timePostionSetup =
     direction === "start" ? "left-0" : "right-0 flex justify-end";
 
+  const nameSetup =
+    direction === "start" ? "text-start" : "text-end";
+
   const optionSetup =
     direction === "start"
       ? "left-10 -top-5"
@@ -54,12 +57,13 @@ export const Message = ({ message, direction }) => {
       {/* Comment Message... */}
       <div className={`flex gap-2 ${messageOptionsSetup}`}>
         <div className="relative">
+          <h3 className={`text-xs text-gray-500 ${nameSetup}`}>{message?.userId.name}</h3>
           <p className="text-sm text-gray-600 sm:text-md bg-white/70 max-w-45 sm:max-w-60 md:max-w-70 lg:max-w-80 rounded-sm p-2">
             {message?.message}
           </p>
 
           <small
-            className={`absolute w-40 -top-5 font-medium text-gray-400 bottom-2 ${timePostionSetup}`}
+            className={`absolute w-40 font-normal text-gray-400 text-xs -bottom-4 ${timePostionSetup}`}
           >
             {new Date(message?.createdAt).toLocaleString("en-Np")}
           </small>
@@ -69,7 +73,7 @@ export const Message = ({ message, direction }) => {
           {userProfile._id === message.userId._id && (
             <SlOptionsVertical
               onClick={(e) => setShowOptions((prev) => !prev)}
-              className="size-8 text-gray-600 hover:bg-gray-100 p-2 rounded-full hover-scale shadow-2xl"
+              className="size-8 text-gray-600 hover:bg-gray-100 p-2 relative top-3 rounded-full hover-scale shadow-2xl"
             />
           )}
 

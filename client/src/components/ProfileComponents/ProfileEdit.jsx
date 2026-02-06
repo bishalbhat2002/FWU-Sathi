@@ -176,44 +176,54 @@ const ProfileEdit = () => {
     let socialMedia = {};
 
     if (facebook) {
-      if (facebook.includes("facebook.com/") && facebook.length < 30) {
+      if (facebook.includes("facebook.com/") && facebook.length < 50) {
         socialMedia.facebook = facebook;
       } else {
         isValid = false;
         handleProfileUpdateError("facebookError", "Facebook is invalid.");
       }
+    }else{
+      socialMedia.facebook = "";
     }
     if (instagram) {
-      if (instagram.includes("instagram.com/") && instagram.length < 30) {
+      if (instagram.includes("instagram.com/") && instagram.length < 50) {
         socialMedia.instagram = instagram;
       } else {
         isValid = false;
         handleProfileUpdateError("instagramError", "Instagram is invalid.");
       }
+    }else{
+      socialMedia.instagram = "";
     }
     if (linkedln) {
-      if (linkedln.includes("linkedln.com/") && linkedln.length < 30) {
+      if (linkedln.includes("linkedln.com/") && linkedln.length < 50) {
         socialMedia.linkedln = linkedln;
       } else {
         isValid = false;
         handleProfileUpdateError("linkedlnError", "Linkedln is invalid.");
       }
+    }else{
+      socialMedia.linkedln = "";
     }
     if (github) {
-      if (github.includes("github.com/") && github.length < 30) {
+      if (github.includes("github.com/") && github.length < 50) {
         socialMedia.github = github;
       } else {
         isValid = false;
         handleProfileUpdateError("githubError", "Github is invalid.");
       }
+    }else{
+      socialMedia.github = "";
     }
     if (youtube) {
-      if (youtube.includes("youtube.com/") && youtube.length < 30) {
+      if (youtube.includes("youtube.com/") && youtube.length < 50) {
         socialMedia.youtube = youtube;
       } else {
         isValid = false;
         handleProfileUpdateError("youtubeError", "Youtube is invalid.");
       }
+    }else{
+      socialMedia.youtube = "";
     }
     if (website) {
       // Regular expresssion for Webstite URL..
@@ -225,6 +235,8 @@ const ProfileEdit = () => {
         isValid = false;
         handleProfileUpdateError("websiteError", "Website is invalid.");
       }
+    }else{
+      socialMedia.website = "";
     }
 
     // console.log(socialMedia);
