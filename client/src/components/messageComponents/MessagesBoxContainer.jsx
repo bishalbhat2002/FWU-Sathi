@@ -28,6 +28,11 @@ export const MessagesBoxContainer = () => {
           message={message}
         />
       ))}
+      {
+        (messages.length === 0) && (
+          <p className="h-full  w-full flex bg items-center justify-center text-lg font-semibold text-gray-600"> No Messages yet. </p>
+        )
+      }
     </div>
   );
 };

@@ -23,6 +23,10 @@ export const messageSlice = createSlice({
       state.success = action.payload;
       console.log("success:", action.payload);
     },
+
+    appendMessage:(state, action)=>{
+      state.messages = [action?.payload, ...state.messages]
+    }
   },
 
   // All the asynchobous operations are put into extraReducers.
@@ -59,7 +63,6 @@ export const messageSlice = createSlice({
       // console.log("fullfilled");
       state.loader = false;
       state.success = true;
-      state.messages = [action?.payload?.message, ...state.messages];
       //  console.log("payload: ",action?.payload);
     });
 
@@ -120,5 +123,5 @@ export const messageSlice = createSlice({
   },
 });
 
-export const { setSuccess } = messageSlice.actions;
+export const { setSuccess, appendMessage } = messageSlice.actions;
 export default messageSlice.reducer;

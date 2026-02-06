@@ -1,6 +1,6 @@
+import {app, server} from "./socket/socket.js"
 import express from "express"
 import cookieParser from "cookie-parser"
-import "dotenv/config"
 import cors from "cors"
 import { connectDB } from "./config/connect.db.js"
 import { GlobalErrorHandler } from "./middlewares/GlobalError.middleware.js"
@@ -14,13 +14,9 @@ import path from "path"
 import { fileURLToPath } from "url"
 
 
-
 // Create __filename and __dirname in ES module... We need this when we use type="module" way of importing...
  const __filename = fileURLToPath(import.meta.url)
  const __dirname = path.dirname(__filename);
-
-
-const app = express()
 
 
 /**
@@ -80,7 +76,8 @@ app.use(GlobalErrorHandler)
 
 const PORT = process.env.SERVER_PORT || 5000
 
-app.listen(PORT, ()=>{
+// Instead of using app -> for Real time app, we use "server". 
+server.listen(PORT, ()=>{
      console.log("Server Listening on PORT: ", PORT)
      connectDB()
 })

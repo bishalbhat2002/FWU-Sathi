@@ -13,8 +13,8 @@ const LoginComponent = () => {
 
   const [showPassword, setShowPassword] = useState(true);
   const [loginData, setLogindata] = useState({
-    email: "marian.hintz@gmail.com",
-    password: "ilovecoding0000",
+    email: "cafati3799@helesco.com",
+    password: "ilovecoding",
   });
 
   function handleLoginDatachange(e) {

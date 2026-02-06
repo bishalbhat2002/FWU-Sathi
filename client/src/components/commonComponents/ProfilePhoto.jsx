@@ -1,13 +1,18 @@
-import { getImageUrl } from "../../utilities/getImageUrl"
+import { getImageUrl } from "../../utilities/getImageUrl";
 
-const ProfilePhoto = ({imgSrc, className}) => {
-  
+const ProfilePhoto = ({ imgSrc, className }) => {
   return (
-    <div className={`overflow-hidden h-10 w-10 rounded-full bg-amber-50 border-2 border-blue-500 p-0.5 hover:scale-104 ease duration-200 active:scale-97 ${className}`}>
-     {/* <img src={imgSrc} alt="" className='scale-107'/> */}
-     <img src={getImageUrl(imgSrc)} alt="" className='scale-107 object-cover object-center w-full h-full'/>
+    <div
+      className={`overflow-hidden h-10 w-10 rounded-full bg-amber-50 border-2 border-blue-500 p-0.5 hover:scale-104 ease duration-200 active:scale-97 ${className}`}
+    >
+      {/* <img src={imgSrc} alt="" className='scale-107'/> */}
+        <img
+          src={getImageUrl(imgSrc)}
+          alt=""
+          className="scale-107 relative object-cover object-center w-full h-full"
+        />
     </div>
-  )
-}
+  );
+};
 
-export default ProfilePhoto
+export default ProfilePhoto;

@@ -2,6 +2,7 @@ import { asyncHandler } from "../utilities/AsyncHandler.utility.js";
 import { Message } from "../models/message.model.js";
 import { ErrorHandler } from "../utilities/ErrorHandler.utility.js";
 import { Report } from "../models/report.model.js";
+import {io} from "../socket/socket.js"
 
 // Code to Send (create) message
 export const sendMessage = asyncHandler(async (req, res, next) => {
@@ -19,6 +20,10 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
   const message = await Message.create({ userId, message: msg });
   
   const messageWithUserDetails = await Message.findById(message._id).populate("userId", "name photo")
+  
+  // Web socket code here...
+  // emit new message to all online users...
+  io.emit("newMessage", messageWithUserDetails);
 
   return res.status(201).json({
     success: true,
@@ -26,7 +31,7 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
     message: messageWithUserDetails
   });
 
-  // Web socket code here...
+
 });
 
 

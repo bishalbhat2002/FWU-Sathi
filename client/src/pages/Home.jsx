@@ -8,10 +8,11 @@ import { getPostsThunk } from "../store/features/post/post.thunk";
 
 const Home = () => {
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     dispatch(getPostsThunk({ page: 1 }));
   }, []);
+
 
   return (
     <ScrollPageLayout>

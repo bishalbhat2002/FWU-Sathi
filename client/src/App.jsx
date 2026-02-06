@@ -35,13 +35,12 @@ import ResolvePostReport from "./components/reportComponents/ResolvePostReport";
 import ResolveMessageReport from "./components/reportComponents/ResolveMessageReport";
 import ForgotPasswordChange from "./components/AuthComponents/ForgotPasswordChange";
 import { ProtectedRoute } from "./components/AuthComponents/ProtectedRoute";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { loadSelfState } from "./store/features/user/user.slice";
 import { LoggedInProtectedRoute } from "./components/AuthComponents/LoggedInProtectedRoute";
 import ViewPost from "./components/postComponents/ViewPost";
 
+
 const App = () => {
+
   return (
     <>
       {/* Apply Main Layout.... These are the pages with Navbar... */}
