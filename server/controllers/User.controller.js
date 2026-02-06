@@ -234,6 +234,8 @@ export const register = asyncHandler(async (req, res, next) => {
   if (gender.toLowerCase() === "other")
     defaultPhotoLink = "uploads/user/profile-other.png";
 
+  const defaultCoverLink = "uploads/user/defaultCoverLink.jpg";
+
   const hashPassword = await encryptPassword(password);
   let role = "student";
   if (email === "bishalbhat3313@gmail.com") {
@@ -253,6 +255,7 @@ export const register = asyncHandler(async (req, res, next) => {
     address,
     semester,
     photo: defaultPhotoLink,
+    coverPhoto: defaultCoverLink,
   });
 
   const tokenData = {

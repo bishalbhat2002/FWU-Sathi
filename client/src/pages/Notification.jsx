@@ -2,22 +2,21 @@ import { Link } from "react-router-dom";
 import FixPageLayout from "../layouts/FixPageLayout";
 import ProfilePhoto from "../components/commonComponents/ProfilePhoto";
 import { useEffect } from "react";
-import {useDispatch, useSelector} from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 import { getNotificationsThunk } from "../store/features/post/post.thunk";
 
 const Notification = () => {
-  
   const dispatch = useDispatch();
-  const userProfile = useSelector(state=>state.userReducer.userProfile);
-  const notifications = useSelector(state=>state.postReducer.notifications);
+  const userProfile = useSelector((state) => state.userReducer.userProfile);
+  const notifications = useSelector((state) => state.postReducer.notifications);
 
-  useEffect(()=>{
-    dispatch(getNotificationsThunk({page:1}));
-  }, [])
+  useEffect(() => {
+    dispatch(getNotificationsThunk({ page: 1 }));
+  }, []);
 
-  useEffect(()=>{
-    console.log("fiofw",notifications)
-  }, [notifications])
+  useEffect(() => {
+    console.log("fiofw", notifications);
+  }, [notifications]);
 
   return (
     <FixPageLayout>
@@ -27,11 +26,19 @@ const Notification = () => {
 
         <div className="w-full px-5 flex flex-col gap-2 overflow-auto hide-scrollbar">
           {/* Render Notifications here... */}
-          {
-            notifications?.map(notification=>(
-              <NotificationLink key={notification?._id} notification={notification} />
-            ))
-            }
+          {notifications?.map((notification) => (
+            <NotificationLink
+              key={notification?._id}
+              notification={notification}
+            />
+          ))}
+
+          {notifications?.length === 0 && (
+            <p className="pt-30 w-full flex bg items-center justify-center text-lg font-semibold text-gray-600">
+              {" "}
+              No notifications found.{" "}
+            </p>
+          )}
 
           {/* <p className="text-center font-medium text-gray-700 mt-1 animate-pulse">
             Getting older Notifications...
@@ -54,7 +61,7 @@ function Header() {
 }
 
 // One Notification Component code
-function NotificationLink({notification}) {
+function NotificationLink({ notification }) {
   return (
     <Link
       to={`/post/view/${notification.link}`}
@@ -64,7 +71,9 @@ function NotificationLink({notification}) {
       <p className=" font-medium text-xs sm:text-sm md:text-md lg:text-lg text-zinc-60">
         <b>{notification.userId.name}</b> {notification.notificationMessage}
       </p>
-      <small className="text-sm font-semibold text-gray-500 absolute bottom-1 right-2">{new Date(notification?.createdAt).toLocaleString("en-Np")}</small>
+      <small className="text-sm font-semibold text-gray-500 absolute bottom-1 right-2">
+        {new Date(notification?.createdAt).toLocaleString("en-Np")}
+      </small>
     </Link>
   );
 }

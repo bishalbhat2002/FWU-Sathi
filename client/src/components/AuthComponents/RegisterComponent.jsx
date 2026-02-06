@@ -18,14 +18,14 @@ const RegisterComponent = () => {
   const dispatch = useDispatch();
 
   const [registerData, setRegisterData] = useState({
-    email: "xedeciw869@dnsclick.com",
-    password: "ifhiufhewiwf",
-    name: "ifhiufhewiwf",
-    gender: "male",
-    program: "csit",
-    semester: "2",
-    college: "fekwn",
-    address: "lkwenf",
+    email: "",
+    password: "ilovecoding0000",
+    name: "",
+    gender: "",
+    program: "BSC-CSIT",
+    semester: "6",
+    college: "FWU",
+    address: "MNR",
     verificationCode: "",
   });
 

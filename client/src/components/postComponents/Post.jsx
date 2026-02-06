@@ -37,14 +37,14 @@ const Post = ({ post, commentBtnDisabled = false }) => {
     <>
       <div className="mx-auto max-w-130 w-full bg-white shadow-post rounded-md overflow-hidden">
         <div className="flex gap-4 p-2 items-center shadow-bottom relative bg-white">
-          <Link to={`/profile/${(post.userId._id !== userProfile._id)? post.userId._id : ""}`} >
+          <Link to={`/profile/${(post?.userId?._id !== userProfile?._id)? post?.userId?._id : ""}`} >
             <ProfilePhoto
-              imgSrc={post.userId.photo}
+              imgSrc={post?.userId?.photo}
               className="h-15 w-15 no-scale-on-hover"
             />
           </Link>
           <div>
-            <Link to={`/profile/${(post.userId._id !== userProfile._id)? post.userId._id : ""}`} >
+            <Link to={`/profile/${(post?.userId?._id !== userProfile?._id)? post?.userId?._id : ""}`} >
               <h2 className="font-bold text-xl text-zinc-700 line-clamp-1">
                 {post.userId.name}
               </h2>
@@ -56,9 +56,9 @@ const Post = ({ post, commentBtnDisabled = false }) => {
 
           {/* Options for handling posts.... */}
           <div className="absolute top-1 right-1 border-1 border-black/20 flex gap-2 px-2 py-1 rounded-md ">
-            {post?.userId?._id === userProfile._id && (
+            {post?.userId?._id === userProfile?._id && (
               <Link
-                to={`/post/edit/${post._id}`}
+                to={`/post/edit/${post?._id}`}
                 // onClick={()=>setSuccess(false)}
                 className="rounded-full p-1 bg-white hover:bg-gray-400 group hover-scale"
                 title="Edit Post"
@@ -67,9 +67,9 @@ const Post = ({ post, commentBtnDisabled = false }) => {
               </Link>
             )}
 
-            {post?.userId?._id !== userProfile._id && (
+            {post?.userId?._id !== userProfile?._id && (
               <Link
-                to={`/post/report/${post._id}`}
+                to={`/post/report/${post?._id}`}
                 className="rounded-full p-1 bg-white hover:bg-gray-400 group hover-scale"
                 title="Report Post"
               >
@@ -77,9 +77,9 @@ const Post = ({ post, commentBtnDisabled = false }) => {
               </Link>
             )}
 
-            {post?.userId?._id === userProfile._id && (
+            {post?.userId?._id === userProfile?._id && (
               <Link
-                to={`/post/delete/${post._id}`}
+                to={`/post/delete/${post?._id}`}
                 className="rounded-full p-1 bg-white hover:bg-red-300 group hover-scale"
                 title="Delete Post"
               >
@@ -89,7 +89,7 @@ const Post = ({ post, commentBtnDisabled = false }) => {
           </div>
 
           <div className="pr-1 pb-0.5 rounded-tl-sm text-zinc-400 font-medium absolute right-0 bottom-0">
-            {new Date(post.createdAt).toLocaleString("en-NP")}
+            {new Date(post?.createdAt).toLocaleString("en-NP")}
           </div>
         </div>
 
@@ -98,7 +98,7 @@ const Post = ({ post, commentBtnDisabled = false }) => {
           {post.photo && (
             <div className="w-full relative px-2 py-1 flex justify-center">
               <img
-                src={getImageUrl(post.photo)}
+                src={getImageUrl(post?.photo)}
                 // src={`${import.meta.env.VITE_SERVER_URL}/${post.photo}`.replace(
                 //   /\\/g,
                 //   "/",
@@ -109,7 +109,7 @@ const Post = ({ post, commentBtnDisabled = false }) => {
                   navigate("/post/view-image/", {
                     state: {
                       imageUrl:
-                        `${import.meta.env.VITE_SERVER_URL}/${post.photo}`.replace(
+                        `${import.meta.env.VITE_SERVER_URL}/${post?.photo}`.replace(
                           /\\/g,
                           "/",
                         ),
@@ -126,11 +126,11 @@ const Post = ({ post, commentBtnDisabled = false }) => {
 
           {!commentBtnDisabled ? (
             <Link
-              to={`/post/${post._id}/comment`}
+              to={`/post/${post?._id}/comment`}
               className={`w-full flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:scale-96 duration-200 ease-in rounded-md hover:opacity-90`}
             >
               <LiaCommentDots className="scale-125" />{" "}
-              <span className="ml-2">{post.commentCount}</span>{" "}
+              <span className="ml-2">{post?.commentCount}</span>{" "}
             </Link>
           ) : (
             <button
@@ -139,7 +139,7 @@ const Post = ({ post, commentBtnDisabled = false }) => {
               className={`w-full flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:scale-96 duration-200 ease-in rounded-md hover:opacity-90`}
             >
               <LiaCommentDots className="scale-125" />{" "}
-              <span className="ml-2">{post.commentCount}</span>{" "}
+              <span className="ml-2">{post?.commentCount}</span>{" "}
             </button>
           )}
 
@@ -162,8 +162,8 @@ function LikeButton({ post }) {
   const userProfile = useSelector((state) => state.userReducer.userProfile);
 
   function handleLike() {
-    dispatch(toggleLike({ postId: post._id, userId: userProfile._id }));
-    dispatch(likePostThunk({ postId: post._id }));
+    dispatch(toggleLike({ postId: post?._id, userId: userProfile?._id }));
+    dispatch(likePostThunk({ postId: post?._id }));
   }
 
   return (
