@@ -38,9 +38,12 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
 
 // Code to edit message
 export const editMessage = asyncHandler(async (req, res, next) => {
-    console.log('edit message route hit....')
+  console.log('edit message route hit....')
   const { messageId } = req.params;
   const msg = req.body.message;
+  const userId = req.user.userId;
+  const role = req.user.role;
+
   // console.log("msg: ", msg)
 
   if (!msg || msg.length < 1 || msg.length > 800) {
@@ -50,16 +53,25 @@ export const editMessage = asyncHandler(async (req, res, next) => {
     });
   }
 
-  const updatedMessage = await Message.findByIdAndUpdate(messageId, {message: msg}, {new:true});
+  const message = await Message.findById(messageId);
 
-  console.log(updatedMessage)
-
-  if (!updatedMessage) {
+  if(!message) {
     return res.status(404).json({
       success: false,
-      message: "Message doen't exist.",
+      message: "Message doesn't exist.",
     });
   }
+
+  if(message.userId.toString() !== userId.toString() && role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      message: "You are not authorized to edit this message.",
+    });
+  }
+
+  const updatedMessage = await Message.findByIdAndUpdate(messageId, {message: msg}, {new:true});
+  console.log(updatedMessage)
+
   
   // Get name, and photo of user also .... 
   // const messageWithUserDetails = await Message.findById(messageId).populate("userId", "name photo")
@@ -71,6 +83,7 @@ export const editMessage = asyncHandler(async (req, res, next) => {
     // updatedMessage: messageWithUserDetails
   });
 
+
   // Web socket code here...
 
 
@@ -80,17 +93,34 @@ export const editMessage = asyncHandler(async (req, res, next) => {
 
 // Code to delete message
 export const deleteMessage = asyncHandler(async (req, res, next) => {
-    console.log('delete message route hit....')
+  console.log('delete message route hit....')
   const { messageId } = req.params;
+  const {userId, role} = req.user;
 
-  const msg = await Message.findByIdAndDelete(messageId);
+  if(!messageId) {
+    return res.status(400).json({
+      success: false,
+      message: "Message ID is required.",
+    });
+  }  
 
-  if (!msg) {
+  const message = await Message.findById(messageId);
+
+  if(!message) {  
     return res.status(404).json({
       success: false,
       message: "Message doesn't exist.",
     });
   }
+
+  if(message.userId.toString() !== userId.toString() && role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      message: "You are not authorized to delete this message.",
+    });
+  }
+
+  const msg = await Message.findByIdAndDelete(messageId);
 
   return res.status(200).json({
     success: true,

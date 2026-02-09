@@ -16,6 +16,7 @@ import {
 import { Logo } from "./Logo";
 
 export const Navbar = () => {
+
   return (
     <nav className="z-50 h-15 bg-white shadow flex justify-between items-center px-3 md:px-10 fixed top-0 right-0 left-0">
       {/* Logo Component from Same Page.... */}
@@ -107,28 +108,12 @@ function NavigationLink() {
 
       <div className="relative">
         <ProfileIcon />
-        
-        {/* Show Profile in case of Login and Login button if not loggedin... */}
-        {/* {true ? <ProfileIcon /> : <LoginButton />} */}
       </div>
     </div>
   );
 }
 
-// Login Button Component....
-function LoginButton() {
-  return (
-    <Link
-      to={"/login"}
-      className="bg-blue-700 px-2 py-1 sm:px-3 sm:py-2 rounded-md hover-scale flex items-center gap-1 opacity-90 hover:opacity-100 text-white"
-    >
-      <span className="text-[15px] sm:text-sm lg:text-md font-medium">
-        Login
-      </span>
-      <RxArrowTopRight className="size-4" />
-    </Link>
-  );
-}
+
 
 // ProfileIcon component..
 function ProfileIcon() {
@@ -140,6 +125,9 @@ function ProfileIcon() {
 
   const profileRef = useRef(null);
   const profileIconRef = useRef(null);
+
+  console.log(userProfile);
+
 
   // Check if our referenced component exists or not, And if it exists then, check if contains the clicked element or not. If it contains then condition fails, if it doesnt contain then the condition is satisfied, And hence, the setProfileViewer() function is invoked.
   function handleOutsideClick(e) {

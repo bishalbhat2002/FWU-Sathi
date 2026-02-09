@@ -17,12 +17,12 @@ import toast from "react-hot-toast";
 
 const initialState = {
   isAuthenticated: false,
-  userProfile: null,
+  userProfile: null,            //state to store currently logged in user details - name, email, profile picture, cover photo, etc...
   profileIndicator: false,
   verificationCodeField: false,
-  showOtherFields: false, // State to show / hide verification code, new & confirm password fields in forgot password page. false -> hide, ture -> show...
-  success: false, // State to redirect to different pages on any operation success.
-  profileInfo: null, // state to store profile information - name, cover, profile, social media links, etc...
+  showOtherFields: false,       // State to show / hide verification code, new & confirm password fields in forgot password page. false -> hide, ture -> show...
+  success: false,               // State to redirect to different pages on any operation success.
+  profileInfo: null,            // state to store profile information - name, cover, profile, social media links, etc...
   editProfile:false,
   editLoader: false,
   totalUsers: 0,

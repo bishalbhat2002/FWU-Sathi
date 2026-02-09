@@ -12,6 +12,7 @@ import {
   createCommentNotification,
   createLikeNotification,
 } from "../utilities/NotificationHandler.utility.js";
+import { deletePhoto } from "../utilities/Delete.photo.utility.js";
 
 // we make a storage with diskStorage - which takes an object with 2 values - Destination and Filename.
 // Destination is where the file will be stored, and filename is name of file that will be given to the file when stored on the specified location.
@@ -104,7 +105,7 @@ export const editPost = asyncHandler(async (req, res, next) => {
   console.log("Post edit route hit...");
   let caption = req.body.caption;
   let postId = req.params.postId; // use req.params for getting parameters from the URL /:id <- this is a parameter.
-  const { userId, semester, name, photo } = req.user;
+  const { userId, semester, name, photo, role } = req.user;
   caption = caption.trim();
 
   // console.log(caption, postId, userId);
@@ -129,7 +130,7 @@ export const editPost = asyncHandler(async (req, res, next) => {
   }
 
   // Check ownership (VERY IMPORTANT) - if the User trying to update the post is not its owner, then dont allow them to change the post.
-  if (post.userId.toString() !== userId.toString()) {
+  if (post.userId.toString() !== userId.toString() && role !== "admin") {
     return next(
       new ErrorHandler(403, "You are not allowed to edit this post."),
     );
@@ -252,6 +253,7 @@ export const deletePost = asyncHandler(async (req, res, next) => {
   console.log('delete post route hit....')
   const postId = req.params.postId; // use req.params here.
   const userId = req.user.userId;
+  const role = req.user.role;
 
   // Check if post exists or not.
   const post = await Post.findById(postId);
@@ -261,13 +263,17 @@ export const deletePost = asyncHandler(async (req, res, next) => {
   }
 
   // Check ownership (VERY IMPORTANT) - if the User trying to update the post is not its owner, then dont allow them to change the post.
-  if (post.userId.toString() !== userId.toString()) {
+  if (post.userId.toString() !== userId.toString() && role !== "admin") {
     return next(
       new ErrorHandler(403, "You are not allowed to delete this post."),
     );
   }
 
   const deletedPost = await Post.findByIdAndDelete(postId);
+
+  if(deletedPost.photo){
+    deletePhoto(deletedPost.photo);         // delete the photo from storage if there is any photo in the post.
+  }
 
   res.status(200).json({
     success: true,
@@ -455,6 +461,7 @@ export const editComment = asyncHandler(async (req, res, next) => {
   const commentId = req.params.id;
   const commentMessage = req.body.commentMessage;
   const userId = req.user.userId; // from auth middleware
+  const role = req.user.role;
 
   // Validate comment for its length
   if (validateComment(commentMessage)) {
@@ -472,7 +479,16 @@ export const editComment = asyncHandler(async (req, res, next) => {
       message:
         "Comment update failed because the comment doesnt belong to you.",
     });
-  } else {
+  }  
+
+    if(commentExist.userId.toString() !== userId.toString() && role !== "admin"){
+      return res.status(403).json({
+        success: false,
+        message:
+          "Failed: You are not allowed to edit the comment.",
+      });
+    }
+
     const updatedComment = await Comment.findByIdAndUpdate(commentId, { comment: commentMessage });
 
     const newComment = await Comment.findById(updatedComment._id)
@@ -483,7 +499,7 @@ export const editComment = asyncHandler(async (req, res, next) => {
       message: "Comment updated successfully.",
       comment: newComment
     });
-  }
+
 });
 
 // Code to delete post comment
@@ -491,7 +507,8 @@ export const deleteComment = asyncHandler(async (req, res, next) => {
   console.log("Delete comment route hit....fewkjbj");
   const commentId = req.params.id;
   const postId = req.params.postId;
-  const userId = req.user.userId; // from auth middleware
+  const userId = req.user.userId;     // from auth middleware
+  const role = req.user.role;
 
   console.log(`commentId:  ${commentId}`)
   console.log(`postId: ${postId}`)
@@ -505,7 +522,17 @@ export const deleteComment = asyncHandler(async (req, res, next) => {
       success: false,
       message: "Comment can't be deleted.",
     });
-  } else {
+  } 
+
+
+  if(commentExist.userId.toString() !== userId.toString() && role !== "admin"){
+    return res.status(403).json({
+      success: false,
+      message:
+        "Failed: You are not allowed to delete the comment.",
+    });
+  }
+
     const deletedComment = await Comment.findByIdAndDelete(commentId);
     const post = await Post.findByIdAndUpdate(postId, {
       $inc: { commentCount: -1 },
@@ -519,7 +546,7 @@ export const deleteComment = asyncHandler(async (req, res, next) => {
       comment: deletedComment,
       post: post,
     });
-  }
+  
 });
 
 // Code to make Comment report

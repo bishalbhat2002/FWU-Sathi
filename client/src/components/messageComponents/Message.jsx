@@ -70,7 +70,7 @@ export const Message = ({ message, direction }) => {
         </div>
 
         <div className="relative">
-          {userProfile._id === message.userId._id && (
+          {(userProfile._id === message.userId._id || userProfile.role === "admin") && (
             <SlOptionsVertical
               onClick={(e) => setShowOptions((prev) => !prev)}
               className="size-8 text-gray-600 hover:bg-gray-100 p-2 relative top-3 rounded-full hover-scale shadow-2xl"
@@ -83,7 +83,7 @@ export const Message = ({ message, direction }) => {
               ref={optionsRef}
               className={`flex flex-col absolute ${optionSetup}  bg-white rounded-md gap-1 overflow-hidden z-20 shadow-2xl border border-zinc-400`}
             >
-              {userProfile._id === message.userId._id && (
+              {(userProfile._id === message.userId._id || userProfile.role === "admin") && (
                 <Link
                   to={`/chat/edit/${message._id}`}
                   className="text-sm font-medium text-zinc-800 hover:bg-zinc-400 active:bg-zinc-300 w-full px-2"
@@ -98,7 +98,7 @@ export const Message = ({ message, direction }) => {
                 Report
               </Link> */}
 
-              {userProfile._id === message.userId._id && (
+              {(userProfile._id === message.userId._id || userProfile.role === "admin") && (
                 <Link
                   to={`/chat/delete/${message._id}`}
                   className="text-sm font-medium text-zinc-800 hover:bg-zinc-400 active:bg-zinc-300 w-full px-2"

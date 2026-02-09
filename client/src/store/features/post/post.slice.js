@@ -350,8 +350,8 @@ export const postSlice = createSlice({
     builder.addCase(editPostCommentThunk.rejected, (state, action) => {
       console.log("rejected");
       state.loader = false;
-      console.log(action.payload);        // Display message
-      toast.error(action.payload?.message);       // comment this when in production
+      toast.error(action?.payload);       // comment this when in production
+      console.log(action.payload?.message);        // Display message
     });
     
     

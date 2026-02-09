@@ -7,12 +7,14 @@ import { useSelector } from "react-redux";
 export const NameInfo = () => {
 
   const profileInfo = useSelector((state) => state.userReducer.profileInfo);
+  console.log(profileInfo)
   
   return (
     <div>
-      <h2 className="text-3xl font-bold text-gray-900">{profileInfo?.name}</h2>
-      <h2 className="text-sm font-medium text-gray-700 -mt-0.5 mb-1">
-        {getSemesterName(profileInfo?.semester)} Semester
+      <h2 className="text-3xl font-bold text-gray-900 ">{profileInfo?.name} </h2>
+      <h2 className="text-sm font-medium text-gray-700 -mt-0.5 mb-1.5 relative">
+        {getSemesterName(profileInfo?.semester)} Semester 
+            {profileInfo?.role && <span className="role-class">{profileInfo?.role === "admin" ? "admin" : "student" } </span> }
       </h2>
       <Link
         to={"/profile/change-password"}

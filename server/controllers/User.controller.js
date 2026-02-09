@@ -12,6 +12,8 @@ import {
   verifyEmailCode,
 } from "../utilities/EmailVerification.utility.js";
 import { Like } from "../models/like.model.js";
+import { deletePhoto } from "../utilities/Delete.photo.utility.js";
+import fs from "fs";
 
 // Encrypt Password function
 const encryptPassword = async (plainPassword) => {
@@ -59,7 +61,7 @@ export const login = asyncHandler(async (req, res, next) => {
     email: user.email,
     semester: user.semester,
     photo: user.photo,
-    // role: user.role,
+    role: user.role,
   };
 
   const token = await createToken(tokenData);
@@ -68,7 +70,7 @@ export const login = asyncHandler(async (req, res, next) => {
     .status(200)
     .cookie("token", token, {
       expires: new Date(
-        Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 10000,
+        Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000,
       ),
       httpOnly: true,
       secure: process.env.NOTE_ENV === "production",
@@ -226,20 +228,22 @@ export const register = asyncHandler(async (req, res, next) => {
 
   let defaultPhotoLink;
   if (gender.toLowerCase() === "male")
-    defaultPhotoLink = "uploads/user/profile-boy.jpeg";
+    defaultPhotoLink = "uploads/user/profile/profile-boy.jpeg";
 
   if (gender.toLowerCase() === "female")
-    defaultPhotoLink = "uploads/user/profile-girl.jpg";
+    defaultPhotoLink = "uploads/user/profile/profile-girl.jpg";
 
   if (gender.toLowerCase() === "other")
-    defaultPhotoLink = "uploads/user/profile-other.png";
+    defaultPhotoLink = "uploads/user/profile/profile-other.png";
 
-  const defaultCoverLink = "uploads/user/defaultCoverLink.jpg";
+  const defaultCoverLink = "uploads/user/cover/defaultCoverLink.jpg";
 
   const hashPassword = await encryptPassword(password);
+
   let role = "student";
-  if (email === "bishalbhat3313@gmail.com") {
-    // Change role for email you want to make admin......
+
+  // Change role for email you want to make admin...... Here, i want to make these two emails as admin..
+  if (email === process.env.EMAIL_FIRST || email === process.env.EMAIL_SECOND) {
     role = "admin";
   }
 
@@ -264,7 +268,7 @@ export const register = asyncHandler(async (req, res, next) => {
     email: user.email,
     semester: user.semester,
     photo: user.photo,
-    // role: user.role,
+    role: user.role,
   };
 
   const token = await createToken(tokenData);
@@ -273,7 +277,7 @@ export const register = asyncHandler(async (req, res, next) => {
     .status(201)
     .cookie("token", token, {
       expires: new Date(
-        Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 10000,
+        Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000,
       ),
       httpOnly: true,
       secure: process.env.NOTE_ENV === "production",
@@ -342,6 +346,7 @@ export const getOtherProfile = asyncHandler(async (req, res, next) => {
   });
 });
 
+
 // Dead Code becasue its work is done by GetOtherProfilePosts. for getting own profile posts
 // export const getProfilePosts = asyncHandler(async (req, res, next) => {
 //   const userId = req.user.userId;
@@ -360,6 +365,7 @@ export const getOtherProfile = asyncHandler(async (req, res, next) => {
 //     posts,
 //   });
 // });
+
 
 // Code for getting other profiles posts
 export const getProfilePosts = asyncHandler(async (req, res, next) => {
@@ -697,7 +703,22 @@ export const ForgotChangePassword = asyncHandler(async (req, res, next) => {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/user"); // This folder must exist otherwise file will not be uploaded.
+
+    let uploadPath = "uploads/user";        
+
+    if (file.fieldname === "profile-photo") {        
+      uploadPath += "/profile";
+    } else if (file.fieldname === "cover-photo") {
+      uploadPath += "/cover";
+    }
+
+    // create folder if not exists.
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+
+    cb(null, uploadPath); 
+  
   },
   filename: (req, file, cb) => {
     cb(
@@ -732,10 +753,31 @@ export const editProfilePic = asyncHandler(async (req, res, next) => {
   console.log("edit profile pic route hit.....");
   let userId = req.user.userId;
 
-  let photoPath = null;
+  if (!req.file) {
+    return res.status(403).json({
+      success: false,
+      message: "No Profile photo uploaded.",
+    });
+  
+  }
 
-  if (req.file) {
-    photoPath = req.file.path;
+    // get existing user data
+    const user = await User.findById(userId);
+
+    if(!user){
+      return res.status(403).json({
+        success: false,
+        message: "User doesn't exist.",
+      });
+    }
+
+    // delete existing photo from storage if its not default photo.
+    if(user.photo){
+      deletePhoto(user.photo);
+    }
+
+
+    const photoPath = req.file.path;
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { photo: photoPath },
@@ -746,12 +788,7 @@ export const editProfilePic = asyncHandler(async (req, res, next) => {
       message: "Profile pic updated successfully.",
       updatedPhoto: updatedUser.photo,
     });
-  } else {
-    return res.status(403).json({
-      success: false,
-      message: "No Profile photo uploaded.",
-    });
-  }
+
 });
 
 // update Cover pic logic:
@@ -759,9 +796,28 @@ export const editCoverPic = asyncHandler(async (req, res, next) => {
   console.log("edit cover pic route hit.....");
   let userId = req.user.userId;
 
-  let coverPath = null;
-  if (req.file) {
-    coverPath = req.file.path;
+  if (!req.file) {
+      return res.status(403).json({
+      success: false,
+      message: "No cover photo uploaded.",
+    });
+  }
+
+    // get existing user data
+    const user = await User.findById(userId);
+
+    if(!user){
+      return res.status(403).json({
+        success: false,
+        message: "User doesn't exist.",
+      });
+    }
+
+    if (req.file) {
+      deletePhoto(user.coverPhoto);
+    }
+
+    const coverPath = req.file.path;
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -774,12 +830,7 @@ export const editCoverPic = asyncHandler(async (req, res, next) => {
       message: "Cover pic updated successfully.",
       updatedCover: updatedUser.coverPhoto,
     });
-  } else {
-    return res.status(403).json({
-      success: false,
-      message: "No cover photo uploaded.",
-    });
-  }
+
 });
 
 // get total users logic:

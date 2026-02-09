@@ -27,6 +27,7 @@ export const isAuthenticated = asyncHandler(async (req, res, next) => {
     email: tokenData.email,
     semester: tokenData.semester,
     photo: tokenData.photo,
+    role: tokenData.role,
   };
 
   return next();

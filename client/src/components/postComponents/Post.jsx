@@ -56,7 +56,7 @@ const Post = ({ post, commentBtnDisabled = false }) => {
 
           {/* Options for handling posts.... */}
           <div className="absolute top-1 right-1 border-1 border-black/20 flex gap-2 px-2 py-1 rounded-md ">
-            {post?.userId?._id === userProfile?._id && (
+            {(post?.userId?._id === userProfile?._id || userProfile?.role === "admin")  && (
               <Link
                 to={`/post/edit/${post?._id}`}
                 // onClick={()=>setSuccess(false)}
@@ -77,7 +77,7 @@ const Post = ({ post, commentBtnDisabled = false }) => {
               </Link>
             )}
 
-            {post?.userId?._id === userProfile?._id && (
+            {(post?.userId?._id === userProfile?._id || userProfile?.role === "admin") && (
               <Link
                 to={`/post/delete/${post?._id}`}
                 className="rounded-full p-1 bg-white hover:bg-red-300 group hover-scale"
