@@ -10,7 +10,7 @@ export const getAllUserThunk = createAsyncThunk(
     try {
      const response = await axiosInstance.get(`/search/get-all-users?page=${page}`);
 
-      // console.log(response?.data);
+      console.log(response?.data);
       return response?.data;                     
 
     } catch (error) {
@@ -27,7 +27,7 @@ export const searchUserThunk = createAsyncThunk(
   async (searchString, { rejectWithValue }) => {
     try {
       // console.log("search:", searchString)
-     const response = await axiosInstance.post(`/search`, {searchString});
+     const response = await axiosInstance.get(`/search?searchString=${searchString}`);
 
       console.log(response?.data);
       return response?.data;                 // return created post and success message object...

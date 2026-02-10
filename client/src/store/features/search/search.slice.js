@@ -2,8 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import { getAllUserThunk, searchUserThunk } from "./search.thunk";
 
+
 const initialState = {
   searchedUsers: [],
+  filterSemester: "",       // filter for semester
 
   // Loaders
   loader: false,
@@ -18,9 +20,13 @@ export const searchSlice = createSlice({
       state.success = action.payload;
       console.log("success:", action.payload);
     },
+    setFilterSemester: (state, action) => {
+      state.filterSemester = action.payload;
+      // console.log("semester filter:", action.payload);
+    }
   },
 
-  // All the asynchobous operations are put into extraReducers.
+  // All the asynchronous operations are put into extraReducers.
   extraReducers: (builder) => {
     // code for searching users...
     builder.addCase(getAllUserThunk.pending, (state, action) => {
@@ -68,5 +74,5 @@ export const searchSlice = createSlice({
   },
 });
 
-export const { setSuccess } = searchSlice.actions;
+export const { setSuccess, setFilterSemester } = searchSlice.actions;
 export default searchSlice.reducer;

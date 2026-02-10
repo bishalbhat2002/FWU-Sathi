@@ -139,7 +139,7 @@ export const deleteMessage = asyncHandler(async (req, res, next) => {
 export const getMessages = asyncHandler(async (req, res, next) => {
     console.log('get messages route hit....')
   const { page = 1 } = req.params;
-  const messageLimit = 25;
+  const messageLimit = 100;
   const messageSkip = (page - 1) * messageLimit;
 
   const messages = await Message.find()

@@ -172,7 +172,7 @@ export const editPost = asyncHandler(async (req, res, next) => {
 // Code for getting all the posts - using pagination and limiting
 export const getPosts = asyncHandler(async (req, res, next) => {
   console.log("get posts route hit....");
-  const limitPost = 15; // Give 15 post at a time...
+  const limitPost = 40;              // Give 40 post at a time...
   const { page = 1 } = req.query; // use req.query for getting query parameters from the URL ?page=2 <- this is a query parameter.
 
   let skipPost = (page - 1) * limitPost;
@@ -201,7 +201,7 @@ export const getPosts = asyncHandler(async (req, res, next) => {
 // Code for getting all the comments from a post - using pagination and limiting
 export const getComments = asyncHandler(async (req, res, next) => {
   console.log("get comments route hit....");
-  const limitComment = 15; // Give 15 post at a time...
+  const limitComment = 40; // Give 40 comments at a time...
   const postId = req.params.postId;
   const { page = 1 } = req.query; // use req.query for getting query parameters from the URL ?page=2 <- this is a query parameter.
 
