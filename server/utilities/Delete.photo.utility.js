@@ -19,7 +19,7 @@ export const deletePhoto = (photoPath) => {
           if (fs.existsSync(fullPath)) {
                console.log("Deleting photo: ", fullPath);
                
-               if(fullPath.includes("profile-boy.jpeg") || fullPath.includes("profile-girl.jpg") || fullPath.includes("profile-other.png")) {
+               if(fullPath.includes("profile-boy.jpeg") || fullPath.includes("profile-girl.jpg") || fullPath.includes("profile-other.png") || fullPath.includes("defaultCoverLink.jpg")) {
                     return;                  // Dont delete default profile and cover photos.
                }
 
