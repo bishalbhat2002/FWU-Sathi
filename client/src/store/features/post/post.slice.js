@@ -5,15 +5,18 @@ import toast from "react-hot-toast";
 const initialState = {
   posts: [], // state to hold posts...
   profilePosts: [],                             // state to hold profile posts
-  post: [],
+  post: null,                                     // state to hold current post...
   comments: [],
-  notification: [],
+  notifications: [],
+  muteNotifications: localStorage.getItem("muteNotifications") === "true" ? true : false || false,
 
   // Loaders
   loader: false,
   success: false, // State to redirect to different pages on any operation success.
   editPostSuccess: false,
   deletePostSuccess: false,
+  postLoader:false,
+  postSucess:false,
 };
 
 export const postSlice = createSlice({
@@ -63,7 +66,15 @@ export const postSlice = createSlice({
     },
      setDeletePostSuccess: (state, action)=>{
       state.deletePostSuccess = action.payload;
-    }
+    },
+    appendNotification: (state, action)=>{
+      state.notifications = [action.payload, ...state.notifications];
+    },
+
+    setMuteNotifications: (state, action)=>{
+      state.muteNotifications = action.payload;
+      localStorage.setItem("muteNotifications", action.payload);
+    },
   },
 
   // All the asynchobous operations are put into extraReducers.
@@ -238,27 +249,27 @@ export const postSlice = createSlice({
 
 
 
-
     // code for fetching one post...
     builder.addCase(getPostThunk.pending, (state, action) => {
       console.log("pending");
-      state.loader = true;
-      state.success = false;
+      state.post = null;            // clear previous post data
+      state.postLoader = true;
+      state.postSuccess = false;
     });
 
     builder.addCase(getPostThunk.fulfilled, (state, action) => {
       console.log("fullfilled");
-      state.loader = false;
-      state.success = true;
-      state.post = action.payload;
+      state.postLoader = false;
+      state.postSuccess = true;
+      state.post = action.payload.post;                     // Store loaded post in post state..
       //  toast.success(action.payload?.message);               // comment this when in production
     });
 
     builder.addCase(getPostThunk.rejected, (state, action) => {
       console.log("rejected");
-      state.loader = false;
+      state.postLoader = false;
+      state.postLoader = false;
       console.log(action.payload);
-      toast.error(action.payload); // comment this when in production
     });
     
     
@@ -320,14 +331,12 @@ export const postSlice = createSlice({
       state.loader = false;
       state.success = true;
       state.comments = [action.payload, ...state.comments];                      // Store loaded comments in comments state..
-      //  toast.success(action.payload?.message);                               // comment this when in production
     });
 
     builder.addCase(createPostCommentThunk.rejected, (state, action) => {
       console.log("rejected");
       state.loader = false;
       console.log(action.payload);        // Display message
-      // toast.error(action.payload);       // comment this when in production
     });
   
     
@@ -396,5 +405,5 @@ export const postSlice = createSlice({
   },
 });
 
-export const { setSuccess, toggleLike, createComment, setEditPostSuccess, setDeletePostSuccess } = postSlice.actions;
+export const { setSuccess, toggleLike, createComment, setEditPostSuccess, setDeletePostSuccess, appendNotification, setMuteNotifications } = postSlice.actions;
 export default postSlice.reducer;

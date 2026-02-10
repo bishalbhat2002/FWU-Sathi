@@ -62,7 +62,7 @@ export const editMessage = asyncHandler(async (req, res, next) => {
     });
   }
 
-  if(message.userId.toString() !== userId.toString() && role !== "admin") {
+  if(message.userId.toString() !== userId.toString()) {
     return res.status(403).json({
       success: false,
       message: "You are not authorized to edit this message.",

@@ -46,17 +46,20 @@ const Post = ({ post, commentBtnDisabled = false }) => {
           <div>
             <Link to={`/profile/${(post?.userId?._id !== userProfile?._id)? post?.userId?._id : ""}`} >
               <h2 className="font-bold text-xl text-zinc-700 line-clamp-1">
-                {post.userId.name}
+                {post?.userId?.name}
               </h2>
             </Link>
             <p className="font-medium text-gray-500 text-sm -mt-1">
-              {getSemesterName(post.semester)} Semester
+              {getSemesterName(post?.semester)} Semester
             </p>
           </div>
 
           {/* Options for handling posts.... */}
-          <div className="absolute top-1 right-1 border-1 border-black/20 flex gap-2 px-2 py-1 rounded-md ">
-            {(post?.userId?._id === userProfile?._id || userProfile?.role === "admin")  && (
+
+
+          {(post?.userId?._id === userProfile?._id || userProfile?.role==="admin") &&
+          <div className="absolute top-1 right-1 border border-black/20 flex gap-2 px-2 py-1 rounded-md ">
+            {(post?.userId?._id === userProfile?._id)  && (
               <Link
                 to={`/post/edit/${post?._id}`}
                 // onClick={()=>setSuccess(false)}
@@ -67,7 +70,8 @@ const Post = ({ post, commentBtnDisabled = false }) => {
               </Link>
             )}
 
-            {post?.userId?._id !== userProfile?._id && (
+            {/* Temporarily hide this feature.... due to lack of time.. */}
+            {/* {post?.userId?._id !== userProfile?._id && (
               <Link
                 to={`/post/report/${post?._id}`}
                 className="rounded-full p-1 bg-white hover:bg-gray-400 group hover-scale"
@@ -75,7 +79,7 @@ const Post = ({ post, commentBtnDisabled = false }) => {
               >
                 <TbMessageReport className="size-4 text-zinc-500 group-hover:text-white hover-scale" />
               </Link>
-            )}
+            )} */}
 
             {(post?.userId?._id === userProfile?._id || userProfile?.role === "admin") && (
               <Link
@@ -87,6 +91,7 @@ const Post = ({ post, commentBtnDisabled = false }) => {
               </Link>
             )}
           </div>
+          }
 
           <div className="pr-1 pb-0.5 rounded-tl-sm text-zinc-400 font-medium absolute right-0 bottom-0">
             {new Date(post?.createdAt).toLocaleString("en-NP")}
@@ -94,8 +99,8 @@ const Post = ({ post, commentBtnDisabled = false }) => {
         </div>
 
         <div className="p-1 bg-white">
-          <p className="w-full px-2 py-1 text-gray-700">{post.caption}</p>
-          {post.photo && (
+          <p className="w-full px-2 py-1 text-gray-700">{post?.caption}</p>
+          {post?.photo && (
             <div className="w-full relative px-2 py-1 flex justify-center">
               <img
                 src={getImageUrl(post?.photo)}
@@ -172,12 +177,12 @@ function LikeButton({ post }) {
       onClick={handleLike}
       className="w-full flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:scale-96 duration-200 ease-in rounded-md hover:opacity-90"
     >
-      {post.likerIds.includes(userProfile?._id) ? (
+      {post?.likerIds?.includes(userProfile?._id) ? (
         <TbHeartFilled className="scale-115 text-red-500" />
       ) : (
         <FaRegHeart />
       )}{" "}
-      <span className="ml-2">{post.likeCount}</span>{" "}
+      <span className="ml-2">{post?.likeCount}</span>{" "}
     </button>
   );
 }

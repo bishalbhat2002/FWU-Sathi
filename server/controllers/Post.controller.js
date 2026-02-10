@@ -130,7 +130,7 @@ export const editPost = asyncHandler(async (req, res, next) => {
   }
 
   // Check ownership (VERY IMPORTANT) - if the User trying to update the post is not its owner, then dont allow them to change the post.
-  if (post.userId.toString() !== userId.toString() && role !== "admin") {
+  if (post.userId.toString() !== userId.toString()) {
     return next(
       new ErrorHandler(403, "You are not allowed to edit this post."),
     );
@@ -270,6 +270,10 @@ export const deletePost = asyncHandler(async (req, res, next) => {
   }
 
   const deletedPost = await Post.findByIdAndDelete(postId);
+
+  // delete all the likes and comments associated with the post.
+  await Like.deleteMany({ postId });
+  await Comment.deleteMany({ postId });
 
   if(deletedPost.photo){
     deletePhoto(deletedPost.photo);         // delete the photo from storage if there is any photo in the post.
@@ -481,7 +485,7 @@ export const editComment = asyncHandler(async (req, res, next) => {
     });
   }  
 
-    if(commentExist.userId.toString() !== userId.toString() && role !== "admin"){
+    if(commentExist.userId.toString() !== userId.toString()){
       return res.status(403).json({
         success: false,
         message:

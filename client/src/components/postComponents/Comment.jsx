@@ -65,7 +65,7 @@ export const Comment = ({ comment }) => {
                 ref={optionsRef}
                 className="flex flex-col absolute bg-white rounded-md gap-1 overflow-hidden z-20 shadow-2xl border-1 border-zinc-400"
               >
-                {(userProfile._id === comment.userId._id || userProfile?.role === "admin") && (
+                {(userProfile._id === comment.userId._id) && (
                   <Link
                     to={`edit/${comment?._id}`}
                     className="text-sm font-medium text-zinc-800 hover:bg-zinc-400 active:bg-zinc-300 w-full px-2"
@@ -73,14 +73,14 @@ export const Comment = ({ comment }) => {
                     Edit
                   </Link>
                 )}
-                {userProfile._id !== comment.userId._id && (
+                {/* {userProfile._id !== comment.userId._id && (
                   <Link
                     to={`report/${comment?._id}`}
                     className="text-sm font-medium text-zinc-800 hover:bg-zinc-400 active:bg-zinc-300 w-full px-2"
                   >
                     Report
                   </Link>
-                )}
+                )} */}
                 {(userProfile._id === comment.userId._id || userProfile?.role === "admin") && (
                   <Link
                     to={`delete/${comment?._id}`}

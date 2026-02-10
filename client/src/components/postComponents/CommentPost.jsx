@@ -1,3 +1,4 @@
+
 import OverlayScreen from "../../layouts/OverlayScreen";
 import Post from "./Post";
 import { CommentWrite } from "./WriteComment";
@@ -41,7 +42,13 @@ const CommentPost = () => {
   
 
         {/* Commment Box Container... It contains the comment input box .....*/}
-        <CommentWrite />
+        {post && <CommentWrite />}
+        
+        {/* Show no post exist if post does.t exist... */}
+        {!post && 
+        <p 
+        className="text-center pb-2 text-4xl text-gray-800 font-bold">POST doesn't Exist</p> 
+        }
       </div>
     </OverlayScreen>
   );

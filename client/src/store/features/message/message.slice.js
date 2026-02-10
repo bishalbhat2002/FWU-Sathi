@@ -9,6 +9,7 @@ import {
 
 const initialState = {
   messages: [],
+  muteMessage : localStorage.getItem("muteMessage") === "true" ? true : false || false,
 
   // Loaders
   loader: false,
@@ -26,6 +27,11 @@ export const messageSlice = createSlice({
 
     appendMessage:(state, action)=>{
       state.messages = [action?.payload, ...state.messages]
+    },
+
+    setMuteMessage: (state, action)=>{
+      state.muteMessage = action.payload;
+      localStorage.setItem("muteMessage", action.payload);  
     }
   },
 
@@ -123,5 +129,5 @@ export const messageSlice = createSlice({
   },
 });
 
-export const { setSuccess, appendMessage } = messageSlice.actions;
+export const { setSuccess, appendMessage, setMuteMessage } = messageSlice.actions;
 export default messageSlice.reducer;

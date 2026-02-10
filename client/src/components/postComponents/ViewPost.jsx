@@ -5,24 +5,31 @@ import { Comment } from "./Comment";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getPostCommentsThunk } from "../../store/features/post/post.thunk";
+import {
+  getPostCommentsThunk,
+  getPostThunk,
+} from "../../store/features/post/post.thunk";
 import { RxCross2 } from "react-icons/rx";
+
 
 const ViewPost = () => {
   const dispatch = useDispatch();
   const { postId } = useParams();
-  const posts = useSelector((state) => state.postReducer.posts);
   const comments = useSelector((state) => state.postReducer.comments);
-  const success = useSelector((state) => state.postReducer.success);
-  const loader = useSelector((state) => state.postReducer.loader);
-  const post = posts.find((post) => post._id === postId);
+  const postSuccess = useSelector((state) => state.postReducer.postSuccess);
+  const postLoader = useSelector((state) => state.postReducer.postLoader);
+  const post = useSelector((state) => state.postReducer.post);
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getPostCommentsThunk(postId));
-  }, [postId]);
+    if (!postId) return;
 
-  if (loader) {
+    dispatch(getPostCommentsThunk(postId));
+    dispatch(getPostThunk(postId));
+
+  }, [postId, dispatch]);
+
+  if (postLoader) {
     return (
       <OverlayScreen>
         <p className="bg-gray-900  Text-gray flex justify-center text-white font-bold px-5 py-2 rounded">
@@ -31,6 +38,19 @@ const ViewPost = () => {
       </OverlayScreen>
     );
   }
+
+  if (!postLoader && !postSuccess) {
+    return (
+      <OverlayScreen>
+        <div className="px-4 py-2 pb-3 bg-white border border-black/30 text-gray-600 text-4xl font-bold rounded">
+          Post does't exist...
+        </div>
+      </OverlayScreen>
+    );
+  }
+
+  console.log("from view:", post)
+
 
   return (
     // Overlays the Comment post infront of all...
@@ -41,11 +61,11 @@ const ViewPost = () => {
       >
         <RxCross2 className="size-6 text-white hover-scale" />
       </button>
-      
-      {post ? (
+
+      {post && (
         <div className="max-h-9/10 max-w-130 w-full relative items-center bg-linear-to-b from-violet-200 to-orange-200 p-2 rounded-sm overflow-y-auto hide-scrollbar">
           {/* Display the actual post first.... */}
-          {post && <Post post={post} commentBtnDisabled={true} />}
+          <Post post={post} commentBtnDisabled={true} />
 
           <Outlet />
 
@@ -59,10 +79,6 @@ const ViewPost = () => {
           {/* Commment Box Container... It contains the comment input box .....*/}
           <CommentWrite />
         </div>
-      ) : (
-        <p className="Text-gray bg-violet-600 text-white font-bold px-5 py-2 rounded">
-          No post found For provided Id
-        </p>
       )}
     </OverlayScreen>
   );

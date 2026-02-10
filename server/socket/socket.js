@@ -35,6 +35,13 @@ io.on("connection", (socket) => {
   // send online users array...
   io.emit("onlineUsers", Object.keys(userSocketMap));
 
+  // listen for request for request from client
+  socket.on("getOnlineUsers", ()=>{
+    // console.log("Request for online users list received from client with socket ID - ", socket.id);
+    socket.emit("onlineUsers", Object.keys(userSocketMap));
+  })
+
+
   socket.on("disconnect", ()=>{
     // console.log(socket.id, "is disconnected.");
     delete userSocketMap[userId];
@@ -46,5 +53,10 @@ io.on("connection", (socket) => {
 });
 
 
+const getSocketIdByUserId = (userId) => {
+  return userSocketMap[userId];                       // reture the socket id for the given user id from the userSocketMap object.
+}
 
-export { app, io, server };
+
+
+export { app, io, server, getSocketIdByUserId };

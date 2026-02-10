@@ -22,8 +22,8 @@ export const Message = ({ message, direction }) => {
 
   const optionSetup =
     direction === "start"
-      ? "left-10 -top-5"
-      : "right-7 -top-5 flex justify-end";
+      ? "left-10"
+      : "right-7 flex justify-end";
 
   const handleOutsideClick = (e) => {
     // e.stopPropagation();
@@ -81,9 +81,9 @@ export const Message = ({ message, direction }) => {
           {showOptions && (
             <div
               ref={optionsRef}
-              className={`flex flex-col absolute ${optionSetup}  bg-white rounded-md gap-1 overflow-hidden z-20 shadow-2xl border border-zinc-400`}
+              className={`flex flex-col absolute ${optionSetup} top-4 bg-white rounded-md gap-1 overflow-hidden z-20 shadow-2xl border border-zinc-400`}
             >
-              {(userProfile._id === message.userId._id || userProfile.role === "admin") && (
+              {(userProfile._id === message.userId._id) && (
                 <Link
                   to={`/chat/edit/${message._id}`}
                   className="text-sm font-medium text-zinc-800 hover:bg-zinc-400 active:bg-zinc-300 w-full px-2"

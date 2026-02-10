@@ -168,7 +168,7 @@ export const getPostThunk = createAsyncThunk(
      console.log('get post res')
 
       console.log(response?.data);
-      return response?.data;                 // return created post and success message object...
+      return response?.data?.post;                 // return created post and success message object...
 
     } catch (error) {
       console.log("error:", error);
@@ -228,7 +228,7 @@ export const createPostCommentThunk = createAsyncThunk(
         {commentMessage: comment},                  
      );
 
-      console.log("response data:", response?.data);
+      // console.log("response data:", response?.data);
       return response?.data?.comment;                 // return created post and success message object...
 
     } catch (error) {

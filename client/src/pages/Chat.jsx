@@ -9,37 +9,48 @@ import { MessagesBoxContainer } from "../components/messageComponents/MessagesBo
 import { getTotalUserThunk } from "../store/features/user/user.thunk";
 import { setOnlineUsers } from "../store/features/socket/socket.slice";
 import { appendMessage } from "../store/features/message/message.slice";
-import toast from "react-hot-toast";
+
 
 const Chat = () => {
   const dispatch = useDispatch();
   const socket = useSelector((state) => state.socketReducer.socket);
-  // const onlineUsers = useSelector(state=>state.socketReducer.onlineUsers)
-
+  
   useEffect(() => {
     dispatch(getMessagesThunk({ pages: 1 }));
     dispatch(getTotalUserThunk());
   }, []);
+
 
   useEffect(() => {
     // return if socket doesn't exit...
     if (!socket) return;
     console.log("Socket is set:", socket.id);
 
-    socket
-      .on("onlineUsers", (onlineUsers) => {
-        
-        if (onlineUsers) {
-          // console.log("active users:", onlineUsers);
-          dispatch(setOnlineUsers(onlineUsers));
-        }
-      })
-      .on("newMessage", (newMessage) => {
-        // console.log(("new message:", newMessage));
-        dispatch(appendMessage(newMessage));
-      })
+    const handleOnlineUsers = (onlineUsers) => {
+      if (onlineUsers) {
+        // console.log("active users:", onlineUsers);
+        dispatch(setOnlineUsers(onlineUsers));
+      }
+    }
 
-  }, [socket]);
+    const handleNewMessage = (newMessage) => {
+        dispatch(appendMessage(newMessage));
+    }
+
+
+    socket.emit("getOnlineUsers"); // request for online users list from server
+
+
+    socket.on("onlineUsers", handleOnlineUsers)
+      .on("newMessage", handleNewMessage);
+
+      // cleanup code
+      return ()=>{
+        socket.off("onlineUsers", handleOnlineUsers); 
+        socket.off("newMessage", handleNewMessage);
+      }
+
+  }, [socket, dispatch]);
 
   return (
     <FixPageLaout>
