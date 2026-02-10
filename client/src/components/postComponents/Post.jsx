@@ -27,7 +27,7 @@ const Post = ({ post, commentBtnDisabled = false }) => {
       toast.success("Link copied to clipboard...");
     } catch (error) {
       toast.error("Link cannoted be copied to clipboard...");
-      console.log("Error from link copy: ", error.message);
+      console.error("Error from link copy: ", error.message);
     }
   }
 
@@ -36,10 +36,11 @@ const Post = ({ post, commentBtnDisabled = false }) => {
   return (
     <>
       <div className="mx-auto max-w-130 w-full bg-white shadow-post rounded-md overflow-hidden">
-        <div className="flex gap-4 p-2 items-center shadow-bottom relative bg-white">
+        <div className="flex gap-4 p-2 pl-3 items-center shadow-bottom relative bg-white">
           <Link to={`/profile/${(post?.userId?._id !== userProfile?._id)? post?.userId?._id : ""}`} >
             <ProfilePhoto
               imgSrc={post?.userId?.photo}
+              userId={post?.userId?._id}
               className="h-15 w-15 no-scale-on-hover"
             />
           </Link>
@@ -93,7 +94,7 @@ const Post = ({ post, commentBtnDisabled = false }) => {
           </div>
           }
 
-          <div className="pr-1 pb-0.5 rounded-tl-sm text-zinc-400 font-medium absolute right-0 bottom-0">
+          <div className="pr-1 pb-0.5 text-xs text-zinc-400 font-medium absolute right-0 bottom-0">
             {new Date(post?.createdAt).toLocaleString("en-NP")}
           </div>
         </div>

@@ -5,7 +5,7 @@ import { ErrorHandler } from "../utilities/ErrorHandler.utility.js";
 
 // code for getting all users without filters.
 export const getAllUsers = asyncHandler(async (req, res, next) => {
-  console.log("get all users route hit...");
+  // console.log("get all users route hit...");
   const { page = 1 } = req.params;
   const limitUsers = 40;    
   const usersSkip = (page - 1) * limitUsers;
@@ -26,11 +26,11 @@ export const getAllUsers = asyncHandler(async (req, res, next) => {
 
 // code for searching users using filters.
 export const searchByFilters = asyncHandler(async (req, res, next) => {
-  console.log("search by filter route hit.");
+  // console.log("search by filter route hit.");
 
   const searchString = req.query.searchString;
 
-  console.log(searchString);
+  // console.log(searchString);
 
   if (!searchString || searchString?.length === 0) {
     return next(new ErrorHandler(403, "Search string cannot be empty."));

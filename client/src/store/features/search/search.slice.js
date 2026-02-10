@@ -18,11 +18,19 @@ export const searchSlice = createSlice({
   reducers: {
     setSuccess: (state, action) => {
       state.success = action.payload;
-      console.log("success:", action.payload);
+      // console.log("success:", action.payload);
     },
     setFilterSemester: (state, action) => {
       state.filterSemester = action.payload;
       // console.log("semester filter:", action.payload);
+    },
+    setSearchString: (state, action) => {
+      state.searchString = action.payload;
+      // console.log("search string:", action.payload);
+    },
+    setIsSearched: (state, action) => {
+      state.isSearched = action.payload;
+      // console.log("isSearched:", action.payload);
     }
   },
 
@@ -30,13 +38,13 @@ export const searchSlice = createSlice({
   extraReducers: (builder) => {
     // code for searching users...
     builder.addCase(getAllUserThunk.pending, (state, action) => {
-      console.log("pending");
+      // console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(getAllUserThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      // console.log("fullfilled");
       state.loader = false;
       state.success = true;
       state.searchedUsers = action?.payload?.users;
@@ -44,7 +52,7 @@ export const searchSlice = createSlice({
     });
 
     builder.addCase(getAllUserThunk.rejected, (state, action) => {
-      console.log("rejected");
+      // console.log("rejected");
       state.loader = false;
       toast.error(action.payload);                          // comment this when in production
     });
@@ -52,27 +60,26 @@ export const searchSlice = createSlice({
 
     // code for searching users...
     builder.addCase(searchUserThunk.pending, (state, action) => {
-      console.log("pending");
+      // console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(searchUserThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      // console.log("fullfilled");
       state.loader = false;
       state.success = true;
-      state.searchedUsers = action.payload?.users;
       //  toast.success(action.payload?.message);               // comment this when in production
     });
 
     builder.addCase(searchUserThunk.rejected, (state, action) => {
-      console.log("rejected");
+      // console.log("rejected");
       state.loader = false;
-      console.log(action.payload);
+      // console.log(action.payload);
       toast.error(action.payload);                          // comment this when in production
     });
   },
 });
 
-export const { setSuccess, setFilterSemester } = searchSlice.actions;
+export const { setSuccess, setFilterSemester} = searchSlice.actions;
 export default searchSlice.reducer;

@@ -11,7 +11,7 @@ export const User = ({ user }) => {
       to={`/profile/${user._id !== userProfile._id ? user._id : ""}`}
       className="min-w-90 max-w-120 sm:min-w-75  bg-linear-to-r from-indigo-100 to-blue-100 shadow px-3 py-2 rounded-md flex gap-3"
     >
-      <ProfilePhoto imgSrc={user?.photo} className={"h-22 w-22 "} />
+      <ProfilePhoto imgSrc={user?.photo} userId={user?._id} className={"h-22 w-22 "} />
       <NameInfo user={user} />
     </Link>
   );

@@ -1,7 +1,6 @@
 import nodeMailer from "nodemailer";
 import "dotenv/config";
-import { asyncHandler } from "./AsyncHandler.utility.js";
-import { response } from "express";
+
 
 
 /**
@@ -77,7 +76,6 @@ export const sendMail = async (to, code) => {
       rejected: info.rejected,      // Array of recipient email addresses that were rejected by the server
       response: info.response,      // Raw response string from the SMTP server confirming the sending status
     };
-    console.log("Email send successfully.")
     
   } catch (error) {
     console.log("Email send Failed: ", error.message);
@@ -89,5 +87,4 @@ export const sendMail = async (to, code) => {
     };
   }
 
-  console.log(info);
 };

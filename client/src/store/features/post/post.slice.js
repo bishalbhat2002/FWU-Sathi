@@ -25,7 +25,7 @@ export const postSlice = createSlice({
   reducers: {
     setSuccess: (state, action) => {
       state.success = action.payload;
-      console.log("success:", action.payload)
+      // console.log("success:", action.payload)
     },
 
     toggleLike: (state, action)=>{
@@ -81,13 +81,13 @@ export const postSlice = createSlice({
   extraReducers: (builder) => {
     // code for post create states...
     builder.addCase(postCreateThunk.pending, (state, action) => {
-      console.log("pending");
+      // //       console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(postCreateThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      // //       console.log("fullfilled");
       state.loader = false;
       state.success = true;
       state.posts = [action.payload?.post, ...state.posts];
@@ -96,7 +96,7 @@ export const postSlice = createSlice({
     });
 
     builder.addCase(postCreateThunk.rejected, (state, action) => {
-      console.log("rejected");
+      // console.log("rejected");
       state.loader = false;
       toast.error(action.payload); // Show password change success message
     });
@@ -104,18 +104,18 @@ export const postSlice = createSlice({
     
     // code for post edit states...
     builder.addCase(editPostThunk.pending, (state, action) => {
-      console.log("pending");
+      // //       console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(editPostThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      // //       console.log("fullfilled");
       state.loader = false;
       state.success = true;
 
       const updatedPost = action.payload?.post;
-      console.log("updated post:", updatedPost);
+      // console.log("updated post:", updatedPost);
       state.posts = state.posts.map(post=>( post._id === updatedPost._id ? updatedPost : post ))
       state.editPostSuccess = true;
       toast.success(action.payload?.message); // Show password change success message
@@ -123,7 +123,7 @@ export const postSlice = createSlice({
     });
 
     builder.addCase(editPostThunk.rejected, (state, action) => {
-      console.log("rejected");
+      // console.log("rejected");
       state.loader = false;
       toast.error(action.payload); // Show password change success message
     });
@@ -131,13 +131,13 @@ export const postSlice = createSlice({
 
     // code for post report states...
     builder.addCase(reportPostThunk.pending, (state, action) => {
-      console.log("pending");
+      // //       console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(reportPostThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      // //       console.log("fullfilled");
       state.loader = false;
       state.success = true;
       toast.success(action.payload);         
@@ -145,7 +145,7 @@ export const postSlice = createSlice({
     });
 
     builder.addCase(reportPostThunk.rejected, (state, action) => {
-      console.log("rejected");
+      // console.log("rejected");
       state.loader = false;
       toast.error(action.payload); 
     });
@@ -153,13 +153,13 @@ export const postSlice = createSlice({
 
     // code for post delete states...
     builder.addCase(deletePostThunk.pending, (state, action) => {
-      console.log("pending");
+      // //       console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(deletePostThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.loader = false;
       state.success = true;
 
@@ -179,13 +179,13 @@ export const postSlice = createSlice({
 
     // code for fetching all notifications...
     builder.addCase(getNotificationsThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(getNotificationsThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.loader = false;
       state.success = true;
       state.notifications = action.payload?.notifications;
@@ -202,13 +202,13 @@ export const postSlice = createSlice({
     
     // code for fetching all posts...
     builder.addCase(getPostsThunk.pending, (state, action) => {
-      console.log("pending");
+      //       //       console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(getPostsThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.loader = false;
       state.success = true;
       // state.posts = [...state.posts, ...action.payload?.posts];
@@ -226,13 +226,13 @@ export const postSlice = createSlice({
     
     // code for fetching all posts for one profile...
     builder.addCase(getProfilePostsThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(getProfilePostsThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.loader = false;
       state.success = true;
       // state.profiePosts = [...state.profilePosts, ...action.payload?.posts];
@@ -251,14 +251,14 @@ export const postSlice = createSlice({
 
     // code for fetching one post...
     builder.addCase(getPostThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.post = null;            // clear previous post data
       state.postLoader = true;
       state.postSuccess = false;
     });
 
     builder.addCase(getPostThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.postLoader = false;
       state.postSuccess = true;
       state.post = action.payload.post;                     // Store loaded post in post state..
@@ -269,19 +269,19 @@ export const postSlice = createSlice({
       console.log("rejected");
       state.postLoader = false;
       state.postLoader = false;
-      console.log(action.payload);
+      // console.log(action.payload);
     });
     
     
     // code for fetching all comments of one post...
     builder.addCase(getPostCommentsThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(getPostCommentsThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.loader = false;
       state.success = true;
       state.comments = action.payload;                      // Store loaded comments in comments state..
@@ -291,20 +291,20 @@ export const postSlice = createSlice({
     builder.addCase(getPostCommentsThunk.rejected, (state, action) => {
       console.log("rejected");
       state.loader = false;
-      console.log(action.payload);        // Display message
+      // console.log(action.payload);        // Display message
       // toast.error(action.payload);       // comment this when in production
     });
         
     
     // code for liking a post...
     builder.addCase(likePostThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(likePostThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.loader = false;
       state.success = true;
       //  toast.success(action.payload?.message);               // comment this when in production
@@ -313,7 +313,7 @@ export const postSlice = createSlice({
     builder.addCase(likePostThunk.rejected, (state, action) => {
       console.log("rejected");
       state.loader = false;
-      console.log(action.payload);        // Display message
+      // console.log(action.payload);        // Display message
       // toast.error(action.payload);       // comment this when in production
     });   
     
@@ -321,13 +321,13 @@ export const postSlice = createSlice({
     
     // code for fetching all comments of one post...
     builder.addCase(createPostCommentThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(createPostCommentThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.loader = false;
       state.success = true;
       state.comments = [action.payload, ...state.comments];                      // Store loaded comments in comments state..
@@ -342,13 +342,13 @@ export const postSlice = createSlice({
     
     // code for editing comment of a post...
     builder.addCase(editPostCommentThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(editPostCommentThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.loader = false;
       state.success = true;
       const comment = action?.payload?.comment;
@@ -367,13 +367,13 @@ export const postSlice = createSlice({
 
     // code for deleting comment of a post...
     builder.addCase(deletePostCommentThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(deletePostCommentThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.loader = false;
       state.success = true;
       const deletedComment = action?.payload?.comment;

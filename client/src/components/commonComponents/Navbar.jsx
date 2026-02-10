@@ -126,7 +126,7 @@ function ProfileIcon() {
   const profileRef = useRef(null);
   const profileIconRef = useRef(null);
 
-  console.log(userProfile);
+  // console.log(userProfile);
 
 
   // Check if our referenced component exists or not, And if it exists then, check if contains the clicked element or not. If it contains then condition fails, if it doesnt contain then the condition is satisfied, And hence, the setProfileViewer() function is invoked.

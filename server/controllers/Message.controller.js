@@ -6,7 +6,7 @@ import {io} from "../socket/socket.js"
 
 // Code to Send (create) message
 export const sendMessage = asyncHandler(async (req, res, next) => {
-  console.log('Send message route hit....')
+  // console.log('Send message route hit....')
   const { userId } = req.user;
   const msg = req.body.message.trim();
 
@@ -38,7 +38,7 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
 
 // Code to edit message
 export const editMessage = asyncHandler(async (req, res, next) => {
-  console.log('edit message route hit....')
+  // console.log('edit message route hit....')
   const { messageId } = req.params;
   const msg = req.body.message;
   const userId = req.user.userId;
@@ -70,7 +70,7 @@ export const editMessage = asyncHandler(async (req, res, next) => {
   }
 
   const updatedMessage = await Message.findByIdAndUpdate(messageId, {message: msg}, {new:true});
-  console.log(updatedMessage)
+  // console.log(updatedMessage)
 
   
   // Get name, and photo of user also .... 
@@ -93,7 +93,7 @@ export const editMessage = asyncHandler(async (req, res, next) => {
 
 // Code to delete message
 export const deleteMessage = asyncHandler(async (req, res, next) => {
-  console.log('delete message route hit....')
+  // console.log('delete message route hit....')
   const { messageId } = req.params;
   const {userId, role} = req.user;
 
@@ -137,7 +137,7 @@ export const deleteMessage = asyncHandler(async (req, res, next) => {
 
 // Code to get Messages
 export const getMessages = asyncHandler(async (req, res, next) => {
-    console.log('get messages route hit....')
+    // console.log('get messages route hit....')
   const { page = 1 } = req.params;
   const messageLimit = 100;
   const messageSkip = (page - 1) * messageLimit;
@@ -157,7 +157,7 @@ export const getMessages = asyncHandler(async (req, res, next) => {
 
 // Code to report messages
 export const reportMessage = asyncHandler(async (req, res, next) => {
-  console.log("Report message route hit....");
+  // console.log("Report message route hit....");
   let messageId = req.params.messageId;
   let reportMessage = req.body.reportMessage?.trim();
   const reporterId = req.user.userId; // from auth middleware

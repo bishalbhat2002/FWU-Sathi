@@ -55,7 +55,7 @@
     bottom: -0.4rem;
   }
 
-  .active-user{
+  .active-user {
     display: inline-block;
   }
 
@@ -67,8 +67,8 @@
     border: 0.2rem solid rgb(239, 239, 239);
     border-radius: 100%;
     position: absolute;
-    top:0.5rem;
-    right:0;
+    top: 0.5rem;
+    right: 0;
   }
 
   .hide-scrollbar {
@@ -112,8 +112,41 @@
   .shadow-bottom {
     box-shadow: 0rem 0.1rem 0.1rem 0.01rem rgba(133, 133, 133, 0.389);
   }
-  .role-class{
-    @apply text-[10px] font-bold text-white/70 bg-blue-500 px-1 py-0.5 rounded ml-2 ;
+
+  .show-user-active {
+        box-shadow: 
+        0 0 0rem 0.2rem rgba(255, 255, 255, 0.914),
+        0 0 0rem 0.4rem rgba(6, 143, 10, 0.914),
+      /* inner glow */ 0 0 0rem 0.5rem rgba(15, 167, 21, 0.748),
+      /* second level */ 0 0 0rem 0.6rem rgba(59, 255, 108, 0.734),
+      /* third level */ 0 0 0rem 0.7rem rgba(79, 255, 126, 0.485); 
+
+    animation: shadowShrinkExpand 1s infinite ease alternate;
+  }
+
+  @keyframes shadowShrinkExpand {
+    0% {
+      box-shadow: 
+      0 0 0rem 0.2rem rgba(255, 255, 255, 0.914),
+      0 0 0rem 0.4rem rgba(6, 143, 10, 0.914),
+        0 0 0rem 0rem rgba(15, 167, 21, 0.748),
+        0 0 0rem 0rem rgba(59, 255, 108, 0.734),
+        0 0 0rem 0rem rgba(79, 255, 126, 0.485);
+    }
+    100% {
+        box-shadow: 0 0 0rem 0.2rem rgba(255, 255, 255, 0.914),
+        0 0 0rem 0.4rem rgba(6, 143, 10, 0.914),
+      /* inner glow */ 0 0 0rem 0.5rem rgba(15, 167, 21, 0.748),
+      /* second level */ 0 0 0rem 0.6rem rgba(59, 255, 108, 0.734),
+      /* third level */ 0 0 0rem 0.7rem rgba(79, 255, 126, 0.485); 
+    }   
+     
+  }
+
+
+
+  .role-class {
+    @apply text-[10px] font-bold text-white/70 bg-blue-500 px-1 py-0.5 rounded ml-2;
   }
 
   .report-nav {

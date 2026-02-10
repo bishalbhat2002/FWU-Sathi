@@ -8,13 +8,13 @@ import { ObjectIdChecker } from "../utilities/ObjectIdChecker.utility.js";
 
 // Code to Resolve Report...
 export const ResolveReport = asyncHandler(async (req, res, next) => {
-  console.log("Report resolve route hit.....");
+  // console.log("Report resolve route hit.....");
   const reportId = req.params.reportId;
   // const userRole = req.user.role;
 
   // Validate the report Id.... If not valid then return....
   if (!ObjectIdChecker(reportId, res)) return;
-  console.log("report-id", reportId);
+  // console.log("report-id", reportId);
 
   // Check User provided Id...
 
@@ -26,7 +26,7 @@ export const ResolveReport = asyncHandler(async (req, res, next) => {
   //     });
 
   const report = await Report.findById(reportId);
-  console.log(report);
+  // console.log(report);
 
   if (!report) {
     return next(new ErrorHandler(400, "Report doesn't exist."));
@@ -74,7 +74,7 @@ export const ResolveReport = asyncHandler(async (req, res, next) => {
 
 // Code to Reject Report...
 export const RejectReport = asyncHandler(async (req, res, next) => {
-  console.log("Report reject route hit.....");
+  // console.log("Report reject route hit.....");
   const reportId = req.params.reportId;
   // const userRole = req.user.role;
 

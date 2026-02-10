@@ -50,6 +50,7 @@ export const Message = ({ message, direction }) => {
       >
         <ProfilePhoto
           imgSrc={message?.userId?.photo}
+          userId={message?.userId?._id}
           className={"h-15 w-15 no-scale-on-hover"}
         />
       </Link>

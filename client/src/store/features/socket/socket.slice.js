@@ -19,7 +19,7 @@ export const socketSlice = createSlice({
     },
 
     setOnlineUsers: (state, action)=>{
-     console.log("online users: ", action.payload);
+     console.log("Online Users Ids: ", action.payload);
      state.onlineUsers = action.payload;
     }
   },

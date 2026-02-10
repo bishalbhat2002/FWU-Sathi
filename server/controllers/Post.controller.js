@@ -102,7 +102,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
 });
 
 export const editPost = asyncHandler(async (req, res, next) => {
-  console.log("Post edit route hit...");
+  // console.log("Post edit route hit...");
   let caption = req.body.caption;
   let postId = req.params.postId; // use req.params for getting parameters from the URL /:id <- this is a parameter.
   const { userId, semester, name, photo, role } = req.user;
@@ -171,7 +171,7 @@ export const editPost = asyncHandler(async (req, res, next) => {
 
 // Code for getting all the posts - using pagination and limiting
 export const getPosts = asyncHandler(async (req, res, next) => {
-  console.log("get posts route hit....");
+  // console.log("get posts route hit....");
   const limitPost = 40;              // Give 40 post at a time...
   const { page = 1 } = req.query; // use req.query for getting query parameters from the URL ?page=2 <- this is a query parameter.
 
@@ -200,7 +200,7 @@ export const getPosts = asyncHandler(async (req, res, next) => {
 
 // Code for getting all the comments from a post - using pagination and limiting
 export const getComments = asyncHandler(async (req, res, next) => {
-  console.log("get comments route hit....");
+  // console.log("get comments route hit....");
   const limitComment = 40; // Give 40 comments at a time...
   const postId = req.params.postId;
   const { page = 1 } = req.query; // use req.query for getting query parameters from the URL ?page=2 <- this is a query parameter.
@@ -250,7 +250,7 @@ export const getPost = asyncHandler(async (req, res, next) => {
 
 // For Post Deletion.
 export const deletePost = asyncHandler(async (req, res, next) => {
-  console.log('delete post route hit....')
+  // console.log('delete post route hit....')
   const postId = req.params.postId; // use req.params here.
   const userId = req.user.userId;
   const role = req.user.role;
@@ -351,7 +351,7 @@ export const reportPost = asyncHandler(async (req, res, next) => {
 
 // Code to add like to the post
 export const ToogleLikePost = asyncHandler(async (req, res, next) => {
-  console.log("Post Like route hit....");
+  // console.log("Post Like route hit....");
   const postId = req.params.postId;
   const liker = req.user.userId;          // from auth middleware
 
@@ -407,7 +407,7 @@ const validateComment = (comment) => {
 
 // Code to add comment to the post
 export const createComment = asyncHandler(async (req, res, next) => {
-  console.log("Post comment route hit....");
+  // console.log("Post comment route hit....");
   const postId = req.params.postId;
   let commentMessage = req.body.commentMessage;
   const userId = req.user.userId; // from auth middleware
@@ -461,11 +461,10 @@ export const createComment = asyncHandler(async (req, res, next) => {
 
 // Code to edit post comment
 export const editComment = asyncHandler(async (req, res, next) => {
-  console.log("edit comment route hit....");
+  // console.log("edit comment route hit....");
   const commentId = req.params.id;
   const commentMessage = req.body.commentMessage;
   const userId = req.user.userId; // from auth middleware
-  const role = req.user.role;
 
   // Validate comment for its length
   if (validateComment(commentMessage)) {
@@ -508,14 +507,14 @@ export const editComment = asyncHandler(async (req, res, next) => {
 
 // Code to delete post comment
 export const deleteComment = asyncHandler(async (req, res, next) => {
-  console.log("Delete comment route hit....fewkjbj");
+  // console.log("Delete comment route hit....fewkjbj");
   const commentId = req.params.id;
   const postId = req.params.postId;
   const userId = req.user.userId;     // from auth middleware
   const role = req.user.role;
 
-  console.log(`commentId:  ${commentId}`)
-  console.log(`postId: ${postId}`)
+  // console.log(`commentId:  ${commentId}`)
+  // console.log(`postId: ${postId}`)
 
 
   // check if the comment belongs to the user or not.
@@ -542,7 +541,7 @@ export const deleteComment = asyncHandler(async (req, res, next) => {
       $inc: { commentCount: -1 },
     });
 
-    console.log(deletedComment);
+    // console.log(deletedComment);
 
     return res.status(200).json({
       success: true,

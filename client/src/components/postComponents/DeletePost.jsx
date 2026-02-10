@@ -84,16 +84,18 @@ const DeletePost = () => {
           <p className="w-full px-2 py-1 text-gray-600  rounded line-clamp-3">
             {post?.caption}
           </p>
-          {/*Use condition to show the photo  */}
-          <div className="w-50 my-2 pl-1 relative">
+
+          {post?.photo && (
+            <div className="w-50 my-2 pl-1 relative">
             <img
               src={getImageUrl(post?.photo)}
               alt="Post photo"
               className="rounded-md"
             />
           </div>
+          )}
 
-          {/* Delete Confirmation Buttons... */}
+          { /* Delete Confirmation Buttons... */}
           <div className="mt-3 p-1 rounded-md shadow border border-black/20">
             <h2 className="text-center text-sm sm:text-md md:text-lg font-medium text-zinc-800">
               Are you sure, You want to <b className="text-red-600">delete</b>{" "}

@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "../components/commonComponents/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { use, useEffect } from "react";
-import { initializeSocket } from "../store/features/socket/socket.slice";
+import { initializeSocket, setOnlineUsers } from "../store/features/socket/socket.slice";
 import toast from "react-hot-toast";
 
 const MainLayout = () => {
@@ -20,6 +20,29 @@ const MainLayout = () => {
   useEffect(() => {
     dispatch(initializeSocket(userProfile?._id));
   }, [isAuthenticated]);
+
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleOnlineUsers = (onlineUsers) => {
+      if (onlineUsers) {
+        // console.log("active users:", onlineUsers);
+        dispatch(setOnlineUsers(onlineUsers));
+      }
+    };
+
+    socket.emit("getOnlineUsers"); // request for online users list from server
+    
+    socket.on("onlineUsers", handleOnlineUsers);
+
+    // cleanup code
+    return () => {
+      socket.off("onlineUsers", handleOnlineUsers);
+    };
+
+  }, [socket, dispatch]);
+
 
 
   useEffect(() => {

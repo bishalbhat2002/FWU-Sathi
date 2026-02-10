@@ -11,6 +11,11 @@ const ProfilePicture = ({ className }) => {
   const profileInfo = useSelector((state) => state.userReducer.profileInfo);
   const userProfile = useSelector((state) => state.userReducer.userProfile);
 
+  const onlineUsers = useSelector((state) => state.socketReducer.onlineUsers);
+
+  console.log("from profile pioc", onlineUsers)
+
+
   // console.log(profileInfo, userProfile);
 
   const [profilePicture, setProfilePicture] = useState(null);
@@ -36,14 +41,28 @@ const ProfilePicture = ({ className }) => {
       ? URL.createObjectURL(profilePicture)
       : getImageUrl(profileInfo?.photo);
 
+
+    // Hide the profile picture change options when user changes the profile picture and then clicks on cancel or save profile button.
+    useEffect(() => {
+      if(profilePicture)
+        setProfilePicture(null);
+     }, [userProfile?.photo])
+
+
+
+
+
+
+
+
   return (
     <div
-      className={`h-30 w-30 rounded-full bg-amber-50 border-3 relative border-blue-500 p-0.5 shadow-profile ${className} `}
+      className={`h-30 w-30 rounded-full bg-amber-50 relative  ${onlineUsers?.includes(profileInfo?._id) ? "" :"border-3 border-blue-500"}  p-0.5 shadow-profile ${className} `}
     >
       <img
         src={profileLink}
         alt=""
-        className="h-full w-full object-cover object-center rounded-full overflow-hidden "
+        className={`h-full w-full object-cover object-center rounded-full overflow-hidden ${onlineUsers?.includes(profileInfo?._id) && "show-user-active"}`}
       />
 
       {userProfile?._id === profileInfo?._id && (

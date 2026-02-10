@@ -34,7 +34,7 @@ const createToken = async (data) => {
 
 // Code for Loggin user
 export const login = asyncHandler(async (req, res, next) => {
-  console.log("Login Route hit...");
+  // console.log("Login Route hit...");
 
   let { email, password } = req.body;
 
@@ -121,7 +121,7 @@ export const getVerificationCodeForRegister = asyncHandler(
 
 // Code for Registering User
 export const register = asyncHandler(async (req, res, next) => {
-  console.log("Register req hit...");
+  // console.log("Register req hit...");
   let {
     name,
     email,
@@ -292,7 +292,7 @@ export const register = asyncHandler(async (req, res, next) => {
 
 // Code for logout user
 export const logout = asyncHandler(async (req, res, next) => {
-  console.log("Logout route hit....");
+  // console.log("Logout route hit....");
   return res
     .status(200)
     .cookie("token", "", {
@@ -307,9 +307,9 @@ export const logout = asyncHandler(async (req, res, next) => {
 
 // Code for getting own profile
 export const getProfile = asyncHandler(async (req, res, next) => {
-  console.log("get profile route hit...");
+  // console.log("get profile route hit...");
   const userId = req.user.userId;
-  console.log("Userid: ", userId);
+  // console.log("Userid: ", userId);
 
   // Check if user already exists
   const user = await User.findById(userId);
@@ -329,7 +329,7 @@ export const getProfile = asyncHandler(async (req, res, next) => {
 // Code for getting Other user profile
 export const getOtherProfile = asyncHandler(async (req, res, next) => {
   const userId = req.params.userId;
-  console.log("Userid: ", userId);
+  // console.log("Userid: ", userId);
 
   // Check if user already exists
   const user = await User.findById(userId);
@@ -398,7 +398,7 @@ export const getProfilePosts = asyncHandler(async (req, res, next) => {
 
 // code for editing Profile Info - name, email, semester, program, gender, college, and social media liks.
 export const editProfileInfo = asyncHandler(async (req, res, next) => {
-  console.log("edit profile info route hit...");
+  // console.log("edit profile info route hit...");
 
   const userId = req.user.userId;
 
@@ -639,7 +639,7 @@ export const getVerificationCode = asyncHandler(async (req, res, next) => {
 
 // Forgot Password - Change password code logic:
 export const ForgotChangePassword = asyncHandler(async (req, res, next) => {
-  console.log("Forgot change password route hit...");
+  // console.log("Forgot change password route hit...");
 
   const email = req.body.email?.trim();
   const code = req.body.code?.trim();
@@ -793,7 +793,7 @@ export const editProfilePic = asyncHandler(async (req, res, next) => {
 
 // update Cover pic logic:
 export const editCoverPic = asyncHandler(async (req, res, next) => {
-  console.log("edit cover pic route hit.....");
+  // console.log("edit cover pic route hit.....");
   let userId = req.user.userId;
 
   if (!req.file) {

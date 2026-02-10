@@ -16,8 +16,8 @@ import {
 import toast from "react-hot-toast";
 
 const initialState = {
-  isAuthenticated: false,
-  userProfile: null,            //state to store currently logged in user details - name, email, profile picture, cover photo, etc...
+  isAuthenticated: JSON.parse(localStorage.getItem('isAuthenticated')) || false,
+  userProfile: JSON.parse(localStorage.getItem('userProfile')) || null,            //state to store currently logged in user details - name, email, profile picture, cover photo, etc...
   profileIndicator: false,
   verificationCodeField: false,
   showOtherFields: false,       // State to show / hide verification code, new & confirm password fields in forgot password page. false -> hide, ture -> show...
@@ -76,13 +76,13 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     // User Login States
     builder.addCase(loginUserThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.loader = true;
     });
 
     builder.addCase(loginUserThunk.fulfilled, (state, action) => {
       //  console.log(action);
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.isAuthenticated = true;
       state.userProfile = action.payload.user; // store the user details on userProfile.
       state.loader = false;
@@ -96,18 +96,17 @@ export const userSlice = createSlice({
       state.isAuthenticated = false;
       state.userProfile = null;
       state.loader = false;
-      console.log(action);
       toast.error(action.payload);
     });
 
     // User Logout States
     builder.addCase(logoutUserThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.loader = true;
     });
 
     builder.addCase(logoutUserThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.loader = false;
       state.isAuthenticated = false;
       state.userProfile = null;
@@ -125,12 +124,12 @@ export const userSlice = createSlice({
 
     // Email Verification - Register States
     builder.addCase(verifyRegisterEmailThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.loader = true;
     });
 
     builder.addCase(verifyRegisterEmailThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.loader = false;
       state.verificationCodeField = true;
       toast(action.payload); // Show verification code send success message
@@ -144,12 +143,12 @@ export const userSlice = createSlice({
 
     // User Registration States
     builder.addCase(registerUserThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.loader = true;
     });
 
     builder.addCase(registerUserThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.isAuthenticated = true;
       state.userProfile = action.payload.user;        // store the user details on userProfile.
       state.loader = false;
@@ -168,13 +167,13 @@ export const userSlice = createSlice({
 
     // code to getting verification code for Email - password change
     builder.addCase(verifyForgotPasswordThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.loader = true;
       state.showOtherFields = false;
     });
 
     builder.addCase(verifyForgotPasswordThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.loader = false;
       state.showOtherFields = true;
       toast.success(action.payload); // Show verification code send success message
@@ -188,13 +187,13 @@ export const userSlice = createSlice({
 
     // code to changing forgot password...
     builder.addCase(changeForgotPasswordThunk.pending, (state, action) => {
-      console.log("pending");
+      //       console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(changeForgotPasswordThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.loader = false;
       state.success = true;
       state.showOtherFields = false;
@@ -209,13 +208,13 @@ export const userSlice = createSlice({
 
     // code for fetching profile data...
     builder.addCase(getProfileThunk.pending, (state, action) => {
-      console.log("pending");
+      // console.log("pending");
       state.profileLoader = true;
       state.profileLoadSuccess = false;
     });
 
     builder.addCase(getProfileThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      // console.log("fullfilled");
       state.profileLoader = false;
       state.profileLoadSuccess = true;
       state.profileInfo = action.payload.user;
@@ -225,25 +224,27 @@ export const userSlice = createSlice({
     builder.addCase(getProfileThunk.rejected, (state, action) => {
       console.log("rejected");
       state.profileLoader = false;
-      console.log(action.payload);
+      // console.log(action.payload);
       // toast.error(action.payload.message); // comment this when in production
     });
 
     // code for profile picture edit states...
     builder.addCase(changeProfilePicThunk.pending, (state, action) => {
-      console.log("pending");
+      // console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(changeProfilePicThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      // console.log("fullfilled");
       state.loader = false;
       state.success = true;
       // console.log(action?.payload);
+
       state.profileInfo.photo = action?.payload?.updatedPhoto;
       state.userProfile.photo = action?.payload?.updatedPhoto;
       localStorage.setItem("userProfile", JSON.stringify(state.userProfile));          // store userProfile in localstorage.
+     
       // console.log(state.profileInfo);
       toast.success(action?.payload?.message); // Show password change success message
     });
@@ -256,17 +257,19 @@ export const userSlice = createSlice({
     
     // code for cover picture edit states...
     builder.addCase(changeCoverPicThunk.pending, (state, action) => {
-      console.log("pending");
+      // console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(changeCoverPicThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      // console.log("fullfilled");
       state.loader = false;
       state.success = true;
-      console.log("payload:",action?.payload);
+      // console.log("payload:",action?.payload);
       state.profileInfo.coverPhoto = action?.payload?.updatedCover;
+      state.userProfile.coverPhoto = action?.payload?.updatedCover;
+      localStorage.setItem("userProfile", JSON.stringify(state.userProfile));          // store userProfile in localstorage.
       // console.log(state.profileInfo);
       toast.success(action?.payload?.message); // Show password change success message
     });
@@ -279,13 +282,13 @@ export const userSlice = createSlice({
     
     // code for profile information edit...
     builder.addCase(editUserInformationThunk.pending, (state, action) => {
-      console.log("pending");
+      // console.log("pending");
       state.editLoader = true;
       state.editSuccess = false;
     });
 
     builder.addCase(editUserInformationThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      //       console.log("fullfilled");
       state.editLoader = false;
       state.editSuccess = true;
 
@@ -303,13 +306,13 @@ export const userSlice = createSlice({
 
     // code for password update ...
     builder.addCase(changePasswordThunk.pending, (state, action) => {
-      console.log("pending");
+      // console.log("pending");
       state.passwordChangeLoader = true;
       state.passwordChangeSuccess = false;
     });
 
     builder.addCase(changePasswordThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      // console.log("fullfilled");
       state.passwordChangeLoader = false;
       state.passwordChangeSuccess = true;
       state.isAuthenticated = false;
@@ -329,13 +332,13 @@ export const userSlice = createSlice({
 
     // code for fetching total user number...
     builder.addCase(getTotalUserThunk.pending, (state, action) => {
-      console.log("pending");
+      // console.log("pending");
       state.loader = true;
       state.success = false;
     });
 
     builder.addCase(getTotalUserThunk.fulfilled, (state, action) => {
-      console.log("fullfilled");
+      // console.log("fullfilled");
       state.loader = false;
       state.success = true;
       state.totalUsers = action.payload;

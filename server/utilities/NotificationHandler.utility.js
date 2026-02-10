@@ -9,7 +9,7 @@ export const createCommentNotification = async ({
   posterUserId,
   action = "commented on your post",
 }) => {
-  console.log("Create Comment Notification Method hit....");
+  // console.log("Create Comment Notification Method hit....");
 
   let newNotification;
 
@@ -50,7 +50,7 @@ export const createLikeNotification = async ({
   let newNotification;
 
   try {
-    console.log("Create Like Notification Method hit....");
+    // console.log("Create Like Notification Method hit....");
 
     const notificationMessage =  "Liked your post";
 

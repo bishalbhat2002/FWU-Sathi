@@ -26,27 +26,15 @@ const Chat = () => {
     if (!socket) return;
     console.log("Socket is set:", socket.id);
 
-    const handleOnlineUsers = (onlineUsers) => {
-      if (onlineUsers) {
-        // console.log("active users:", onlineUsers);
-        dispatch(setOnlineUsers(onlineUsers));
-      }
-    }
 
     const handleNewMessage = (newMessage) => {
         dispatch(appendMessage(newMessage));
     }
 
-
-    socket.emit("getOnlineUsers"); // request for online users list from server
-
-
-    socket.on("onlineUsers", handleOnlineUsers)
-      .on("newMessage", handleNewMessage);
+    socket.on("newMessage", handleNewMessage);
 
       // cleanup code
       return ()=>{
-        socket.off("onlineUsers", handleOnlineUsers); 
         socket.off("newMessage", handleNewMessage);
       }
 

@@ -1,16 +1,15 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { searchUserThunk, getAllUserThunk } from "../../store/features/search/search.thunk";
 import { toast } from "react-hot-toast";
 import { setFilterSemester } from "../../store/features/search/search.slice";
+import { useState } from "react";
 
 
 
 export const UserSearchBar = () => {
-  const [searchString, setSearchString] = useState("");
-
-
+  
   const dispatch = useDispatch();
+  const [searchString, setSearchString] = useState("");
 
   function handleUserSearch(e) {
     e.preventDefault();
@@ -35,8 +34,6 @@ export const UserSearchBar = () => {
     const semester = e.target.value;
     dispatch(setFilterSemester(semester));            // set semester filter in the state...
   }
-
-
 
 
   return (
@@ -65,9 +62,10 @@ export const UserSearchBar = () => {
 
           {/* Option for slecting Semester... */}
           <select 
+          defaultValue={""}
           onChange={handleSemesterFilter}
           className="w-30 flex-end mt-3">
-            <option value="" selected={true}>All Semester</option>
+            <option value="" >All Semester</option>
             <option value="1">1 semester</option>
             <option value="2">2 semester</option>
             <option value="3">3 semester</option>

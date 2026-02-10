@@ -21,7 +21,7 @@ export const postCreateThunk = createAsyncThunk(
         formData,                  // When we are handling file upload, we send formData object instead of plain object....
      );
 
-      console.log(response?.data);
+      // console.log(response?.data);
       return response?.data;                 // return created post and success message object...
 
     } catch (error) {
@@ -43,7 +43,7 @@ export const editPostThunk = createAsyncThunk(
         {caption},                  // When we are handling file upload, we send formData object instead of plain object....
      );
 
-      console.log(response?.data);
+      // console.log(response?.data);
       return response?.data;                 // post edit message success message object...
 
     } catch (error) {
@@ -66,7 +66,7 @@ export const reportPostThunk = createAsyncThunk(
         {reportMessage:report},              
      );
 
-      console.log(response?.data);
+      // console.log(response?.data);
       return response?.data?.message;                 // post report success message object...
 
     } catch (error) {
@@ -86,7 +86,7 @@ export const deletePostThunk = createAsyncThunk(
 
      const response = await axiosInstance.delete(`/post/delete/${postId}`);
 
-      console.log(response?.data);
+      // console.log(response?.data);
       return response?.data;                 // post report success message object...
 
     } catch (error) {
@@ -104,7 +104,7 @@ export const getNotificationsThunk = createAsyncThunk(
     try {
      const response = await axiosInstance.get(`/notification?page=${page}`);
 
-      console.log(response?.data);
+      // console.log(response?.data);
       return response?.data;                 // return created post and success message object...
 
     } catch (error) {
@@ -126,7 +126,7 @@ export const getPostsThunk = createAsyncThunk(
     try {
      const response = await axiosInstance.get(`/post?page=${page}`);
 
-      console.log(response?.data);
+      // console.log(response?.data);
       return response?.data;                 // return created post and success message object...
 
     } catch (error) {
@@ -167,7 +167,7 @@ export const getPostThunk = createAsyncThunk(
      const response = await axiosInstance.get(`/post/view-post/${postId}`);
      console.log('get post res')
 
-      console.log(response?.data);
+      // console.log(response?.data);
       return response?.data?.post;                 // return created post and success message object...
 
     } catch (error) {
@@ -203,7 +203,7 @@ export const likePostThunk = createAsyncThunk(
 
      const response = await axiosInstance.put(`/post/like/${postId}`);
 
-      console.log("response data:", response?.data);
+      // console.log("response data:", response?.data);
       return response?.data?.comment;                 // return created post and success message object...
 
     } catch (error) {
@@ -250,7 +250,7 @@ export const editPostCommentThunk = createAsyncThunk(
         {commentMessage:comment},                
      );
 
-      console.log(response?.data);
+      // console.log(response?.data);
       return response?.data;                 // post edit message success message object...
 
     } catch (error) {
@@ -272,7 +272,7 @@ export const deletePostCommentThunk = createAsyncThunk(
      const response = await axiosInstance.delete(
         `/post/${postId}/delete-comment/${commentId}`);
 
-      console.log(response?.data);
+      // console.log(response?.data);
       return response?.data;                 // post edit message success message object...
 
     } catch (error) {

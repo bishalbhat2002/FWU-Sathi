@@ -38,7 +38,6 @@ export const registerUserThunk = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      console.log("req send... register");
       const response = await axiosInstance.post("/user/register", {
         email,
         code: verificationCode,
@@ -64,12 +63,14 @@ export const registerUserThunk = createAsyncThunk(
 export const loginUserThunk = createAsyncThunk(
   "LoginUser",
   async ({ email, password }, { rejectWithValue }) => {
+
     try {
       const response = await axiosInstance.post("/user/login", {
         email,
         password,
       });
-      console.log("response: ", response);
+
+    
 
       // This goes to fulfilled state.
       return response.data;
@@ -190,7 +191,7 @@ export const changeCoverPicThunk = createAsyncThunk(
       formData.append("cover-photo", photo);
       const response = await axiosInstance.put(`/user/edit-cover`, formData);
 
-      console.log(response?.data);
+      // console.log(response?.data);
       return response?.data; // return created post and success message object...
     } catch (error) {
       console.log("error:", error?.response);
@@ -225,7 +226,6 @@ export const changePasswordThunk = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
      
-      console.log(data)
       const response = await axiosInstance.put("/user/update-password", data);
 
       // console.log(response?.data);

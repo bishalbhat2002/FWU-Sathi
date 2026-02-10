@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdModeEdit } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { changeCoverPicThunk } from "../../store/features/user/user.thunk";
@@ -35,6 +35,17 @@ const CoverPhoto = () => {
     cover && URL.createObjectURL(cover)
       ? URL.createObjectURL(cover)
       : getImageUrl(profileInfo?.coverPhoto);
+
+
+// hide chnage cover photo option, when cover photo is uploaded successfully...
+useEffect(()=>{
+  if(cover)
+    setCover(null);
+
+}, [userProfile.coverPhoto])
+
+
+
 
   return (
     <>

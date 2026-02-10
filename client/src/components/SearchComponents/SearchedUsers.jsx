@@ -3,13 +3,12 @@ import { useSelector } from "react-redux";
 
 export const SearchedUsers = () => {
   const searchedUsers = useSelector((state) => state.searchReducer.searchedUsers);
-
   const filterSemester = useSelector((state) => state.searchReducer.filterSemester);
 
   // Apply semester filter if selected
   const filteredUsers = filterSemester
-    ? searchedUsers.filter(
-        (user) => String(user.semester) === String(filterSemester)
+    ? searchedUsers?.filter(
+        (user) => String(user?.semester) === String(filterSemester)
       )
     : searchedUsers;
 
@@ -22,7 +21,7 @@ export const SearchedUsers = () => {
       ))}
 
       {/* If no user found... */}
-      {filteredUsers?.length === 0 && (
+      {(filteredUsers.length === 0 && filterSemester) && (
         <div className="w-full h-40 flex flex-col items-center justify-center gap-2  md:col-span-2 lg:col-span-3 xl:col-span-4 mt-10">
           <h2 className="text-lg font-medium text-zinc-700">No user found!</h2>
           <p className="text-sm text-zinc-500">
