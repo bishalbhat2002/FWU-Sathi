@@ -133,6 +133,153 @@ Using **Socket.IO**, FWU Sathi supports:
 - Cookie Parser
 - Dotenv
 
+
+---
+
+# ⚙️ Running the Project Locally
+
+Follow these steps to run the project on your local machine.
+
+---
+
+# 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/bishalbhat2002/FWU-Sathi.git
+cd FWU-Sathi
+```
+
+---
+
+# 2️⃣ Setup Frontend (Client)
+
+Open terminal and run:
+
+```bash
+cd client
+npm install
+```
+
+Rename the environment file:
+
+```
+env → .env
+```
+
+Start the frontend:
+
+```bash
+npm run dev
+```
+
+The frontend will run on:
+
+```
+http://localhost:5173
+```
+
+---
+
+# 3️⃣ Setup Backend (Server)
+
+Open **another terminal** and run:
+
+```bash
+cd server
+npm install
+```
+
+Rename the environment file:
+
+```
+env → .env
+```
+
+---
+
+# 4️⃣ Node Mailer Configuration
+
+This configuration is required for **sending OTP emails for verification and password reset**.
+
+```
+# Add your own Node Mailer related data
+EMAIL=your-email-from-which-you-want-to-send-email
+PASS=your-email-app-password-generated (DONT-USE-REAL-PASSWORD-HERE)
+```
+
+⚠️ Important:
+
+- Do **NOT use your real Gmail password**
+- Generate a **Gmail App Password**
+
+---
+
+# 👨‍💼 Default Admin Emails
+
+The following emails will automatically get **admin privileges** when they register.
+
+Admins have moderation capabilities such as deleting other users' posts, comments, and messages. Note: You can add only 2 emails as admin.
+
+```
+# FWU Sathi Admin Emails
+EMAIL_FIRST=firstadmin@gmail.com
+EMAIL_SECOND=secondadmin@gmail.com
+```
+
+---
+
+# ▶️ Start Backend Server
+
+After setting up the `.env` file, run:
+
+```bash
+npm run dev
+```
+
+The backend server will start automatically.
+
+---
+
+# 🎯 Purpose of FWU Sathi
+
+FWU Sathi aims to:
+
+- Help juniors learn from seniors
+- Encourage knowledge sharing
+- Provide study materials in one place
+- Build a strong CSIT student community
+- Connect students across FWU affiliated colleges
+
+---
+
+# 📚 Academic Context
+
+This project was developed as part of:
+
+**Minor Project II**  
+**7th Semester – BSc CSIT**  
+**Far-Western University**  
+**Mahendranagar, Kanchanpur, Nepal**
+
+
+---
+
+# 🤝 Contributions
+
+This project was developed primarily for academic purposes. However, suggestions and improvements are always welcome.
+
+You can contribute by:
+
+- Forking the repository
+- Creating a new branch
+<!-- - Submitting a pull request -->
+
+---
+
+# ⭐ Support
+
+If you find this project useful, consider giving it a ⭐ on GitHub.
+
 ---
 
 # 📁 Project Structure
@@ -297,155 +444,10 @@ FWU-Sathi/
         │   ├── NotificationHandler.utility.js
         │   ├── ObjectIdChecker.utility.js
         │   └── sendMail.js
+        ├── uploads/
         ├── .gitignore
         ├── package-lock.json
         ├── package.json
         └── server.js
 
 ```
-
----
-
-# ⚙️ Running the Project Locally
-
-Follow these steps to run the project on your local machine.
-
----
-
-# 1️⃣ Clone the Repository
-
-```bash
-git clone https://github.com/bishalbhat2002/FWU-Sathi.git
-cd FWU-Sathi
-```
-
----
-
-# 2️⃣ Setup Frontend (Client)
-
-Open terminal and run:
-
-```bash
-cd client
-npm install
-```
-
-Rename the environment file:
-
-```
-env → .env
-```
-
-Start the frontend:
-
-```bash
-npm run dev
-```
-
-The frontend will run on:
-
-```
-http://localhost:5173
-```
-
----
-
-# 3️⃣ Setup Backend (Server)
-
-Open **another terminal** and run:
-
-```bash
-cd server
-npm install
-```
-
-Rename the environment file:
-
-```
-env → .env
-```
-
----
-
-# 4️⃣ Node Mailer Configuration
-
-This configuration is required for **sending OTP emails for verification and password reset**.
-
-```
-# Add your own Node Mailer related data
-EMAIL=your-email-from-which-you-want-to-send-email
-PASS=your-email-app-password-generated (DONT-USE-REAL-PASSWORD-HERE)
-```
-
-⚠️ Important:
-
-- Do **NOT use your real Gmail password**
-- Generate a **Gmail App Password**
-
----
-
-# 👨‍💼 Default Admin Emails
-
-The following emails will automatically get **admin privileges** when they register.
-
-Admins have moderation capabilities such as deleting other users' posts, comments, and messages. Note: You can add only 2 emails as admin.
-
-```
-# FWU Sathi Admin Emails
-EMAIL_FIRST=firstadmin@gmail.com
-EMAIL_SECOND=secondadmin@gmail.com
-```
-
----
-
-# ▶️ Start Backend Server
-
-After setting up the `.env` file, run:
-
-```bash
-npm run dev
-```
-
-The backend server will start automatically.
-
----
-
-# 🎯 Purpose of FWU Sathi
-
-FWU Sathi aims to:
-
-- Help juniors learn from seniors
-- Encourage knowledge sharing
-- Provide study materials in one place
-- Build a strong CSIT student community
-- Connect students across FWU affiliated colleges
-
----
-
-# 📚 Academic Context
-
-This project was developed as part of:
-
-**Minor Project II**  
-**7th Semester – BSc CSIT**  
-**Far-Western University**  
-**Mahendranagar, Kanchanpur, Nepal**
-
-
----
-
-# 🤝 Contributions
-
-This project was developed primarily for academic purposes. However, suggestions and improvements are always welcome.
-
-You can contribute by:
-
-- Forking the repository
-- Creating a new branch
-<!-- - Submitting a pull request -->
-
----
-
-# ⭐ Support
-
-If you find this project useful, consider giving it a ⭐ on GitHub.
