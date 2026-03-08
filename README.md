@@ -11,7 +11,7 @@ The goal of FWU Sathi is to build a **student-driven support ecosystem** where s
 - Since the project is not deployed online, a video demonstration is available on YouTube.
 
 ### Watch Project Demo video
-https://youtu.be/ZHAWWw8NYEw?si=zJP2p5goM4tlnOuP
+https://www.youtube.com/watch?v=ZHAWWw8NYEw
 
 ---
 
