@@ -2,8 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { searchUserThunk, getAllUserThunk } from "../../store/features/search/search.thunk";
 import { toast } from "react-hot-toast";
 import { setFilterSemester } from "../../store/features/search/search.slice";
-import { useState } from "react";
-
+import { useState, useRef } from "react";
+import gsap from "gsap";
+import {useGSAP} from "@gsap/react";
 
 
 export const UserSearchBar = () => {
@@ -36,8 +37,22 @@ export const UserSearchBar = () => {
   }
 
 
+  // GSAP Animation Code here...
+  const searchRef = useRef(null);
+  useGSAP(() => {
+  gsap.from(searchRef.current, {
+    opacity: 0,
+    y: -40,
+    delay: 0.2,
+    duration: 0.8,
+    ease: "power3.out",
+  });
+}, []);
+
+
   return (
     <form
+      ref={searchRef}
       onSubmit={handleUserSearch}
       className="w-full max-w-100 p-5 bg-blue-100/20 border border-black/20 mx-auto mt-2 rounded-md flex flex-col items-end overflow-hidden shadow relative"
     >

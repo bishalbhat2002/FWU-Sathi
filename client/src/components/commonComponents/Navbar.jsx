@@ -14,6 +14,11 @@ import {
   toggleProfileIndicator,
 } from "../../store/features/user/user.slice";
 import { Logo } from "./Logo";
+import {gsap} from "gsap";
+import {useGSAP} from "@gsap/react";
+
+
+
 
 export const Navbar = () => {
 
@@ -31,6 +36,31 @@ export const Navbar = () => {
 
 // Navigation Link Components
 function NavigationLink() {
+
+  useGSAP(() => {
+    
+    const tl = gsap.timeline();
+
+    tl.from("ul li",{
+      opacity: 0,
+      y: -20,
+      duration: 0.5,
+      ease: "power2.out",
+      stagger: 0.1
+    });
+
+    tl.from(".profile-icon-container",{
+      opacity: 0,
+      y: -20,
+      duration: 0.5,
+      ease: "power2.out",
+    },"-=0.4")
+
+
+  }, [])
+
+
+
   return (
     <div className="flex justify-center items-center gap-5 sm:gap-7">
       <ul className="flex flex-1 justify-between gap-4 sm:gap-5">
@@ -106,7 +136,7 @@ function NavigationLink() {
         </li>
       </ul>
 
-      <div className="relative">
+      <div className="relative profile-icon-container">
         <ProfileIcon />
       </div>
     </div>

@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { useRef } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link} from "react-router-dom";
 import toast from "react-hot-toast";
 import { MdOutlineMail } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUserThunk } from "../../store/features/user/user.thunk";
+import gsap from "gsap";
+import {useGSAP} from "@gsap/react";
+
 
 const LoginComponent = () => {
   const dispatch = useDispatch();
@@ -50,9 +54,27 @@ const LoginComponent = () => {
 
 
 
+  /**
+   * GSAP Animation Code here...
+   * 
+   */
+  const formRef = useRef(null);
+  useGSAP(() => {
+  gsap.from(formRef.current, {
+    opacity: 0,
+    y: 50,
+    duration: 0.8,
+    ease: "power3.out",
+  });
+}, []);
+
+
+
+
   return (
     <div className="w-full h-screen sm:pt-15 flex justify-center items-center overflow-hidden">
       <form
+        ref={formRef}
         onSubmit={handleLogin}
         className="max-w-105 w-full bg-white shadow-post rounded-md overflow-hidden p-5 mx-2 flex flex-col gap-5"
       >

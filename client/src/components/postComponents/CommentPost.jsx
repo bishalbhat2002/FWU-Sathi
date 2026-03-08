@@ -1,16 +1,16 @@
-
 import OverlayScreen from "../../layouts/OverlayScreen";
 import Post from "./Post";
 import { CommentWrite } from "./WriteComment";
 import { Comment } from "./Comment";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getPostCommentsThunk } from "../../store/features/post/post.thunk";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const CommentPost = () => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { postId } = useParams();
   const posts = useSelector((state) => state.postReducer.posts);
   const comments = useSelector((state) => state.postReducer.comments);
@@ -20,35 +20,66 @@ const CommentPost = () => {
     dispatch(getPostCommentsThunk(postId));
   }, [postId]);
 
+  // GSAP Code for animation
+  const postCreateBtnRef = useRef(null);
+  const [isClosing, setIsClosing] = useState(false);
+
+  useGSAP(() => {
+    // Animate the post create container when it mounts
+    if (!isClosing) {
+      gsap.from(postCreateBtnRef.current, {
+        opacity: 0,
+        scale: 0,
+        y: 0,
+        duration: 0.3,
+        delay: 0.1,
+        ease: "power2.out",
+      });
+    }
+
+    // Animate the post create container when it unmounts
+    if (isClosing) {
+      gsap.to(postCreateBtnRef.current, {
+        opacity: 0,
+        scale: 0,
+        y: "-100%",
+        duration: 0.3,
+        ease: "power2.out",
+        onComplete: () => {
+          navigate(-1);
+        },
+      });
+    }
+  }, [isClosing]);
 
   return (
     // Overlays the Comment post infront of all...
     <OverlayScreen>
       {/* Comment Post Container.. */}
-      <div className="max-h-[95%] max-w-130 w-full relative items-center bg-linear-to-b from-blue-200 to-orange-200 p-2 rounded-sm overflow-y-auto hide-scrollbar">
+      <div 
+      ref={postCreateBtnRef}
+      className="max-h-[95%] max-w-130 w-full relative items-center bg-linear-to-b from-blue-200 to-orange-200 p-2 rounded-sm overflow-y-auto hide-scrollbar">
         {/* Display the actual post first.... */}
         {post && <Post post={post} commentBtnDisabled={true} />}
 
         <Outlet />
 
         {/* Comment Showing container. This container shows the comments on the post.  */}
-         <div className="mt-2 max-h-9/10">
-          {
-            comments?.map(comment=>(
-              <Comment key={comment?._id} comment={comment} />
-            ))
-          }
+        <div className="mt-2 max-h-9/10">
+          {comments?.map((comment) => (
+            <Comment key={comment?._id} comment={comment} />
+          ))}
         </div>
-  
 
         {/* Commment Box Container... It contains the comment input box .....*/}
         {post && <CommentWrite />}
-        
+
         {/* Show no post exist if post does.t exist... */}
-        {!post && 
-        <p 
-        className="text-center pb-2 text-4xl text-gray-800 font-bold">POST doesn't Exist</p> 
-        }
+        {!post && (
+          <p className="text-center pb-2 text-4xl text-gray-800 font-bold">
+            POST doesn't Exist
+          </p>
+        )}
       </div>
     </OverlayScreen>
   );

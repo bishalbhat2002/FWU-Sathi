@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import OverlayScreen from "../../layouts/OverlayScreen";
 import ProfilePhoto from "../commonComponents/ProfilePhoto";
 import { RxCross2 } from "react-icons/rx";
@@ -7,7 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSemesterName } from "../../utilities/getSemName";
 import { getImageUrl } from "../../utilities/getImageUrl";
 import { editPostThunk } from "../../store/features/post/post.thunk";
-import { setEditPostSuccess, setSuccess } from "../../store/features/post/post.slice";
+import { setEditPostSuccess } from "../../store/features/post/post.slice";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const EditPost = () => {
   const { postId } = useParams();
@@ -15,7 +17,9 @@ const EditPost = () => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.postReducer.posts);
   const loader = useSelector((state) => state.postReducer.loader);
-  const editPostSuccess = useSelector((state) => state.postReducer.editPostSuccess);
+  const editPostSuccess = useSelector(
+    (state) => state.postReducer.editPostSuccess,
+  );
   const post = posts.find((post) => post?._id === postId);
 
   const [caption, setCaption] = useState(post?.caption);
@@ -38,16 +42,52 @@ const EditPost = () => {
     dispatch(editPostThunk({ caption, postId }));
   }
 
+  /**
+   * GSAP Animation Code
+   */
+  const postEditBtnRef = useRef(null);
+  const [isClosing, setIsClosing] = useState(false);
+
+  useGSAP(() => {
+    // Animate the post create container when it mounts
+    if (!isClosing) {
+      gsap.from(postEditBtnRef.current, {
+        opacity: 0,
+        y: "100",
+        duration: 0.4,
+        delay: 0.1,
+        ease: "power2.out",
+      });
+    }
+
+    // Animate the post create container when it unmounts
+    if (isClosing) {
+      gsap.to(postEditBtnRef.current, {
+        opacity: 0,
+        scale: 0.3,
+        y: "100%",
+        duration: 0.3,
+        ease: "power2.out",
+        onComplete: () => {
+          navigate(-1);
+        },
+      });
+    }
+  }, [isClosing]);
+
   return (
     <OverlayScreen>
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => setIsClosing(true)}
         className="rounded-full p-1 bg-gray-800 absolute border-2 border-white right-3 top-3 hover-scale"
       >
         <RxCross2 className="size-6 text-white hover-scale" />
       </button>
 
-      <div className="bg-white max-w-130 w-full bg-white-600 border-1 rounded-md border-gray-300 relative">
+      <div
+        ref={postEditBtnRef}
+        className="bg-white max-w-130 w-full bg-white-600 border rounded-md border-gray-300 relative"
+      >
         <span className="absolute right-0 text-sm sm:text-md bg-green-100 rounded-bl px-2 py-1 font-medium text-zinc-500">
           You are Editing this post.
         </span>

@@ -1,0 +1,31 @@
+# Server Details....
+SERVER_PORT=3000
+MONGO_URI=mongodb://localhost:27017/FWU_Sathi
+# MONGO_URI=mongodb+srv://hancyboy3313_db_user:wtLZQmw2Gq5QD69H@fwu-sathi.idqyas6.mongodb.net/
+
+# Auth Related data....
+JWT_KEY=xyz12590bbydnkkkabbdjnekkdlkjefwnjk
+JWT_EXPIRE=7d
+COOKIE_EXPIRE=7
+
+# Node Mailer related data.... [change only EMAIL and PASS fields, rest should be same]
+EMAIL=yourGmailHere
+PASS=yourAppPasswordHere
+
+PORT=465
+HOST=smtp.gmail.com
+
+# Note: For the EMAIL and PASS fields, you should replace 'yourGmailHere' with your actual Gmail address and 'yourAppPasswordHere' with an app password generated from your Google account. This is necessary for the Node Mailer to send emails securely.
+
+#Note: Do not write actual password, use app password generated from your Google account for the PASS field to ensure security. If you don't know what an app password is, you can search it on youtube or googe. But dont use actual password of your Gmail account. 
+
+
+# Client URL
+CLIENT_URL=http://localhost:5173
+
+
+#FWU Sathi Admin Emails  [change only EMAIL_FIRST and EMAIL_SECOND fields]
+EMAIL_FIRST=yourGmailHere
+EMAIL_SECOND=yourGmailHere
+
+# Note: For the EMAIL_FIRST and EMAIL_SECOND fields, you should replace 'yourGmailHere' with the actual Gmail addresses of the FWU Sathi admins. This will allow the server to send notifications or emails to these admin accounts as needed.    

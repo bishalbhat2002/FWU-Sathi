@@ -13,7 +13,7 @@ import Search from "./pages/Search";
 import Chat from "./pages/Chat";
 import Profile from "./pages/Profile";
 import CreatePost from "./components/postComponents/CreatePost";
-import EditPost from "./components/postComponents/EdiPost";
+import EditPost from "./components/postComponents/EditPost";
 import ReportPost from "./components/postComponents/ReportPost";
 import DeletePost from "./components/postComponents/DeletePost";
 import CommentPost from "./components/postComponents/CommentPost";
@@ -74,7 +74,7 @@ const App = () => {
               path="post/delete/:postId"
               element={
                 <ProtectedRoute>
-                  <DeletePost />{" "}
+                  <DeletePost />
                 </ProtectedRoute>
               }
             />

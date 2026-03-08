@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { MdOutlineMail } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +8,11 @@ import {
   verifyForgotPasswordThunk,
 } from "../../store/features/user/user.thunk";
 import { setSuccess } from "../../store/features/user/user.slice";
+import { gsap } from "gsap";
+import {useGSAP} from "@gsap/react"
+
+
+
 
 const ForgotPasswordChange = () => {
   const navigate = useNavigate();
@@ -153,9 +157,26 @@ const ForgotPasswordChange = () => {
     }
   }, [success]);
 
+
+  // Forgot password change animation code...
+  const formRef = useRef(null);
+  useGSAP(() => {
+
+    gsap.from(formRef.current, {
+      opacity: 0,
+      y: 50,
+      duration: 0.8,
+      ease: "power3.out",
+    });
+
+  }, []);
+
+
+
   return (
     <div className="w-full h-screen sm:pt-15 flex justify-center items-center overflow-hidden">
       <form
+        ref={formRef}
         onSubmit={!showOtherFields ? handleEmailSubmit : handlePasswordChange}
         className="max-w-105 w-full mx-2 bg-white shadow-post rounded-md overflow-hidden p-5 flex flex-col gap-5"
       >

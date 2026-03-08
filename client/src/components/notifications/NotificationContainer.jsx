@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 
 export const NotificationContainer = () => {
-     const notifications = useSelector((state) => state.postReducer.notifications);
+    const notifications = useSelector((state) => state.postReducer.notifications);
 
 
   return (

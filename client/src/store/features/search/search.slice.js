@@ -69,6 +69,7 @@ export const searchSlice = createSlice({
       // console.log("fullfilled");
       state.loader = false;
       state.success = true;
+      state.searchedUsers = action?.payload?.users;
       //  toast.success(action.payload?.message);               // comment this when in production
     });
 

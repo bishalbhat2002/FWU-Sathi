@@ -1,10 +1,15 @@
-import { isValidElement, useEffect, useState } from "react";
+import { isValidElement, useRef, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { MdOutlineMail } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
-import { registerUserThunk, verifyRegisterEmailThunk } from "../../store/features/user/user.thunk";
+import {
+  registerUserThunk,
+  verifyRegisterEmailThunk,
+} from "../../store/features/user/user.thunk";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const RegisterComponent = () => {
   const [showPassword, setShowPassword] = useState(true);
@@ -204,13 +209,36 @@ const RegisterComponent = () => {
 
     // Send the registration form data to backend....
     console.log("data send:", registerData);
-    
+
     dispatch(registerUserThunk(registerData));
-  } 
-  
+  }
+
+  /**
+   * GSAP Animation for Register Form...
+   *
+   */
+
+  const formRef = useRef(null);
+  useGSAP(() => {
+
+    gsap.from(formRef.current, {
+      opacity: 0,
+      y: 50,
+      duration: 0.8,
+      ease: "power3.out",
+    });
+
+  }, []);
+
+
+
+
+
+
   return (
     <div className="w-full h-screen pt-15 flex justify-center items-start sm:items-center overflow-x-hidden overflow-y-auto">
       <form
+        ref={formRef}
         onSubmit={!verificationCodeField ? verifyEmail : handleRegister}
         className="max-w-220 w-full mx-3 my-5 bg-white shadow-post rounded-md overflow-hidden p-5 flex flex-col gap-5"
       >
@@ -221,7 +249,7 @@ const RegisterComponent = () => {
         {/* Input Fields container. */}
         <div className="grid sm:grid-cols-2 gap-x-5 gap-y-4">
           {/* Email Input field container... */}
-          <div className="flex flex-col gap-1 w-full relative">
+          <div className="flex flex-col gap-1 w-full relative form-field">
             <label
               className="text-lg text-zinc-500 font-medium"
               htmlFor="email"
@@ -248,7 +276,7 @@ const RegisterComponent = () => {
           </div>
 
           {/* Password Input field continaer... */}
-          <div className="flex flex-col gap-1 relative">
+          <div className="flex flex-col gap-1 relative form-field">
             <label
               className="text-lg text-zinc-500 font-medium"
               htmlFor="password"
@@ -287,7 +315,7 @@ const RegisterComponent = () => {
           {/* <hr className="sm:col-span-2 text-black/30" /> */}
 
           {/* Name field continer.... */}
-          <div className="flex flex-col gap-1 w-full relative">
+          <div className="flex flex-col gap-1 w-full relative form-field">
             <label className="text-md text-zinc-500 font-medium" htmlFor="name">
               Name:
             </label>
@@ -308,7 +336,7 @@ const RegisterComponent = () => {
           </div>
 
           {/* Gender field continer.... */}
-          <div className="flex flex-col gap-1 w-full relative">
+          <div className="flex flex-col gap-1 w-full relative form-field">
             <label
               className="text-md text-zinc-500 font-medium"
               htmlFor="gender"
@@ -378,7 +406,7 @@ const RegisterComponent = () => {
           </div>
 
           {/* semester field continer.... */}
-          <div className="flex flex-col gap-1 w-full relative">
+          <div className="flex flex-col gap-1 w-full relative form-field">
             <label
               className="text-md text-zinc-500 font-medium"
               htmlFor="semester"
@@ -429,7 +457,7 @@ const RegisterComponent = () => {
           </div>
 
           {/* Program field continer.... */}
-          <div className="flex flex-col gap-1 w-full relative">
+          <div className="flex flex-col gap-1 w-full relative form-field">
             <label
               className="text-md text-zinc-500 font-medium"
               htmlFor="program"
@@ -453,7 +481,7 @@ const RegisterComponent = () => {
           </div>
 
           {/* college field continer.... */}
-          <div className="flex flex-col gap-1 w-full relative">
+          <div className="flex flex-col gap-1 w-full relative form-field">
             <label
               className="text-md text-zinc-500 font-medium"
               htmlFor="college"
@@ -477,7 +505,7 @@ const RegisterComponent = () => {
           </div>
 
           {/* address field continer.... */}
-          <div className="flex flex-col gap-1 w-full relative">
+          <div className="flex flex-col gap-1 w-full relative form-field">
             <label
               className="text-md text-zinc-500 font-medium"
               htmlFor="address"
@@ -502,7 +530,7 @@ const RegisterComponent = () => {
 
           {/* Verification Code Entering Field... */}
           {verificationCodeField && (
-            <div className="border-t-1 border-black/30 mt-1 pt-2">
+            <div className="border-t border-black/30 mt-1 pt-2 form-field">
               <label
                 htmlFor="verification-code"
                 className="text-md text-zinc-500 font-medium"
@@ -534,7 +562,7 @@ const RegisterComponent = () => {
         <button
           type="submit"
           disabled={loader}
-          className={`w-full bg-blue-500 opacity-85 rounded-sm py-1.5 text-white ${loader ? "" : "hover:opacity-100 active:scale-97"}  ease-in focus:opacity-100 focus:outline-blue-700 duration-200 `}
+          className={`w-full register-btn bg-blue-500 opacity-85 rounded-sm py-1.5 text-white ${loader ? "" : "hover:opacity-100 active:scale-97"}  ease-in focus:opacity-100 focus:outline-blue-700 duration-200 font-medium `}
         >
           {loader
             ? verificationCodeField

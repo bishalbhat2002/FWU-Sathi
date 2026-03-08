@@ -5,12 +5,11 @@ import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { getSemesterName } from "../../utilities/getSemName";
 import { getImageUrl } from "../../utilities/getImageUrl";
-import { useEffect, useState } from "react";
-import {
-  setDeletePostSuccess,
-  setSuccess,
-} from "../../store/features/post/post.slice";
+import { useEffect, useRef, useState } from "react";
+import { setDeletePostSuccess } from "../../store/features/post/post.slice";
 import { deletePostThunk } from "../../store/features/post/post.thunk";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const DeletePost = () => {
   const navigate = useNavigate();
@@ -43,20 +42,55 @@ const DeletePost = () => {
     dispatch(deletePostThunk({ postId }));
   }
 
+
+  /**
+   * GSAP Animation Code
+   */
+  const postDeleteBtnRef = useRef(null);
+  const [isClosing, setIsClosing] = useState(false);
+
+  useGSAP(() => {
+    // Animate the post delete container when it mounts
+    if (!isClosing) {
+      gsap.from(postDeleteBtnRef.current, {
+        opacity: 0,
+        y: "100",
+        duration: 0.4,
+        delay: 0.1,
+        ease: "power2.out",
+      });
+    }
+
+    // Animate the post delete container when it unmounts
+    if (isClosing) {
+      gsap.to(postDeleteBtnRef.current, {
+        opacity: 0,
+        scale: 0.3,
+        y: "100%",
+        duration: 0.3,
+        ease: "power2.out",
+        onComplete: () => {
+          navigate(-1);
+        },
+      });
+    }
+  }, [isClosing]);
+
   if (!post) {
     return null;
   }
 
+
   return (
     <OverlayScreen>
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => setIsClosing(true)}
         className="rounded-full p-1 bg-gray-800 absolute border-2 border-white right-3 top-3 hover-scale"
       >
         <RxCross2 className="size-6 text-white hover-scale" />
       </button>
 
-      <div className="bg-white max-w-130 w-full bg-white-600 border-1 rounded-md border-gray-300 relative">
+      <div ref={postDeleteBtnRef} className="bg-white max-w-130 w-full bg-white-600 border-1 rounded-md border-gray-300 relative">
         <span className="absolute right-0 text-sm sm:text-md bg-red-100 rounded-bl px-2 py-1 font-medium text-zinc-500">
           You are Deleting this post.
         </span>
@@ -87,15 +121,15 @@ const DeletePost = () => {
 
           {post?.photo && (
             <div className="w-50 my-2 pl-1 relative">
-            <img
-              src={getImageUrl(post?.photo)}
-              alt="Post photo"
-              className="rounded-md"
-            />
-          </div>
+              <img
+                src={getImageUrl(post?.photo)}
+                alt="Post photo"
+                className="rounded-md"
+              />
+            </div>
           )}
 
-          { /* Delete Confirmation Buttons... */}
+          {/* Delete Confirmation Buttons... */}
           <div className="mt-3 p-1 rounded-md shadow border border-black/20">
             <h2 className="text-center text-sm sm:text-md md:text-lg font-medium text-zinc-800">
               Are you sure, You want to <b className="text-red-600">delete</b>{" "}
@@ -104,7 +138,7 @@ const DeletePost = () => {
             <div className="text-md font-medium flex gap-2">
               <button
                 type="button"
-                onClick={() => navigate(-1)}
+                onClick={() => setIsClosing(true)}
                 autoFocus={true}
                 className="w-1/2 mt-2 inline-block py-2 bg-white/10 border border-black/20 shadow rounded-sm text-zinc-800 hover:bg-blue-200 active:scale-97 ease-in duration-200"
               >

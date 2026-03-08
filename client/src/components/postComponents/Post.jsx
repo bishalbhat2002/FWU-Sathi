@@ -1,9 +1,7 @@
 import ProfilePhoto from "../commonComponents/ProfilePhoto";
-import { RxCross2 } from "react-icons/rx";
 import { FaRegHeart } from "react-icons/fa";
 import { TbHeartFilled } from "react-icons/tb";
 import { LiaCommentDots } from "react-icons/lia";
-import { TbMessageReport } from "react-icons/tb";
 import { IoIosLink } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { MdModeEdit } from "react-icons/md";
@@ -11,11 +9,13 @@ import { MdDelete } from "react-icons/md";
 import { getSemesterName } from "../../utilities/getSemName";
 import { getImageUrl } from "../../utilities/getImageUrl";
 import { useSelector, useDispatch } from "react-redux";
-import { setSuccess, toggleLike } from "../../store/features/post/post.slice";
+import { toggleLike } from "../../store/features/post/post.slice";
 import { likePostThunk } from "../../store/features/post/post.thunk";
 import toast from "react-hot-toast";
+import { forwardRef } from "react";
 
-const Post = ({ post, commentBtnDisabled = false }) => {
+
+const Post = forwardRef(({ post, commentBtnDisabled = false }, ref) => {
   const navigate = useNavigate();
   const userProfile = useSelector((state) => state.userReducer.userProfile);
 
@@ -35,9 +35,13 @@ const Post = ({ post, commentBtnDisabled = false }) => {
 
   return (
     <>
-      <div className="mx-auto max-w-130 w-full bg-white shadow-post rounded-md overflow-hidden">
+      <div
+      ref={ref}       // Attach ref to the root element of the Post component
+      className="mx-auto post max-w-130 w-full bg-white shadow-post rounded-md overflow-hidden">
         <div className="flex gap-4 p-2 pl-3 items-center shadow-bottom relative bg-white">
-          <Link to={`/profile/${(post?.userId?._id !== userProfile?._id)? post?.userId?._id : ""}`} >
+          <Link
+            to={`/profile/${post?.userId?._id !== userProfile?._id ? post?.userId?._id : ""}`}
+          >
             <ProfilePhoto
               imgSrc={post?.userId?.photo}
               userId={post?.userId?._id}
@@ -45,7 +49,9 @@ const Post = ({ post, commentBtnDisabled = false }) => {
             />
           </Link>
           <div>
-            <Link to={`/profile/${(post?.userId?._id !== userProfile?._id)? post?.userId?._id : ""}`} >
+            <Link
+              to={`/profile/${post?.userId?._id !== userProfile?._id ? post?.userId?._id : ""}`}
+            >
               <h2 className="font-bold text-xl text-zinc-700 line-clamp-1">
                 {post?.userId?.name}
               </h2>
@@ -57,22 +63,22 @@ const Post = ({ post, commentBtnDisabled = false }) => {
 
           {/* Options for handling posts.... */}
 
+          {(post?.userId?._id === userProfile?._id ||
+            userProfile?.role === "admin") && (
+            <div className="absolute top-1 right-1 border border-black/20 flex gap-2 px-2 py-1 rounded-md ">
+              {post?.userId?._id === userProfile?._id && (
+                <Link
+                  to={`/post/edit/${post?._id}`}
+                  // onClick={()=>setSuccess(false)}
+                  className="rounded-full p-1 bg-white hover:bg-gray-400 group hover-scale"
+                  title="Edit Post"
+                >
+                  <MdModeEdit className="size-4 -rotate-15 text-zinc-500 group-hover:text-white hover-scale" />
+                </Link>
+              )}
 
-          {(post?.userId?._id === userProfile?._id || userProfile?.role==="admin") &&
-          <div className="absolute top-1 right-1 border border-black/20 flex gap-2 px-2 py-1 rounded-md ">
-            {(post?.userId?._id === userProfile?._id)  && (
-              <Link
-                to={`/post/edit/${post?._id}`}
-                // onClick={()=>setSuccess(false)}
-                className="rounded-full p-1 bg-white hover:bg-gray-400 group hover-scale"
-                title="Edit Post"
-              >
-                <MdModeEdit className="size-4 -rotate-15 text-zinc-500 group-hover:text-white hover-scale" />
-              </Link>
-            )}
-
-            {/* Temporarily hide this feature.... due to lack of time.. */}
-            {/* {post?.userId?._id !== userProfile?._id && (
+              {/* Temporarily hide this feature.... due to lack of time.. */}
+              {/* {post?.userId?._id !== userProfile?._id && (
               <Link
                 to={`/post/report/${post?._id}`}
                 className="rounded-full p-1 bg-white hover:bg-gray-400 group hover-scale"
@@ -82,17 +88,18 @@ const Post = ({ post, commentBtnDisabled = false }) => {
               </Link>
             )} */}
 
-            {(post?.userId?._id === userProfile?._id || userProfile?.role === "admin") && (
-              <Link
-                to={`/post/delete/${post?._id}`}
-                className="rounded-full p-1 bg-white hover:bg-red-300 group hover-scale"
-                title="Delete Post"
-              >
-                <MdDelete className="size-4 text-zinc-500 hover-scale group-hover:text-white " />
-              </Link>
-            )}
-          </div>
-          }
+              {(post?.userId?._id === userProfile?._id ||
+                userProfile?.role === "admin") && (
+                <Link
+                  to={`/post/delete/${post?._id}`}
+                  className="rounded-full p-1 bg-white hover:bg-red-300 group hover-scale"
+                  title="Delete Post"
+                >
+                  <MdDelete className="size-4 text-zinc-500 hover-scale group-hover:text-white " />
+                </Link>
+              )}
+            </div>
+          )}
 
           <div className="pr-1 pb-0.5 text-xs text-zinc-400 font-medium absolute right-0 bottom-0">
             {new Date(post?.createdAt).toLocaleString("en-NP")}
@@ -141,7 +148,7 @@ const Post = ({ post, commentBtnDisabled = false }) => {
           ) : (
             <button
               type="button"
-              onClick={(e)=>e.preventDefault()}
+              onClick={(e) => e.preventDefault()}
               className={`w-full flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:scale-96 duration-200 ease-in rounded-md hover:opacity-90`}
             >
               <LiaCommentDots className="scale-125" />{" "}
@@ -159,7 +166,7 @@ const Post = ({ post, commentBtnDisabled = false }) => {
       </div>
     </>
   );
-};
+});
 
 export default Post;
 

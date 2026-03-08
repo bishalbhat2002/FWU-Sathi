@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import OverlayScreen from "../../layouts/OverlayScreen";
 import ProfilePhoto from "../commonComponents/ProfilePhoto";
 import { useNavigate } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { validateImage } from "../../utilities/validatePhoto";
 import toast from "react-hot-toast";
-
 import { useDispatch, useSelector } from "react-redux";
 import { postCreateThunk } from "../../store/features/post/post.thunk";
 import { getSemesterName } from "../../utilities/getSemName";
 import { setSuccess } from "../../store/features/post/post.slice";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const CreatePost = () => {
   const dispatch = useDispatch();
@@ -37,7 +38,6 @@ const CreatePost = () => {
       navigate("/");
     }
   }, [success, loader]);
-
 
   function handleImageChange(e) {
     const image = e.target.files[0];
@@ -82,17 +82,52 @@ const CreatePost = () => {
     dispatch(postCreateThunk(post));
   }
 
+  /**
+   * GSAP Animation Code
+   */
+  const postCreateBtnRef = useRef(null);
+  const [isClosing, setIsClosing] = useState(false);
+
+  useGSAP(() => {
+    // Animate the post create container when it mounts
+    if (!isClosing) {
+      gsap.from(postCreateBtnRef.current, {
+        opacity: 0,
+        y: "100",
+        duration: 0.4,
+        delay: 0.1,
+        ease: "power2.out",
+      });
+    }
+
+    // Animate the post create container when it unmounts
+    if (isClosing) {
+      gsap.to(postCreateBtnRef.current, {
+        opacity: 0,
+        scale: 0.3,
+        y: "100%",
+        duration: 0.3,
+        ease: "power2.out",
+        onComplete: () => {
+          navigate(-1);
+        },
+      });
+    }
+  }, [isClosing]);
 
   return (
     <OverlayScreen>
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => setIsClosing(true)}
         className="rounded-full p-1 bg-gray-800 absolute border-2 border-white right-3 top-3 hover-scale"
       >
         <RxCross2 className="size-6 text-white hover-scale" />
       </button>
 
-      <div className="bg-white max-w-130 w-full bg-white-600 border-1 rounded-md border-gray-300 relative">
+      <div
+        ref={postCreateBtnRef}
+        className="bg-white max-w-130 w-full bg-white-600 border-1 rounded-md border-gray-300 relative"
+      >
         <div className="flex gap-4 p-2 items-center border-b border-black/20 relative">
           <ProfilePhoto
             imgSrc={userProfile.photo}

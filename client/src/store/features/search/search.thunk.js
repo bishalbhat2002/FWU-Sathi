@@ -29,7 +29,7 @@ export const searchUserThunk = createAsyncThunk(
       // console.log("search:", searchString)
      const response = await axiosInstance.get(`/search?searchString=${searchString}`);
 
-      // console.log(response?.data);
+      console.log(response?.data);
       return response?.data;                 // return created post and success message object...
 
     } catch (error) {

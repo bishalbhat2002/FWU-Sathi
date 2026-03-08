@@ -1,0 +1,7 @@
+# Development SERVER URL
+VITE_SERVER_URL=http://localhost:3000
+VITE_CLIENT_URL=http://localhost:5173
+
+# Actual SERVER URL
+# VITE_SERVER_URL=http://localhost:300
+
